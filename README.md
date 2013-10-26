@@ -1,7 +1,8 @@
 SJTUFlow
 ========
 
-Project for ASE
+Project for Advanced Software Engineering and SJTU Digital Arts Lab
+
 
 贡献方法
 ========
@@ -13,6 +14,16 @@ Project for ASE
 3.提交修改 git commit -m "你修改的一些描述"
 
 4.最后提交到Github 使用git push origin master
+
+
+注意事项
+========
+
+1.推荐使用图形化客户端Github for Windows/Mac 
+
+2.commit message 大家写的书面化一点，等正式开发以后最好用人名（如Harboyl, Ziqi:）+ [issue number（如issue #15）] issue description 提交
+
+3.我们用github的issue list 进行进度管理，可以为每个issue指定解决人和milestone
 
 项目成员
 ========
