@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SJTUFlowClass</class>
+ <widget class="QMainWindow" name="SJTUFlowClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>SJTUFlow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <widget class="QHorizontalTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::West</enum>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::Rounded</enum>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>128</width>
+      <height>128</height>
+     </size>
+    </property>
+    <property name="elideMode">
+     <enum>Qt::ElideNone</enum>
+    </property>
+    <widget class="QWidget" name="tabSceneDesign">
+     <attribute name="icon">
+      <iconset resource="sjtuflow.qrc">
+       <normaloff>:/Icons/Resources/Icons/SceneDesign.png</normaloff>:/Icons/Resources/Icons/SceneDesign.png</iconset>
+     </attribute>
+     <attribute name="title">
+      <string>Scene Design</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>160</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayoutSceneDesign">
+       <item>
+        <widget class="QGraphicsView" name="graphicsViewSceneDesign"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabCoding">
+     <attribute name="icon">
+      <iconset resource="sjtuflow.qrc">
+       <normaloff>:/Icons/Resources/Icons/Coding.png</normaloff>:/Icons/Resources/Icons/Coding.png</iconset>
+     </attribute>
+     <attribute name="title">
+      <string>Coding</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>160</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayoutCoding"/>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabDisplay">
+     <attribute name="icon">
+      <iconset resource="sjtuflow.qrc">
+       <normaloff>:/Icons/Resources/Icons/Display.png</normaloff>:/Icons/Resources/Icons/Display.png</iconset>
+     </attribute>
+     <attribute name="title">
+      <string>Display</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>160</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayoutDisplay"/>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QHorizontalTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>qhorizontaltabwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="sjtuflow.qrc"/>
+ </resources>
+ <connections/>
+</ui>

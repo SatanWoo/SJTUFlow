@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/SJTUFlow"/>
+    <qresource prefix="/Icons">
+        <file>Resources/Icons/SceneDesign.png</file>
+        <file>Resources/Icons/Coding.png</file>
+        <file>Resources/Icons/Display.png</file>
+    </qresource>
+    <qresource prefix="/ToolBar">
+        <file>Resources/Icons/NewFileCoding.png</file>
+    </qresource>
+</RCC>
