@@ -4,9 +4,9 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_sjtuflow.h"
 
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QToolBar>
-#include <QtWidgets/QTabWidget>
+#include "scenedesignwidget.h"
+#include "codingwidget.h"
+#include "displaywidget.h"
 
 class SJTUFlow : public QMainWindow
 {
@@ -19,34 +19,12 @@ public:
 private:
 	Ui::SJTUFlowClass ui;
 
-	QMenuBar *menuBarSceneDesign;
-	QMenuBar *menuBarCoding;
-	QMenuBar *menuBarDisplay;
-	QToolBar *toolBarSceneDesign;
-	QToolBar *toolBarCoding;
-	QToolBar *toolBarDisplay;
-
-	int codingTabNum; // record how many tabs have been added
-	QTabWidget *tabWidgetCoding;
-	
-	int saveOrNotCoding(int index);
-	void saveFileCoding(const QString &filename);
+	SceneDesignWidget *sceneDesignWidget;
+	CodingWidget *codingWidget;
+	DisplayWidget *displayWidget;
 
 private slots:
-/************************************************************************/
-/*                        menu slots                                    */
-/************************************************************************/
-	void newFileCoding();
-	void openFileCoding();
-	void saveFileCoding();
-	void saveAsCoding();
-	void closeFileCoding();
-	void closeAllCoding();
-	
-/************************************************************************/
-/*                        tab slots                                     */
-/************************************************************************/
-	bool closeCodingTab(int index);
+
 };
 
 #endif // SJTUFLOW_H

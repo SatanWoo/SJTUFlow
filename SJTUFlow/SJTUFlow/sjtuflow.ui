@@ -51,7 +51,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>-1</number>
     </property>
     <property name="iconSize">
      <size>
@@ -62,70 +62,6 @@
     <property name="elideMode">
      <enum>Qt::ElideNone</enum>
     </property>
-    <widget class="QWidget" name="tabSceneDesign">
-     <attribute name="icon">
-      <iconset resource="sjtuflow.qrc">
-       <normaloff>:/Icons/Resources/Icons/SceneDesign.png</normaloff>:/Icons/Resources/Icons/SceneDesign.png</iconset>
-     </attribute>
-     <attribute name="title">
-      <string>Scene Design</string>
-     </attribute>
-     <widget class="QWidget" name="verticalLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>160</width>
-        <height>80</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayoutSceneDesign">
-       <item>
-        <widget class="QGraphicsView" name="graphicsViewSceneDesign"/>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tabCoding">
-     <attribute name="icon">
-      <iconset resource="sjtuflow.qrc">
-       <normaloff>:/Icons/Resources/Icons/Coding.png</normaloff>:/Icons/Resources/Icons/Coding.png</iconset>
-     </attribute>
-     <attribute name="title">
-      <string>Coding</string>
-     </attribute>
-     <widget class="QWidget" name="verticalLayoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>160</width>
-        <height>80</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayoutCoding"/>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tabDisplay">
-     <attribute name="icon">
-      <iconset resource="sjtuflow.qrc">
-       <normaloff>:/Icons/Resources/Icons/Display.png</normaloff>:/Icons/Resources/Icons/Display.png</iconset>
-     </attribute>
-     <attribute name="title">
-      <string>Display</string>
-     </attribute>
-     <widget class="QWidget" name="verticalLayoutWidget_3">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>160</width>
-        <height>80</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayoutDisplay"/>
-     </widget>
-    </widget>
    </widget>
   </widget>
  </widget>

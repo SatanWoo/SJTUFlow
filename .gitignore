@@ -176,3 +176,6 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+
+# SVN
+.svn/
