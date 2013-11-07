@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "ui_codingwidget.h"
 
+#define TEMP_FILE_NAME ".tmp"
+
 class CodingWidget : public QMainWindow
 {
 	Q_OBJECT
@@ -17,8 +19,9 @@ private:
 
 	int codingTabNum; // record how many tabs have been added
 
-	int saveOrNotCoding(int index);
-	void saveFile(const QString &filename);
+	void loadFile(const QString &fileName);
+	int saveOrNot(int index);
+	void saveFile(const QString &fileName);
 
 private slots:
 /************************************************************************/
@@ -30,6 +33,8 @@ private slots:
 	void saveAs();
 	void closeFile();
 	void closeAll();
+
+	void runModule();
 
 /************************************************************************/
 /*                        tab slots                                     */

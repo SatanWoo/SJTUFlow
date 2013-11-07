@@ -17,7 +17,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -33,12 +32,13 @@ public:
     QAction *actionSaveAs;
     QAction *actionClose;
     QAction *actionCloseAll;
+    QAction *actionRunModule;
     QWidget *centralWidget;
     QTabWidget *tabWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
+    QMenu *menuRun;
     QToolBar *toolBar;
-    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *CodingWidget)
     {
@@ -60,11 +60,14 @@ public:
         actionClose->setObjectName(QStringLiteral("actionClose"));
         actionCloseAll = new QAction(CodingWidget);
         actionCloseAll->setObjectName(QStringLiteral("actionCloseAll"));
+        actionRunModule = new QAction(CodingWidget);
+        actionRunModule->setObjectName(QStringLiteral("actionRunModule"));
         centralWidget = new QWidget(CodingWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(0, 0, 127, 80));
+        tabWidget->setGeometry(QRect(0, 0, 361, 191));
+        tabWidget->setStyleSheet(QStringLiteral(""));
         tabWidget->setTabsClosable(true);
         CodingWidget->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(CodingWidget);
@@ -72,15 +75,15 @@ public:
         menuBar->setGeometry(QRect(0, 0, 400, 23));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
+        menuRun = new QMenu(menuBar);
+        menuRun->setObjectName(QStringLiteral("menuRun"));
         CodingWidget->setMenuBar(menuBar);
         toolBar = new QToolBar(CodingWidget);
         toolBar->setObjectName(QStringLiteral("toolBar"));
         CodingWidget->addToolBar(Qt::TopToolBarArea, toolBar);
-        statusBar = new QStatusBar(CodingWidget);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
-        CodingWidget->setStatusBar(statusBar);
 
         menuBar->addAction(menuFile->menuAction());
+        menuBar->addAction(menuRun->menuAction());
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
         menuFile->addSeparator();
@@ -89,6 +92,7 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionClose);
         menuFile->addAction(actionCloseAll);
+        menuRun->addAction(actionRunModule);
 
         retranslateUi(CodingWidget);
 
@@ -112,7 +116,10 @@ public:
         actionClose->setText(QApplication::translate("CodingWidget", "Close", 0));
         actionClose->setShortcut(QApplication::translate("CodingWidget", "Ctrl+W", 0));
         actionCloseAll->setText(QApplication::translate("CodingWidget", "Close All", 0));
+        actionRunModule->setText(QApplication::translate("CodingWidget", "Run Module", 0));
+        actionRunModule->setShortcut(QApplication::translate("CodingWidget", "F5", 0));
         menuFile->setTitle(QApplication::translate("CodingWidget", "&File", 0));
+        menuRun->setTitle(QApplication::translate("CodingWidget", "Run", 0));
     } // retranslateUi
 
 };
