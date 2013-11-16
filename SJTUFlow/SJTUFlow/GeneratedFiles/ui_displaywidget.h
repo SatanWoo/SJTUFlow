@@ -15,10 +15,6 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -27,10 +23,6 @@ class Ui_DisplayWidget
 {
 public:
     QWidget *centralWidget;
-    QMenuBar *menuBar;
-    QMenu *menuFile;
-    QToolBar *mainToolBar;
-    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *DisplayWidget)
     {
@@ -40,20 +32,6 @@ public:
         centralWidget = new QWidget(DisplayWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         DisplayWidget->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(DisplayWidget);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 23));
-        menuFile = new QMenu(menuBar);
-        menuFile->setObjectName(QStringLiteral("menuFile"));
-        DisplayWidget->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(DisplayWidget);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        DisplayWidget->addToolBar(Qt::TopToolBarArea, mainToolBar);
-        statusBar = new QStatusBar(DisplayWidget);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
-        DisplayWidget->setStatusBar(statusBar);
-
-        menuBar->addAction(menuFile->menuAction());
 
         retranslateUi(DisplayWidget);
 
@@ -63,7 +41,6 @@ public:
     void retranslateUi(QMainWindow *DisplayWidget)
     {
         DisplayWidget->setWindowTitle(QApplication::translate("DisplayWidget", "DisplayWidget", 0));
-        menuFile->setTitle(QApplication::translate("DisplayWidget", "File", 0));
     } // retranslateUi
 
 };

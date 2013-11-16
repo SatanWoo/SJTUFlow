@@ -21,20 +21,24 @@ public:
 	void setFileName(QString name){ fileName = name; }
 	QString getFileName(){ return fileName; }
 	void setSaved(){ saved = true; }
-	bool isSaved(){ return saved;}
+	bool isSaved(){ return saved; }
+	bool isChanged(){ return changed; }
 
 protected:
 	void resizeEvent(QResizeEvent *event);
+	void contextMenuEvent(QContextMenuEvent *e){}
 
 private slots:
  	void updateLineNumberAreaWidth(int newBlockCount);
 	void updateLineNumberArea(const QRect &, int);
+	void contentChanged(bool changed);
 
 private:
 	PySyntaxHighlighter *highlighter;
 	LineNumberArea *lineNumberArea;
 	QString fileName;
 	bool saved;
+	bool changed;
 };
 
 class LineNumberArea : public QWidget

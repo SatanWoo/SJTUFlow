@@ -13,6 +13,8 @@ CodingWidget::CodingWidget(QWidget *parent)
 	ui.setupUi(this);
 
 	codingTabNum = 0;
+	savedIcon = QIcon(":/Coding/Resources/Icons/CodingSaved.png");
+	unsavedIcon = QIcon(":/Coding/Resources/Icons/CodingUnsaved.png");
 
 	setCentralWidget(ui.tabWidget);
 	newFile();
@@ -21,6 +23,17 @@ CodingWidget::CodingWidget(QWidget *parent)
 /*                             toolBar                                  */
 /************************************************************************/
 	ui.toolBar->addAction(ui.actionNew);
+	ui.toolBar->addAction(ui.actionOpen);
+	ui.toolBar->addAction(ui.actionSave);
+	ui.toolBar->addAction(ui.actionClose);
+	ui.toolBar->addAction(ui.actionCloseAll);
+	ui.toolBar->addSeparator();
+	ui.toolBar->addAction(ui.actionCut);
+	ui.toolBar->addAction(ui.actionCopy);
+	ui.toolBar->addAction(ui.actionPaste);
+	ui.toolBar->addSeparator();
+	ui.toolBar->addAction(ui.actionUndo);
+	ui.toolBar->addAction(ui.actionRedo);
 
 /************************************************************************/
 /*                          signals and slots                           */
@@ -106,8 +119,21 @@ void CodingWidget::saveFile(const QString &fileName)
 void CodingWidget::newFile()
 {
 	CodeEdit *textEdit = new CodeEdit;
+	
+	connect(textEdit, SIGNAL(modificationChanged(bool)), this, SLOT(textChanged(bool)));
+	connect(textEdit, SIGNAL(copyAvailable(bool)), this, SLOT(copyAvailable(bool)));
+	connect(textEdit, SIGNAL(redoAvailable(bool)), ui.actionRedo, SLOT(setEnabled(bool)));
+	connect(textEdit, SIGNAL(undoAvailable(bool)), ui.actionUndo, SLOT(setEnabled(bool)));
 
-	ui.tabWidget->addTab(textEdit, QString("New %1").arg(++codingTabNum));
+	connect(ui.actionUndo, SIGNAL(triggered()), textEdit, SLOT(undo()));
+	connect(ui.actionRedo, SIGNAL(triggered()), textEdit, SLOT(redo()));
+	connect(ui.actionCut, SIGNAL(triggered()), textEdit, SLOT(cut()));
+	connect(ui.actionCopy, SIGNAL(triggered()), textEdit, SLOT(copy()));
+	connect(ui.actionPaste, SIGNAL(triggered()), textEdit, SLOT(paste()));
+	connect(ui.actionDelete, SIGNAL(triggered()), textEdit, SLOT(clear()));
+	connect(ui.actionSelectAll, SIGNAL(triggered()), textEdit, SLOT(selectAll()));
+
+	ui.tabWidget->addTab(textEdit, savedIcon, QString("New %1").arg(++codingTabNum));
 	ui.tabWidget->setCurrentIndex(ui.tabWidget->count() - 1);
 	textEdit->setFocus();
 }
@@ -125,6 +151,10 @@ void CodingWidget::openFile()
 void CodingWidget::saveFile()
 {
 	CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+	if (!codeEdit->isChanged())
+	{
+		return;
+	}
 	if (codeEdit->isSaved())
 	{
 		saveFile(codeEdit->getFileName());
@@ -209,4 +239,24 @@ bool CodingWidget::closeTab( int index )
 		ui.tabWidget->removeTab(index);
 	}
 	return true;
+}
+
+void CodingWidget::textChanged(bool changed)
+{
+	if (changed)
+	{
+		ui.tabWidget->setTabIcon(ui.tabWidget->currentIndex(), unsavedIcon);
+	}
+	else
+	{
+		ui.tabWidget->setTabIcon(ui.tabWidget->currentIndex(), savedIcon);
+	}
+	ui.actionSave->setEnabled(changed);
+}
+
+void CodingWidget::copyAvailable( bool yes )
+{
+	ui.actionCopy->setEnabled(yes);
+	ui.actionCut->setEnabled(yes);
+	ui.actionDelete->setEnabled(yes);
 }

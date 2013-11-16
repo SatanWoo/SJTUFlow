@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "ui_scenedesignwidget.h"
 
+#include "glwidget.h"
+
 class SceneDesignWidget : public QMainWindow
 {
 	Q_OBJECT
@@ -14,6 +16,8 @@ public:
 
 private:
 	Ui::SceneDesignWidget ui;
+
+	GLWidget *glWidget;
 };
 
 #endif // SCENEDESIGNWIDGET_H

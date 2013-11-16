@@ -18,6 +18,8 @@ private:
 	Ui::CodingWidget ui;
 
 	int codingTabNum; // record how many tabs have been added
+	QIcon savedIcon;
+	QIcon unsavedIcon;
 
 	void loadFile(const QString &fileName);
 	int saveOrNot(int index);
@@ -40,6 +42,12 @@ private slots:
 /*                        tab slots                                     */
 /************************************************************************/
 	bool closeTab(int index);
+	void textChanged(bool changed);
+
+/************************************************************************/
+/*                        tool bar slots                                */
+/************************************************************************/
+	void copyAvailable(bool yes);
 };
 
 #endif // CODINGWIDGET_H

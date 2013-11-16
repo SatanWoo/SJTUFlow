@@ -13,23 +13,37 @@
   <property name="windowTitle">
    <string>CodingWidget</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>361</width>
-      <height>191</height>
-     </rect>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
     </property>
-    <property name="styleSheet">
-     <string notr="true"/>
+    <property name="leftMargin">
+     <number>0</number>
     </property>
-    <property name="tabsClosable">
-     <bool>true</bool>
+    <property name="topMargin">
+     <number>0</number>
     </property>
-   </widget>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -59,10 +73,36 @@
     </property>
     <addaction name="actionRunModule"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionDelete"/>
+    <addaction name="actionSelectAll"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuRun"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -73,7 +113,7 @@
   <action name="actionNew">
    <property name="icon">
     <iconset resource="sjtuflow.qrc">
-     <normaloff>:/ToolBar/Resources/Icons/NewFileCoding.png</normaloff>:/ToolBar/Resources/Icons/NewFileCoding.png</iconset>
+     <normaloff>:/Coding/Resources/Icons/CodingNewFile.png</normaloff>:/Coding/Resources/Icons/CodingNewFile.png</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -86,6 +126,10 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingOpenFile.png</normaloff>:/Coding/Resources/Icons/CodingOpenFile.png</iconset>
+   </property>
    <property name="text">
     <string>Open</string>
    </property>
@@ -94,6 +138,13 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingSaveFile.png</normaloff>:/Coding/Resources/Icons/CodingSaveFile.png</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
@@ -110,6 +161,10 @@
    </property>
   </action>
   <action name="actionClose">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingCloseFile.png</normaloff>:/Coding/Resources/Icons/CodingCloseFile.png</iconset>
+   </property>
    <property name="text">
     <string>Close</string>
    </property>
@@ -118,6 +173,10 @@
    </property>
   </action>
   <action name="actionCloseAll">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingCloseAll.png</normaloff>:/Coding/Resources/Icons/CodingCloseAll.png</iconset>
+   </property>
    <property name="text">
     <string>Close All</string>
    </property>
@@ -128,6 +187,97 @@
    </property>
    <property name="shortcut">
     <string>F5</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingUndo.png</normaloff>:/Coding/Resources/Icons/CodingUndo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingRedo.png</normaloff>:/Coding/Resources/Icons/CodingRedo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingCut.png</normaloff>:/Coding/Resources/Icons/CodingCut.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingCopy.png</normaloff>:/Coding/Resources/Icons/CodingCopy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingPaste.png</normaloff>:/Coding/Resources/Icons/CodingPaste.png</iconset>
+   </property>
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionSelectAll">
+   <property name="text">
+    <string>Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
  </widget>

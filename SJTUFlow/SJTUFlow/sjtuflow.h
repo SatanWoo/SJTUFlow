@@ -4,6 +4,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_sjtuflow.h"
 
+#include "titlebar.h"
 #include "scenedesignwidget.h"
 #include "codingwidget.h"
 #include "displaywidget.h"
@@ -19,6 +20,7 @@ public:
 private:
 	Ui::SJTUFlowClass ui;
 
+	TitleBar *titleBar;
 	SceneDesignWidget *sceneDesignWidget;
 	CodingWidget *codingWidget;
 	DisplayWidget *displayWidget;

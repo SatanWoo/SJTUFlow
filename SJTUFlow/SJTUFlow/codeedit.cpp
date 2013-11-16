@@ -8,6 +8,7 @@ CodeEdit::CodeEdit(QWidget *parent)
 	highlighter = new PySyntaxHighlighter(document());
 	lineNumberArea = new LineNumberArea(this);
 	saved = false;
+	changed = false;
 
 	QFont font = QFont("Courier", 10);
 	font.setFixedPitch(true);
@@ -17,6 +18,7 @@ CodeEdit::CodeEdit(QWidget *parent)
 
 	connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
 	connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
+	connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(contentChanged(bool)));
 
 	updateLineNumberAreaWidth(0);
 }
@@ -96,4 +98,9 @@ void CodeEdit::updateLineNumberArea( const QRect &rect, int dy )
 	{
 		updateLineNumberAreaWidth(0);
 	}
+}
+
+void CodeEdit::contentChanged( bool changed )
+{
+	this->changed = changed;
 }

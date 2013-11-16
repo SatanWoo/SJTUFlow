@@ -5,8 +5,8 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	setCentralWidget(ui.tabWidget);
-	setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
+	setWindowFlags(Qt::FramelessWindowHint);
+	setGeometry(50, 30, width(), height());
 	setFixedSize(width(), height());
 
 /************************************************************************/
