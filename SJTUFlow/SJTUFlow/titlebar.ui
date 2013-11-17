@@ -20,7 +20,12 @@
    <string>TitleBar</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QToolButton
+   <string notr="true">*
+{
+	color: white;
+	border-image: transparent;
+}
+QToolButton
 {
 	background-color: transparent;
 	border-style: flat;
@@ -35,7 +40,8 @@ QToolButton:hover
 QToolButton:pressed
 {
 	background-color: rgba(20, 59, 255, 100);
-}</string>
+}
+</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout" stretch="500,0,0">
    <property name="spacing">

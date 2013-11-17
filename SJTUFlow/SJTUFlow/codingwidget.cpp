@@ -4,6 +4,7 @@
 #include <QtWidgets/QFileDialog>
 #include <QFile>
 #include <QTextStream>
+#include <QPainter>
 
 #include "codeedit.h"
 

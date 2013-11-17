@@ -39,6 +39,7 @@ private:
 	QString fileName;
 	bool saved;
 	bool changed;
+	int tabWidth;
 };
 
 class LineNumberArea : public QWidget

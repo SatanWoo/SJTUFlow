@@ -49,6 +49,25 @@ public:
         if (SceneDesignWidget->objectName().isEmpty())
             SceneDesignWidget->setObjectName(QStringLiteral("SceneDesignWidget"));
         SceneDesignWidget->resize(400, 300);
+        SceneDesignWidget->setStyleSheet(QLatin1String("QMenuBar\n"
+"{\n"
+"	border-color: rgba(255, 255, 255, 50);\n"
+"	background-color: rgba(255, 255, 255, 50);\n"
+"	color: white;\n"
+"}\n"
+"QMenuBar::item\n"
+"{\n"
+"	background-color: transparent;\n"
+"}\n"
+"QMenuBar::item:pressed\n"
+"{\n"
+"	background-color: rgba(20, 59, 255, 100);\n"
+"}\n"
+"QToolBar\n"
+"{\n"
+"	border-color: rgba(255, 255, 255, 50);\n"
+"	background-color: rgba(255, 255, 255, 50);\n"
+"}"));
         actionNew = new QAction(SceneDesignWidget);
         actionNew->setObjectName(QStringLiteral("actionNew"));
         actionOpen = new QAction(SceneDesignWidget);

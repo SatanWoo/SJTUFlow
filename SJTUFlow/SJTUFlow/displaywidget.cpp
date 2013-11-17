@@ -6,6 +6,7 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 	ui.setupUi(this);
 
 	glWidget = new GLWidget;
+	glWidget->startTimer(1);
 	setCentralWidget(glWidget);
 }
 

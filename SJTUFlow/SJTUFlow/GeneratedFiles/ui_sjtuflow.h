@@ -40,7 +40,28 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(SJTUFlowClass->sizePolicy().hasHeightForWidth());
         SJTUFlowClass->setSizePolicy(sizePolicy);
-        SJTUFlowClass->setStyleSheet(QStringLiteral("font: \"Comic Sans MS\";"));
+        SJTUFlowClass->setStyleSheet(QLatin1String("*\n"
+"{\n"
+"	font: \"Comic Sans MS\";\n"
+"	border-color: transparent;\n"
+"}\n"
+"QTabWidget, QTabWidget::pane\n"
+"{\n"
+"	border-color: transparent;\n"
+"}\n"
+"QHorizontalTabWidget::tab-bar\n"
+"{\n"
+"	alignment: center;\n"
+"	border-color: transparent;\n"
+"}\n"
+"QTabBar::tab\n"
+"{\n"
+"	background-color: transparent;\n"
+"}\n"
+"QTabBar::tab:selected\n"
+"{\n"
+"	background-color: qradialgradient(spread:pad, cx:1, cy:0.5, radius:0.2, fx:1, fy:0.5, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(255, 255, 255, 50));\n"
+"}"));
         centralWidget = new QWidget(SJTUFlowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());

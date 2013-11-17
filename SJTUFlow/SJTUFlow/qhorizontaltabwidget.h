@@ -9,6 +9,9 @@ public:
 	QHorizontalTabWidget(QWidget *parent);
 	~QHorizontalTabWidget();
 
+protected:
+	void paintEvent(QPaintEvent *);
+
 private:
 	
 };

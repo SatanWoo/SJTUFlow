@@ -17,8 +17,13 @@ public:
 	SJTUFlow(QWidget *parent = 0);
 	~SJTUFlow();
 
+protected:
+	void paintEvent(QPaintEvent *);
+
 private:
 	Ui::SJTUFlowClass ui;
+
+	QPixmap bgImage;
 
 	TitleBar *titleBar;
 	SceneDesignWidget *sceneDesignWidget;

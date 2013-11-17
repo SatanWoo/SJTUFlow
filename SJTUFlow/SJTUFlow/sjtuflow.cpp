@@ -5,6 +5,8 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	bgImage.load(":/SJTUFlow/Resources/background.jpg");
+
 	setWindowFlags(Qt::FramelessWindowHint);
 	setGeometry(50, 30, width(), height());
 	setFixedSize(width(), height());
@@ -30,4 +32,10 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 SJTUFlow::~SJTUFlow()
 {
 
+}
+
+void SJTUFlow::paintEvent( QPaintEvent *e )
+{
+	QPainter painter(this);
+	painter.drawPixmap(rect(), bgImage);
 }

@@ -1,5 +1,7 @@
 <RCC>
-    <qresource prefix="/SJTUFlow"/>
+    <qresource prefix="/SJTUFlow">
+        <file>Resources/background.jpg</file>
+    </qresource>
     <qresource prefix="/Icons">
         <file>Resources/Icons/SceneDesign.png</file>
         <file>Resources/Icons/Coding.png</file>

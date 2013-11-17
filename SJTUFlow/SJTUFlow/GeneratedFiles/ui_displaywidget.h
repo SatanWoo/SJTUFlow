@@ -29,6 +29,7 @@ public:
         if (DisplayWidget->objectName().isEmpty())
             DisplayWidget->setObjectName(QStringLiteral("DisplayWidget"));
         DisplayWidget->resize(400, 300);
+        DisplayWidget->setStyleSheet(QStringLiteral(""));
         centralWidget = new QWidget(DisplayWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         DisplayWidget->setCentralWidget(centralWidget);

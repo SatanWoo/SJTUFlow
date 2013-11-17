@@ -39,7 +39,12 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(TitleBar->sizePolicy().hasHeightForWidth());
         TitleBar->setSizePolicy(sizePolicy);
-        TitleBar->setStyleSheet(QLatin1String("QToolButton\n"
+        TitleBar->setStyleSheet(QLatin1String("*\n"
+"{\n"
+"	color: white;\n"
+"	border-image: transparent;\n"
+"}\n"
+"QToolButton\n"
 "{\n"
 "	background-color: transparent;\n"
 "	border-style: flat;\n"
@@ -54,7 +59,8 @@ public:
 "QToolButton:pressed\n"
 "{\n"
 "	background-color: rgba(20, 59, 255, 100);\n"
-"}"));
+"}\n"
+""));
         horizontalLayout = new QHBoxLayout(TitleBar);
         horizontalLayout->setSpacing(0);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);

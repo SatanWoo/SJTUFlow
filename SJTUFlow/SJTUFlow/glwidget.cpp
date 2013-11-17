@@ -12,23 +12,11 @@ GLWidget::GLWidget(QWidget *parent)
 {
 	rtri = 0;
 	rquad = 0;
-
-	startTimer(1);
 }
 
 GLWidget::~GLWidget()
 {
 
-}
-
-QSize GLWidget::minimumSizeHint() const
-{
-	return QSize(50, 50);
-}
-
-QSize GLWidget::sizeHint() const
-{
-	return QSize(400, 400);
 }
 
 void GLWidget::initializeGL()
@@ -112,9 +100,6 @@ void GLWidget::paintGL()
 		glVertex3f( 1.0f,-1.0f, 1.0f);					// Bottom Left Of The Quad (Right)
 		glVertex3f( 1.0f,-1.0f,-1.0f);					// Bottom Right Of The Quad (Right)
 	glEnd();											// Done Drawing The Quad
-
-	rtri += 0.2f;										// Increase The Rotation Variable For The Triangle ( NEW )
-	rquad -= 0.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
 }
 
 void GLWidget::resizeGL(int width, int height)
@@ -144,4 +129,12 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
 	
+}
+
+void GLWidget::timerEvent(QTimerEvent *)
+{
+	rtri += 0.2f;										// Increase The Rotation Variable For The Triangle ( NEW )
+	rquad -= 0.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
+
+	updateGL();
 }

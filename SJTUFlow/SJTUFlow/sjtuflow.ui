@@ -20,7 +20,28 @@
    <string>SJTUFlow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">font: &quot;Comic Sans MS&quot;;</string>
+   <string notr="true">*
+{
+	font: &quot;Comic Sans MS&quot;;
+	border-color: transparent;
+}
+QTabWidget, QTabWidget::pane
+{
+	border-color: transparent;
+}
+QHorizontalTabWidget::tab-bar
+{
+	alignment: center;
+	border-color: transparent;
+}
+QTabBar::tab
+{
+	background-color: transparent;
+}
+QTabBar::tab:selected
+{
+	background-color: qradialgradient(spread:pad, cx:1, cy:0.5, radius:0.2, fx:1, fy:0.5, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(255, 255, 255, 50));
+}</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">

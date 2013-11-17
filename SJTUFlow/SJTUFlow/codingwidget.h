@@ -14,6 +14,8 @@ public:
 	CodingWidget(QWidget *parent = 0);
 	~CodingWidget();
 
+protected:
+
 private:
 	Ui::CodingWidget ui;
 

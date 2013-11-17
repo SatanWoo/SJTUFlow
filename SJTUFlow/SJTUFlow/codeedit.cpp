@@ -9,12 +9,15 @@ CodeEdit::CodeEdit(QWidget *parent)
 	lineNumberArea = new LineNumberArea(this);
 	saved = false;
 	changed = false;
+	tabWidth = 4;
 
-	QFont font = QFont("Courier", 10);
+	QFont font = QFont("Courier", 14);
 	font.setFixedPitch(true);
 	setFont(font);
+	QFontMetrics metrics(font);
+	setTabStopWidth(tabWidth * metrics.width(' '));
 
-	setStyleSheet("background-color:#2e3436;color:#ffffff");
+	setStyleSheet("QPlainTextEdit{background-color:#2e3436;color:#ffffff;}");
 
 	connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
 	connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
@@ -38,14 +41,19 @@ void CodeEdit::lineNumberAreaPaintEvent( QPaintEvent *event )
 	int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
 	int bottom = top + (int) blockBoundingRect(block).height();
 
+	QFont font = QFont("Courier", 10);
+	font.setFixedPitch(true);
+	painter.setFont(font);
+	QFontMetrics metrics(font);
+
 	while (block.isValid() && top <= event->rect().bottom()) 
 	{
 		if (block.isVisible() && bottom >= event->rect().top()) 
 		{
 			QString number = QString::number(blockNumber + 1);
 			painter.setPen(Qt::black);
-			painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
-				Qt::AlignRight, number);
+			painter.drawText(0, top, lineNumberArea->width() - 2, metrics.height(),
+				Qt::AlignRight | Qt::AlignVCenter, number);
 		}
 
 		block = block.next();
@@ -64,8 +72,12 @@ int CodeEdit::lineNumberAreaWidth()
 		max /= 10;
 		++digits;
 	}
+	digits = digits <= 3 ? 3 : digits;
 
-	int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+	QFont font = QFont("Courier", 10);
+	font.setFixedPitch(true);
+	QFontMetrics metrics(font);
+	int space = metrics.width('9') * digits + 4;
 
 	return space;
 }

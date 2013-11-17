@@ -2,6 +2,7 @@
 
 #include <QStyle>
 #include <QMouseEvent>
+#include <QPainter>
 
 #include <iostream>
 
@@ -12,9 +13,6 @@ TitleBar::TitleBar(QWidget *parent)
 
 	pressed = false;
 
-	setAutoFillBackground(true);
-	setBackgroundRole(QPalette::Highlight);
-	
 	QPixmap pix = style()->standardPixmap(QStyle::SP_TitleBarCloseButton);
 	QImage img = pix.toImage();
 	img.invertPixels(QImage::InvertRgb);

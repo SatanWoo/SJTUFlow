@@ -11,8 +11,7 @@ public:
 	GLWidget(QWidget *parent = 0);
 	~GLWidget();
 
-	QSize minimumSizeHint() const;
-	QSize sizeHint() const;
+	void setTimer(int interval);
 
 protected:
 	void initializeGL();
@@ -21,7 +20,7 @@ protected:
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 
-	void timerEvent(QTimerEvent *){ updateGL(); }
+	void timerEvent(QTimerEvent *);
 
 private:
 	GLfloat rtri;
