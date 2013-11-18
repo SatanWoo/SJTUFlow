@@ -48,11 +48,20 @@ QToolBar
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="actionNew"/>
+    <widget class="QMenu" name="menuNew">
+     <property name="title">
+      <string>New</string>
+     </property>
+     <addaction name="actionScene2D"/>
+     <addaction name="actionScene3D"/>
+    </widget>
+    <addaction name="menuNew"/>
     <addaction name="actionOpen"/>
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport"/>
    </widget>
    <widget class="QMenu" name="menuRender">
     <property name="title">
@@ -87,14 +96,6 @@ QToolBar
     <bool>false</bool>
    </attribute>
   </widget>
-  <action name="actionNew">
-   <property name="text">
-    <string>New</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+N</string>
-   </property>
-  </action>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
@@ -175,6 +176,21 @@ QToolBar
   <action name="actionProperty">
    <property name="text">
     <string>Property</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="text">
+    <string>Import</string>
+   </property>
+  </action>
+  <action name="actionScene2D">
+   <property name="text">
+    <string>2D Scene</string>
+   </property>
+  </action>
+  <action name="actionScene3D">
+   <property name="text">
+    <string>3D Scene</string>
    </property>
   </action>
  </widget>

@@ -25,7 +25,6 @@ QT_BEGIN_NAMESPACE
 class Ui_SceneDesignWidget
 {
 public:
-    QAction *actionNew;
     QAction *actionOpen;
     QAction *actionSave;
     QAction *actionSave_as;
@@ -37,9 +36,13 @@ public:
     QAction *actionRotate;
     QAction *actionScale;
     QAction *actionProperty;
+    QAction *actionImport;
+    QAction *actionScene2D;
+    QAction *actionScene3D;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
+    QMenu *menuNew;
     QMenu *menuRender;
     QMenu *menuEdit;
     QToolBar *mainToolBar;
@@ -68,8 +71,6 @@ public:
 "	border-color: rgba(255, 255, 255, 50);\n"
 "	background-color: rgba(255, 255, 255, 50);\n"
 "}"));
-        actionNew = new QAction(SceneDesignWidget);
-        actionNew->setObjectName(QStringLiteral("actionNew"));
         actionOpen = new QAction(SceneDesignWidget);
         actionOpen->setObjectName(QStringLiteral("actionOpen"));
         actionSave = new QAction(SceneDesignWidget);
@@ -92,6 +93,12 @@ public:
         actionScale->setObjectName(QStringLiteral("actionScale"));
         actionProperty = new QAction(SceneDesignWidget);
         actionProperty->setObjectName(QStringLiteral("actionProperty"));
+        actionImport = new QAction(SceneDesignWidget);
+        actionImport->setObjectName(QStringLiteral("actionImport"));
+        actionScene2D = new QAction(SceneDesignWidget);
+        actionScene2D->setObjectName(QStringLiteral("actionScene2D"));
+        actionScene3D = new QAction(SceneDesignWidget);
+        actionScene3D->setObjectName(QStringLiteral("actionScene3D"));
         centralWidget = new QWidget(SceneDesignWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         SceneDesignWidget->setCentralWidget(centralWidget);
@@ -100,6 +107,8 @@ public:
         menuBar->setGeometry(QRect(0, 0, 400, 23));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
+        menuNew = new QMenu(menuFile);
+        menuNew->setObjectName(QStringLiteral("menuNew"));
         menuRender = new QMenu(menuBar);
         menuRender->setObjectName(QStringLiteral("menuRender"));
         menuEdit = new QMenu(menuBar);
@@ -112,11 +121,15 @@ public:
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
         menuBar->addAction(menuRender->menuAction());
-        menuFile->addAction(actionNew);
+        menuFile->addAction(menuNew->menuAction());
         menuFile->addAction(actionOpen);
         menuFile->addSeparator();
         menuFile->addAction(actionSave);
         menuFile->addAction(actionSave_as);
+        menuFile->addSeparator();
+        menuFile->addAction(actionImport);
+        menuNew->addAction(actionScene2D);
+        menuNew->addAction(actionScene3D);
         menuRender->addAction(actionSetting);
         menuEdit->addAction(actionUndo);
         menuEdit->addAction(actionRedo);
@@ -137,8 +150,6 @@ public:
     void retranslateUi(QMainWindow *SceneDesignWidget)
     {
         SceneDesignWidget->setWindowTitle(QApplication::translate("SceneDesignWidget", "SceneDesignWidget", 0));
-        actionNew->setText(QApplication::translate("SceneDesignWidget", "New", 0));
-        actionNew->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+N", 0));
         actionOpen->setText(QApplication::translate("SceneDesignWidget", "Open", 0));
         actionOpen->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+O", 0));
         actionSave->setText(QApplication::translate("SceneDesignWidget", "Save", 0));
@@ -159,7 +170,11 @@ public:
         actionScale->setText(QApplication::translate("SceneDesignWidget", "Scale", 0));
         actionScale->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+R", 0));
         actionProperty->setText(QApplication::translate("SceneDesignWidget", "Property", 0));
+        actionImport->setText(QApplication::translate("SceneDesignWidget", "Import", 0));
+        actionScene2D->setText(QApplication::translate("SceneDesignWidget", "2D Scene", 0));
+        actionScene3D->setText(QApplication::translate("SceneDesignWidget", "3D Scene", 0));
         menuFile->setTitle(QApplication::translate("SceneDesignWidget", "&File", 0));
+        menuNew->setTitle(QApplication::translate("SceneDesignWidget", "New", 0));
         menuRender->setTitle(QApplication::translate("SceneDesignWidget", "&Render", 0));
         menuEdit->setTitle(QApplication::translate("SceneDesignWidget", "&Edit", 0));
     } // retranslateUi

@@ -15,10 +15,10 @@
         <file>Resources/Icons/CodingNewFile.png</file>
         <file>Resources/Icons/CodingOpenFile.png</file>
         <file>Resources/Icons/CodingPaste.png</file>
-        <file>Resources/Icons/CodingRedo.png</file>
-        <file>Resources/Icons/CodingSaveFile.png</file>
-        <file>Resources/Icons/CodingUndo.png</file>
         <file>Resources/Icons/CodingSaved.png</file>
+        <file>Resources/Icons/CodingSaveFile.png</file>
         <file>Resources/Icons/CodingUnsaved.png</file>
+        <file>Resources/Icons/CodingRedo.png</file>
+        <file>Resources/Icons/CodingUndo.png</file>
     </qresource>
 </RCC>
