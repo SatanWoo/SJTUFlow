@@ -30,8 +30,8 @@ QMenuBar::item:pressed
 }
 QToolBar
 {
-	border-color: rgba(255, 255, 255, 50);
-	background-color: rgba(255, 255, 255, 50);
+	border-color: rgb(209, 209, 209);
+	background-color: rgb(209, 209, 209);
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget"/>
@@ -89,12 +89,217 @@ QToolBar
    <addaction name="menuRender"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+  </widget>
+  <widget class="QToolBar" name="toolBar2D">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="toolBar3D">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QDockWidget" name="dockWidgetProperty">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>200</width>
+     <height>205</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>200</width>
+     <height>10000</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">*
+{
+	border-color: rgb(100, 100, 100);
+	background-color: rgb(100, 100, 100);
+}
+QLineEdit
+{
+	border-color: transparent;
+	background-color: white;
+}
+QLineEdit:!enabled
+{
+	background-color: rgb(200, 200, 200);
+}</string>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Property</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="1">
+      <widget class="QLabel" name="labelPosX">
+       <property name="text">
+        <string>x</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLineEdit" name="lineEditObjName"/>
+     </item>
+     <item row="1" column="0" rowspan="3">
+      <widget class="QLabel" name="labelPos">
+       <property name="text">
+        <string>position</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelObjName">
+       <property name="text">
+        <string>objectName</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" colspan="3">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="labelColor">
+       <property name="text">
+        <string>color</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="lineEditPosX"/>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLineEdit" name="lineEditPosZ"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="labelPosY">
+       <property name="text">
+        <string>y</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLineEdit" name="lineEditPosY"/>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="labelPosZ">
+       <property name="text">
+        <string>z</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="checkBoxFill">
+       <property name="text">
+        <string>fill</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButtonColor">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>100</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <action name="actionOpen">
    <property name="text">
@@ -150,6 +355,10 @@ QToolBar
    </property>
   </action>
   <action name="actionMove">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Move.png</normaloff>:/Design/Resources/Icons/Move.png</iconset>
+   </property>
    <property name="text">
     <string>Move</string>
    </property>
@@ -158,6 +367,10 @@ QToolBar
    </property>
   </action>
   <action name="actionRotate">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Rotate.png</normaloff>:/Design/Resources/Icons/Rotate.png</iconset>
+   </property>
    <property name="text">
     <string>Rotate</string>
    </property>
@@ -166,6 +379,10 @@ QToolBar
    </property>
   </action>
   <action name="actionScale">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Scale.png</normaloff>:/Design/Resources/Icons/Scale.png</iconset>
+   </property>
    <property name="text">
     <string>Scale</string>
    </property>
@@ -195,6 +412,12 @@ QToolBar
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>lineEditObjName</tabstop>
+  <tabstop>lineEditPosX</tabstop>
+  <tabstop>lineEditPosY</tabstop>
+  <tabstop>lineEditPosZ</tabstop>
+ </tabstops>
  <resources>
   <include location="sjtuflow.qrc"/>
  </resources>

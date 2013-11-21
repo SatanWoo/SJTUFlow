@@ -5,9 +5,9 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	glWidget = new GLWidget;
-	glWidget->startTimer(1);
-	setCentralWidget(glWidget);
+	scene = new Scene;
+	scene->startTimer(1);
+	setCentralWidget(scene);
 }
 
 DisplayWidget::~DisplayWidget()

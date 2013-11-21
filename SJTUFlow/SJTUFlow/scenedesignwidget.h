@@ -4,7 +4,9 @@
 #include <QMainWindow>
 #include "ui_scenedesignwidget.h"
 
-#include "glwidget.h"
+#include <QColorDialog>
+
+#include "scene.h"
 
 class SceneDesignWidget : public QMainWindow
 {
@@ -17,7 +19,13 @@ public:
 private:
 	Ui::SceneDesignWidget ui;
 
-	GLWidget *glWidget;
+	QColorDialog *colorDialog;
+	Scene *scene;
+
+	int currentObjectId;
+
+private slots:
+	void showProperty();
 };
 
 #endif // SCENEDESIGNWIDGET_H

@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "ui_displaywidget.h"
 
-#include "glwidget.h"
+#include "scene.h"
 
 class DisplayWidget : public QMainWindow
 {
@@ -17,7 +17,7 @@ public:
 private:
 	Ui::DisplayWidget ui;
 
-	GLWidget *glWidget;
+	Scene *scene;
 };
 
 #endif // DISPLAYWIDGET_H

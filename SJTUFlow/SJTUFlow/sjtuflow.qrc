@@ -21,4 +21,13 @@
         <file>Resources/Icons/CodingRedo.png</file>
         <file>Resources/Icons/CodingUndo.png</file>
     </qresource>
+    <qresource prefix="/Design">
+        <file>Resources/Icons/Move.png</file>
+        <file>Resources/Icons/Rotate.png</file>
+        <file>Resources/Icons/Scale.png</file>
+        <file>Resources/Icons/Box.png</file>
+        <file>Resources/Icons/Sphere.png</file>
+        <file>Resources/Icons/Circle.png</file>
+        <file>Resources/Icons/Rectangle.png</file>
+    </qresource>
 </RCC>

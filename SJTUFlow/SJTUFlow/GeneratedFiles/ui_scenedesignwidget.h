@@ -13,10 +13,18 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QDockWidget>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
@@ -46,6 +54,26 @@ public:
     QMenu *menuRender;
     QMenu *menuEdit;
     QToolBar *mainToolBar;
+    QToolBar *toolBar2D;
+    QToolBar *toolBar3D;
+    QDockWidget *dockWidgetProperty;
+    QWidget *dockWidgetContents;
+    QGridLayout *gridLayout;
+    QLabel *labelPosX;
+    QLineEdit *lineEditObjName;
+    QLabel *labelPos;
+    QLabel *labelObjName;
+    QSpacerItem *verticalSpacer;
+    QLabel *labelColor;
+    QLineEdit *lineEditPosX;
+    QLineEdit *lineEditPosZ;
+    QLabel *labelPosY;
+    QLineEdit *lineEditPosY;
+    QLabel *labelPosZ;
+    QCheckBox *checkBoxFill;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *pushButtonColor;
+    QSpacerItem *horizontalSpacer;
 
     void setupUi(QMainWindow *SceneDesignWidget)
     {
@@ -68,8 +96,8 @@ public:
 "}\n"
 "QToolBar\n"
 "{\n"
-"	border-color: rgba(255, 255, 255, 50);\n"
-"	background-color: rgba(255, 255, 255, 50);\n"
+"	border-color: rgb(209, 209, 209);\n"
+"	background-color: rgb(209, 209, 209);\n"
 "}"));
         actionOpen = new QAction(SceneDesignWidget);
         actionOpen->setObjectName(QStringLiteral("actionOpen"));
@@ -87,10 +115,19 @@ public:
         actionDelete->setObjectName(QStringLiteral("actionDelete"));
         actionMove = new QAction(SceneDesignWidget);
         actionMove->setObjectName(QStringLiteral("actionMove"));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/Design/Resources/Icons/Move.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionMove->setIcon(icon);
         actionRotate = new QAction(SceneDesignWidget);
         actionRotate->setObjectName(QStringLiteral("actionRotate"));
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/Design/Resources/Icons/Rotate.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRotate->setIcon(icon1);
         actionScale = new QAction(SceneDesignWidget);
         actionScale->setObjectName(QStringLiteral("actionScale"));
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/Design/Resources/Icons/Scale.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionScale->setIcon(icon2);
         actionProperty = new QAction(SceneDesignWidget);
         actionProperty->setObjectName(QStringLiteral("actionProperty"));
         actionImport = new QAction(SceneDesignWidget);
@@ -116,7 +153,133 @@ public:
         SceneDesignWidget->setMenuBar(menuBar);
         mainToolBar = new QToolBar(SceneDesignWidget);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        mainToolBar->setFloatable(false);
         SceneDesignWidget->addToolBar(Qt::TopToolBarArea, mainToolBar);
+        toolBar2D = new QToolBar(SceneDesignWidget);
+        toolBar2D->setObjectName(QStringLiteral("toolBar2D"));
+        SceneDesignWidget->addToolBar(Qt::TopToolBarArea, toolBar2D);
+        toolBar3D = new QToolBar(SceneDesignWidget);
+        toolBar3D->setObjectName(QStringLiteral("toolBar3D"));
+        SceneDesignWidget->addToolBar(Qt::TopToolBarArea, toolBar3D);
+        dockWidgetProperty = new QDockWidget(SceneDesignWidget);
+        dockWidgetProperty->setObjectName(QStringLiteral("dockWidgetProperty"));
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(dockWidgetProperty->sizePolicy().hasHeightForWidth());
+        dockWidgetProperty->setSizePolicy(sizePolicy);
+        dockWidgetProperty->setMinimumSize(QSize(200, 205));
+        dockWidgetProperty->setMaximumSize(QSize(200, 10000));
+        dockWidgetProperty->setStyleSheet(QLatin1String("*\n"
+"{\n"
+"	border-color: rgb(100, 100, 100);\n"
+"	background-color: rgb(100, 100, 100);\n"
+"}\n"
+"QLineEdit\n"
+"{\n"
+"	border-color: transparent;\n"
+"	background-color: white;\n"
+"}\n"
+"QLineEdit:!enabled\n"
+"{\n"
+"	background-color: rgb(200, 200, 200);\n"
+"}"));
+        dockWidgetProperty->setFloating(false);
+        dockWidgetProperty->setFeatures(QDockWidget::DockWidgetClosable);
+        dockWidgetProperty->setAllowedAreas(Qt::RightDockWidgetArea);
+        dockWidgetContents = new QWidget();
+        dockWidgetContents->setObjectName(QStringLiteral("dockWidgetContents"));
+        gridLayout = new QGridLayout(dockWidgetContents);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        labelPosX = new QLabel(dockWidgetContents);
+        labelPosX->setObjectName(QStringLiteral("labelPosX"));
+        labelPosX->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout->addWidget(labelPosX, 1, 1, 1, 1);
+
+        lineEditObjName = new QLineEdit(dockWidgetContents);
+        lineEditObjName->setObjectName(QStringLiteral("lineEditObjName"));
+
+        gridLayout->addWidget(lineEditObjName, 0, 2, 1, 1);
+
+        labelPos = new QLabel(dockWidgetContents);
+        labelPos->setObjectName(QStringLiteral("labelPos"));
+        labelPos->setAlignment(Qt::AlignCenter);
+
+        gridLayout->addWidget(labelPos, 1, 0, 3, 1);
+
+        labelObjName = new QLabel(dockWidgetContents);
+        labelObjName->setObjectName(QStringLiteral("labelObjName"));
+        labelObjName->setAlignment(Qt::AlignCenter);
+
+        gridLayout->addWidget(labelObjName, 0, 0, 1, 1);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout->addItem(verticalSpacer, 7, 0, 1, 3);
+
+        labelColor = new QLabel(dockWidgetContents);
+        labelColor->setObjectName(QStringLiteral("labelColor"));
+        labelColor->setAlignment(Qt::AlignCenter);
+
+        gridLayout->addWidget(labelColor, 5, 0, 1, 1);
+
+        lineEditPosX = new QLineEdit(dockWidgetContents);
+        lineEditPosX->setObjectName(QStringLiteral("lineEditPosX"));
+
+        gridLayout->addWidget(lineEditPosX, 1, 2, 1, 1);
+
+        lineEditPosZ = new QLineEdit(dockWidgetContents);
+        lineEditPosZ->setObjectName(QStringLiteral("lineEditPosZ"));
+
+        gridLayout->addWidget(lineEditPosZ, 3, 2, 1, 1);
+
+        labelPosY = new QLabel(dockWidgetContents);
+        labelPosY->setObjectName(QStringLiteral("labelPosY"));
+        labelPosY->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout->addWidget(labelPosY, 2, 1, 1, 1);
+
+        lineEditPosY = new QLineEdit(dockWidgetContents);
+        lineEditPosY->setObjectName(QStringLiteral("lineEditPosY"));
+
+        gridLayout->addWidget(lineEditPosY, 2, 2, 1, 1);
+
+        labelPosZ = new QLabel(dockWidgetContents);
+        labelPosZ->setObjectName(QStringLiteral("labelPosZ"));
+        labelPosZ->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout->addWidget(labelPosZ, 3, 1, 1, 1);
+
+        checkBoxFill = new QCheckBox(dockWidgetContents);
+        checkBoxFill->setObjectName(QStringLiteral("checkBoxFill"));
+
+        gridLayout->addWidget(checkBoxFill, 4, 0, 1, 1);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        pushButtonColor = new QPushButton(dockWidgetContents);
+        pushButtonColor->setObjectName(QStringLiteral("pushButtonColor"));
+        pushButtonColor->setIconSize(QSize(20, 16));
+        pushButtonColor->setFlat(true);
+
+        horizontalLayout->addWidget(pushButtonColor);
+
+        horizontalSpacer = new QSpacerItem(100, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+
+        gridLayout->addLayout(horizontalLayout, 5, 2, 1, 1);
+
+        dockWidgetProperty->setWidget(dockWidgetContents);
+        SceneDesignWidget->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockWidgetProperty);
+        QWidget::setTabOrder(lineEditObjName, lineEditPosX);
+        QWidget::setTabOrder(lineEditPosX, lineEditPosY);
+        QWidget::setTabOrder(lineEditPosY, lineEditPosZ);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
@@ -177,6 +340,17 @@ public:
         menuNew->setTitle(QApplication::translate("SceneDesignWidget", "New", 0));
         menuRender->setTitle(QApplication::translate("SceneDesignWidget", "&Render", 0));
         menuEdit->setTitle(QApplication::translate("SceneDesignWidget", "&Edit", 0));
+        toolBar2D->setWindowTitle(QApplication::translate("SceneDesignWidget", "toolBar", 0));
+        toolBar3D->setWindowTitle(QApplication::translate("SceneDesignWidget", "toolBar", 0));
+        dockWidgetProperty->setWindowTitle(QApplication::translate("SceneDesignWidget", "Property", 0));
+        labelPosX->setText(QApplication::translate("SceneDesignWidget", "x", 0));
+        labelPos->setText(QApplication::translate("SceneDesignWidget", "position", 0));
+        labelObjName->setText(QApplication::translate("SceneDesignWidget", "objectName", 0));
+        labelColor->setText(QApplication::translate("SceneDesignWidget", "color", 0));
+        labelPosY->setText(QApplication::translate("SceneDesignWidget", "y", 0));
+        labelPosZ->setText(QApplication::translate("SceneDesignWidget", "z", 0));
+        checkBoxFill->setText(QApplication::translate("SceneDesignWidget", "fill", 0));
+        pushButtonColor->setText(QString());
     } // retranslateUi
 
 };

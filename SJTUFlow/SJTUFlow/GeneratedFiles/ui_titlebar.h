@@ -41,8 +41,11 @@ public:
         TitleBar->setSizePolicy(sizePolicy);
         TitleBar->setStyleSheet(QLatin1String("*\n"
 "{\n"
-"	color: white;\n"
 "	border-image: transparent;\n"
+"}\n"
+"QLabel\n"
+"{\n"
+"	color: white;\n"
 "}\n"
 "QToolButton\n"
 "{\n"

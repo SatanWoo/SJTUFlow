@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QPainter>
+#include <QProcess>
 
 #include "codeedit.h"
 
@@ -164,6 +165,7 @@ void CodingWidget::saveFile()
 	{
 		saveAs();
 	}
+	ui.tabWidget->setTabIcon(ui.tabWidget->currentIndex(), savedIcon);
 }
 
 void CodingWidget::saveAs()
@@ -209,17 +211,15 @@ void CodingWidget::runModule()
 	saveFile();
 	if (!codeEdit->getFileName().isEmpty())
 	{
-		system(QString("E:\\Python27\\python %1 > %2")
-			.arg(codeEdit->getFileName()).arg(TEMP_FILE_NAME)
-			.toStdString().c_str());
+		QProcess process;
 
-		QFile file(tr(TEMP_FILE_NAME));
-		file.open(QFile::ReadOnly | QFile::Text);
-		QTextStream in(&file);
-		QString output = in.readAll();
-		file.close();
-		QFile::remove(tr(TEMP_FILE_NAME));
-		QMessageBox::information(this, tr("Output"), output, QMessageBox::Ok);
+// 		int r = process.execute(tr("E:/Python27/python.exe %1 > %2")
+// 			.arg(codeEdit->getFileName()).arg(TEMP_FILE_NAME));
+// 		if (r != 0)
+// 		{
+// 			QString output = QString(process.readAll());
+// 			QMessageBox::information(this, tr("Output"), output, QMessageBox::Ok);
+//		}	
 	}	
 }
 

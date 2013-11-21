@@ -110,14 +110,17 @@
     <ClCompile Include="GeneratedFiles\Release\moc_titlebar.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="glwidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_glwidget.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_scene.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_glwidget.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_scene.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="primitive.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,7 +163,7 @@
     <CustomBuild Include="titlebar.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="glwidget.h">
+    <CustomBuild Include="scene.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -185,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_titlebar.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="primitive.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

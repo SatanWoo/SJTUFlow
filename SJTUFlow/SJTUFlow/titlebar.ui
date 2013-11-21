@@ -22,8 +22,11 @@
   <property name="styleSheet">
    <string notr="true">*
 {
-	color: white;
 	border-image: transparent;
+}
+QLabel
+{
+	color: white;
 }
 QToolButton
 {
