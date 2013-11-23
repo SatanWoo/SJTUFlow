@@ -127,7 +127,7 @@ void Scene::resizeGL(int width, int height)
 	glLoadIdentity();									// Reset The Projection Matrix
 
 	// Calculate The Aspect Ratio Of The Window
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,1.0f,1000.0f);
+	gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 1.0f, 1000.0f);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
@@ -155,12 +155,14 @@ void Scene::newCircle()
 {
 	GLdouble center[2] = {0.2, 0.0};
 	GLdouble radius = 0.1;
-	GLubyte color[3] = {0, 255, 0};
+	QColor color(0, 255, 0);
 
 	SceneUnit::Primitive *p = new SceneUnit::Circle(center, color, radius);
 	p->setName(QString("circle_%1").arg(++circleNum));
 	p->setId(primitives.count());
 	primitives.append(p);
+
+	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 
 	updateGL();
 }
@@ -169,12 +171,14 @@ void Scene::newRectangle()
 {
 	GLdouble center[2] = {-0.2, 0.0};
 	GLdouble width = 0.1;
-	GLubyte color[3] = {255, 0, 0};
+	QColor color(255, 0, 0);
 
 	SceneUnit::Primitive *p = new SceneUnit::Rectangle(center, color, width);
 	p->setName(QString("rect_%1").arg(++rectangleNum));
 	p->setId(primitives.count());
 	primitives.append(p);
+
+	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 
 	updateGL();
 }
@@ -183,12 +187,14 @@ void Scene::newBox()
 {
 	GLdouble center[3] = {0.0, 0.2, -1.0};
 	GLdouble len = 0.1;
-	GLubyte color[3] = {0, 255, 255};
+	QColor color(0, 255, 255);
 
 	SceneUnit::Primitive *p = new SceneUnit::Box(center, color, len);
 	p->setName(QString("box_%1").arg(++boxNum));
 	p->setId(primitives.count());
 	primitives.append(p);
+
+	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 
 	updateGL();
 }
@@ -197,12 +203,14 @@ void Scene::newSphere()
 {
 	GLdouble center[3] = {0.0, -0.2, -1.0};
 	GLdouble radius = 0.1;
-	GLubyte color[3] = {255, 0, 255};
+	QColor color(255, 0, 255);
 
 	SceneUnit::Primitive *p = new SceneUnit::Sphere(center, color, radius, quadric);
 	p->setName(QString("sphere_%1").arg(++sphereNum));
 	p->setId(primitives.count());
 	primitives.append(p);
+
+	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 
 	updateGL();
 }

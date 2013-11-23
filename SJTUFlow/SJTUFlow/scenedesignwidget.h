@@ -22,10 +22,12 @@ private:
 	QColorDialog *colorDialog;
 	Scene *scene;
 
-	int currentObjectId;
+	int selectedObjectId;
 
 private slots:
 	void showProperty();
+
+	void colorChanged(QColor color);
 };
 
 #endif // SCENEDESIGNWIDGET_H

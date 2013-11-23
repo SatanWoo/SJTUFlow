@@ -55,6 +55,7 @@ public:
         if (CodingWidget->objectName().isEmpty())
             CodingWidget->setObjectName(QStringLiteral("CodingWidget"));
         CodingWidget->resize(400, 300);
+        CodingWidget->setContextMenuPolicy(Qt::NoContextMenu);
         CodingWidget->setStyleSheet(QLatin1String("CodingWidget{background-color: rgba(255, 255, 255, 50);}\n"
 "QMenuBar\n"
 "{\n"

@@ -80,6 +80,7 @@ public:
         if (SceneDesignWidget->objectName().isEmpty())
             SceneDesignWidget->setObjectName(QStringLiteral("SceneDesignWidget"));
         SceneDesignWidget->resize(400, 300);
+        SceneDesignWidget->setContextMenuPolicy(Qt::NoContextMenu);
         SceneDesignWidget->setStyleSheet(QLatin1String("QMenuBar\n"
 "{\n"
 "	border-color: rgba(255, 255, 255, 50);\n"
@@ -142,6 +143,7 @@ public:
         menuBar = new QMenuBar(SceneDesignWidget);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 400, 23));
+        menuBar->setContextMenuPolicy(Qt::NoContextMenu);
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuNew = new QMenu(menuFile);
@@ -153,13 +155,16 @@ public:
         SceneDesignWidget->setMenuBar(menuBar);
         mainToolBar = new QToolBar(SceneDesignWidget);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        mainToolBar->setContextMenuPolicy(Qt::NoContextMenu);
         mainToolBar->setFloatable(false);
         SceneDesignWidget->addToolBar(Qt::TopToolBarArea, mainToolBar);
         toolBar2D = new QToolBar(SceneDesignWidget);
         toolBar2D->setObjectName(QStringLiteral("toolBar2D"));
+        toolBar2D->setContextMenuPolicy(Qt::NoContextMenu);
         SceneDesignWidget->addToolBar(Qt::TopToolBarArea, toolBar2D);
         toolBar3D = new QToolBar(SceneDesignWidget);
         toolBar3D->setObjectName(QStringLiteral("toolBar3D"));
+        toolBar3D->setContextMenuPolicy(Qt::NoContextMenu);
         SceneDesignWidget->addToolBar(Qt::TopToolBarArea, toolBar3D);
         dockWidgetProperty = new QDockWidget(SceneDesignWidget);
         dockWidgetProperty->setObjectName(QStringLiteral("dockWidgetProperty"));
@@ -183,6 +188,12 @@ public:
 "QLineEdit:!enabled\n"
 "{\n"
 "	background-color: rgb(200, 200, 200);\n"
+"}\n"
+"QPushButton\n"
+"{\n"
+"    border-style: outset;\n"
+"    border-width: 1px;\n"
+"    border-color: beige;\n"
 "}"));
         dockWidgetProperty->setFloating(false);
         dockWidgetProperty->setFeatures(QDockWidget::DockWidgetClosable);
@@ -201,6 +212,7 @@ public:
 
         lineEditObjName = new QLineEdit(dockWidgetContents);
         lineEditObjName->setObjectName(QStringLiteral("lineEditObjName"));
+        lineEditObjName->setContextMenuPolicy(Qt::NoContextMenu);
 
         gridLayout->addWidget(lineEditObjName, 0, 2, 1, 1);
 
@@ -228,11 +240,13 @@ public:
 
         lineEditPosX = new QLineEdit(dockWidgetContents);
         lineEditPosX->setObjectName(QStringLiteral("lineEditPosX"));
+        lineEditPosX->setContextMenuPolicy(Qt::NoContextMenu);
 
         gridLayout->addWidget(lineEditPosX, 1, 2, 1, 1);
 
         lineEditPosZ = new QLineEdit(dockWidgetContents);
         lineEditPosZ->setObjectName(QStringLiteral("lineEditPosZ"));
+        lineEditPosZ->setContextMenuPolicy(Qt::NoContextMenu);
 
         gridLayout->addWidget(lineEditPosZ, 3, 2, 1, 1);
 
@@ -244,6 +258,7 @@ public:
 
         lineEditPosY = new QLineEdit(dockWidgetContents);
         lineEditPosY->setObjectName(QStringLiteral("lineEditPosY"));
+        lineEditPosY->setContextMenuPolicy(Qt::NoContextMenu);
 
         gridLayout->addWidget(lineEditPosY, 2, 2, 1, 1);
 
@@ -263,8 +278,10 @@ public:
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         pushButtonColor = new QPushButton(dockWidgetContents);
         pushButtonColor->setObjectName(QStringLiteral("pushButtonColor"));
-        pushButtonColor->setIconSize(QSize(20, 16));
-        pushButtonColor->setFlat(true);
+        pushButtonColor->setMinimumSize(QSize(28, 20));
+        pushButtonColor->setMaximumSize(QSize(28, 20));
+        pushButtonColor->setIconSize(QSize(26, 18));
+        pushButtonColor->setFlat(false);
 
         horizontalLayout->addWidget(pushButtonColor);
 
@@ -340,8 +357,9 @@ public:
         menuNew->setTitle(QApplication::translate("SceneDesignWidget", "New", 0));
         menuRender->setTitle(QApplication::translate("SceneDesignWidget", "&Render", 0));
         menuEdit->setTitle(QApplication::translate("SceneDesignWidget", "&Edit", 0));
-        toolBar2D->setWindowTitle(QApplication::translate("SceneDesignWidget", "toolBar", 0));
-        toolBar3D->setWindowTitle(QApplication::translate("SceneDesignWidget", "toolBar", 0));
+        mainToolBar->setWindowTitle(QApplication::translate("SceneDesignWidget", "Main ToolBar", 0));
+        toolBar2D->setWindowTitle(QApplication::translate("SceneDesignWidget", "2D toolBar", 0));
+        toolBar3D->setWindowTitle(QApplication::translate("SceneDesignWidget", "3D toolBar", 0));
         dockWidgetProperty->setWindowTitle(QApplication::translate("SceneDesignWidget", "Property", 0));
         labelPosX->setText(QApplication::translate("SceneDesignWidget", "x", 0));
         labelPos->setText(QApplication::translate("SceneDesignWidget", "position", 0));

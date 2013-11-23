@@ -10,6 +10,9 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>SceneDesignWidget</string>
   </property>
@@ -43,6 +46,9 @@ QToolBar
      <width>400</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -89,6 +95,12 @@ QToolBar
    <addaction name="menuRender"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>Main ToolBar</string>
+   </property>
    <property name="floatable">
     <bool>false</bool>
    </property>
@@ -100,8 +112,11 @@ QToolBar
    </attribute>
   </widget>
   <widget class="QToolBar" name="toolBar2D">
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>2D toolBar</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -111,8 +126,11 @@ QToolBar
    </attribute>
   </widget>
   <widget class="QToolBar" name="toolBar3D">
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>3D toolBar</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -154,6 +172,12 @@ QLineEdit
 QLineEdit:!enabled
 {
 	background-color: rgb(200, 200, 200);
+}
+QPushButton
+{
+    border-style: outset;
+    border-width: 1px;
+    border-color: beige;
 }</string>
    </property>
    <property name="floating">
@@ -184,7 +208,11 @@ QLineEdit:!enabled
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QLineEdit" name="lineEditObjName"/>
+      <widget class="QLineEdit" name="lineEditObjName">
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0" rowspan="3">
       <widget class="QLabel" name="labelPos">
@@ -230,10 +258,18 @@ QLineEdit:!enabled
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QLineEdit" name="lineEditPosX"/>
+      <widget class="QLineEdit" name="lineEditPosX">
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
+       </property>
+      </widget>
      </item>
      <item row="3" column="2">
-      <widget class="QLineEdit" name="lineEditPosZ"/>
+      <widget class="QLineEdit" name="lineEditPosZ">
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
+       </property>
+      </widget>
      </item>
      <item row="2" column="1">
       <widget class="QLabel" name="labelPosY">
@@ -246,7 +282,11 @@ QLineEdit:!enabled
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="QLineEdit" name="lineEditPosY"/>
+      <widget class="QLineEdit" name="lineEditPosY">
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
+       </property>
+      </widget>
      </item>
      <item row="3" column="1">
       <widget class="QLabel" name="labelPosZ">
@@ -269,17 +309,29 @@ QLineEdit:!enabled
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="pushButtonColor">
+         <property name="minimumSize">
+          <size>
+           <width>28</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>28</width>
+           <height>20</height>
+          </size>
+         </property>
          <property name="text">
           <string/>
          </property>
          <property name="iconSize">
           <size>
-           <width>20</width>
-           <height>16</height>
+           <width>26</width>
+           <height>18</height>
           </size>
          </property>
          <property name="flat">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>

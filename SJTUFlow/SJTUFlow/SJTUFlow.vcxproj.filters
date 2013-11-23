@@ -122,6 +122,12 @@
     <ClCompile Include="primitive.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_primitive.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_primitive.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="sjtuflow.h">
@@ -166,6 +172,9 @@
     <CustomBuild Include="scene.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="primitive.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_sjtuflow.h">
@@ -188,9 +197,6 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_titlebar.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="primitive.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

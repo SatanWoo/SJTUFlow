@@ -15,6 +15,8 @@ public:
 	Scene(QWidget *parent = 0);
 	~Scene();
 
+	SceneUnit::Primitive *getPrimitive(int id){ return primitives.at(id); }
+
 protected:
 	void initializeGL();
 	void paintGL();

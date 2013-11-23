@@ -18,50 +18,47 @@ Primitive::~Primitive(void)
 {
 }
 
-void Primitive::getColor( GLubyte color[3] )
+void Primitive::getCenter( GLdouble center[3] )
 {
-	color[0] = this->color[0];
-	color[1] = this->color[1];
-	color[2] = this->color[2];
+	center[0] = this->center[0];
+	center[1] = this->center[1];
+	center[2] = this->center[2];
 }
 
-void Primitive::setColor( GLubyte color[3] )
+QColor Primitive::getColor()
 {
-	this->color[0] = color[0];
-	this->color[1] = color[1];
-	this->color[2] = color[2];
+	return QColor(this->color[0], 
+		this->color[1], this->color[2]);
 }
 
-Primitive2D::Primitive2D( GLdouble center[2], GLubyte color[3], bool fill )
+void Primitive::setColor( QColor color )
+{
+	this->color[0] = color.red();
+	this->color[1] = color.green();
+	this->color[2] = color.blue();
+
+	emit propertyChanged();
+}
+
+Primitive2D::Primitive2D( GLdouble center[2], QColor color, bool fill )
 {
 	setCenter(center);
 	setColor(color);
 	setFill(fill);
 }
 
-void Primitive2D::getCenter( GLdouble center[2] )
-{
-	center[0] = this->center[0];
-	center[1] = this->center[1];
-}
-
 void Primitive2D::setCenter( GLdouble center[2] )
 {
 	this->center[0] = center[0];
 	this->center[1] = center[1];
+
+	emit propertyChanged();
 }
 
-Primitive3D::Primitive3D( GLdouble center[3], GLubyte color[3] )
+Primitive3D::Primitive3D( GLdouble center[3], QColor color )
 {
 	setCenter(center);
 	setColor(color);
-}
-
-void Primitive3D::getCenter( GLdouble center[3] )
-{
-	center[0] = this->center[0];
-	center[1] = this->center[1];
-	center[2] = this->center[2];
 }
 
 void Primitive3D::setCenter( GLdouble center[3] )
@@ -69,9 +66,11 @@ void Primitive3D::setCenter( GLdouble center[3] )
 	this->center[0] = center[0];
 	this->center[1] = center[1];
 	this->center[2] = center[2];
+
+	emit propertyChanged();
 }
 
-Circle::Circle( GLdouble center[2], GLubyte color[3], 
+Circle::Circle( GLdouble center[2], QColor color, 
 	GLdouble radius, bool fill )
 	: Primitive2D(center, color, fill)
 {
@@ -105,7 +104,7 @@ void Circle::draw()
 	glEnd();
 }
 
-Rectangle::Rectangle( GLdouble center[2], GLubyte color[3], 
+Rectangle::Rectangle( GLdouble center[2], QColor color, 
 	GLdouble width, GLdouble height, bool fill ) 
 	: Primitive2D(center, color, fill)
 {
@@ -114,7 +113,7 @@ Rectangle::Rectangle( GLdouble center[2], GLubyte color[3],
 	type = T_Rect;
 }
 
-Rectangle::Rectangle( GLdouble center[2], GLubyte color[3], 
+Rectangle::Rectangle( GLdouble center[2], QColor color, 
 	GLdouble width, bool fill )
 	: Primitive2D(center, color, fill)
 {
@@ -145,7 +144,7 @@ void Rectangle::draw()
 	glEnd();
 }
 
-Sphere::Sphere( GLdouble center[3], GLubyte color[3], 
+Sphere::Sphere( GLdouble center[3], QColor color, 
 	GLdouble radius, GLUquadric *quadric )
 	: Primitive3D(center, color)
 {
@@ -162,7 +161,7 @@ void Sphere::draw()
 	gluSphere(quadric, radius, 32, 32);
 }
 
-Box::Box( GLdouble center[3], GLubyte color[3], 
+Box::Box( GLdouble center[3], QColor color, 
 	GLdouble lenx, GLdouble leny, GLdouble lenz )
 	: Primitive3D(center, color)
 {
@@ -171,7 +170,7 @@ Box::Box( GLdouble center[3], GLubyte color[3],
 	setLenZ(lenz);
 }
 
-Box::Box( GLdouble center[3], GLubyte color[3], 
+Box::Box( GLdouble center[3], QColor color, 
 	GLdouble len )
 	: Primitive3D(center, color)
 {

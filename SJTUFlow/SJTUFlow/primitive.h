@@ -3,11 +3,15 @@
 
 #include <GL/glut.h>
 #include <QString>
+#include <QObject>
+#include <QColor>
 
 namespace SceneUnit
 {
-	class Primitive
+	class Primitive : public QObject
 	{
+		Q_OBJECT
+
 	public:
 		Primitive(void);
 		~Primitive(void);
@@ -20,14 +24,19 @@ namespace SceneUnit
 		int getId(){ return id; }
 		void setId(int id){ this->id = id; }
 		QString getName(){ return name; }
-		void setName(QString name){ this->name = name; }
 
-		virtual void getCenter(GLdouble center[]) = 0;
+		void getCenter(GLdouble center[3]);
 		virtual void setCenter(GLdouble center[]) = 0;
-		void getColor(GLubyte color[3]);
-		void setColor(GLubyte color[3]);
+		QColor getColor();
 		bool isFilled(){ return fill; }
-		void setFill(bool fill){ this->fill = fill; }
+
+signals:
+		void propertyChanged();
+
+		public slots:
+			void setName(QString name){ this->name = name; }
+			void setFill(bool fill){ this->fill = fill; emit propertyChanged(); }
+			void setColor(QColor color);
 
 	protected:
 		Type type;
@@ -42,32 +51,30 @@ namespace SceneUnit
 	class Primitive2D : public Primitive
 	{
 	public:
-		Primitive2D(GLdouble center[2], GLubyte color[3], bool fill = true);
+		Primitive2D(GLdouble center[2], QColor color, bool fill = true);
 
 		virtual void draw() = 0;
-		void getCenter(GLdouble center[2]);
 		void setCenter(GLdouble center[2]);
 	};
 
 	class Primitive3D : public Primitive
 	{
 	public:
-		Primitive3D(GLdouble center[3], GLubyte color[3]);
+		Primitive3D(GLdouble center[3], QColor color);
 
 		virtual void draw() = 0;
-		void getCenter(GLdouble center[3]);
 		void setCenter(GLdouble center[3]);
 	};
 
 	class Circle : public Primitive2D
 	{
 	public:
-		Circle(GLdouble center[2], GLubyte color[3], 
+		Circle(GLdouble center[2], QColor color, 
 			GLdouble radius, bool fill = true);
 
 		void draw();
 		GLdouble getRadius(){ return radius; }
-		void setRadius(GLdouble radius){ this->radius = radius; }
+		void setRadius(GLdouble radius){ this->radius = radius; emit propertyChanged(); }
 
 	private:
 		GLdouble radius;
@@ -76,16 +83,16 @@ namespace SceneUnit
 	class Rectangle : public Primitive2D
 	{
 	public:
-		Rectangle(GLdouble center[2], GLubyte color[3], 
+		Rectangle(GLdouble center[2], QColor color, 
 			GLdouble width, GLdouble height, bool fill = true);
-		Rectangle(GLdouble center[2], GLubyte color[3], 
+		Rectangle(GLdouble center[2], QColor color, 
 			GLdouble width, bool fill = true);
 
 		void draw();
 		GLdouble getWidth(){ return width; }
-		void setWidth(GLdouble width){ this->width = width; }
+		void setWidth(GLdouble width){ this->width = width; emit propertyChanged(); }
 		GLdouble getHeight(){ return height; }
-		void setHeight(GLdouble height){ this->height = height; }
+		void setHeight(GLdouble height){ this->height = height; emit propertyChanged(); }
 
 	private:
 		GLdouble width;
@@ -95,12 +102,12 @@ namespace SceneUnit
 	class Sphere : public Primitive3D
 	{
 	public:
-		Sphere(GLdouble center[3], GLubyte color[3], 
+		Sphere(GLdouble center[3], QColor color, 
 			GLdouble radius, GLUquadric *quadric);
 
 		void draw();
 		GLdouble getRadius(){ return radius; }
-		void setRadius(GLdouble radius){ this->radius = radius; }
+		void setRadius(GLdouble radius){ this->radius = radius; emit propertyChanged(); }
 
 	private:
 		GLdouble radius;
@@ -110,17 +117,17 @@ namespace SceneUnit
 	class Box : public Primitive3D
 	{
 	public:
-		Box(GLdouble center[3], GLubyte color[3], 
+		Box(GLdouble center[3], QColor color, 
 			GLdouble lenx, GLdouble leny, GLdouble lenz);
-		Box(GLdouble center[3], GLubyte color[3], GLdouble len);
+		Box(GLdouble center[3], QColor color, GLdouble len);
 
 		void draw();
 		GLdouble getLenX(){ return lenx; }
-		void setLenX(GLdouble lenx){ this->lenx = lenx; }
+		void setLenX(GLdouble lenx){ this->lenx = lenx; emit propertyChanged(); }
 		GLdouble getLenY(){ return leny; }
-		void setLenY(GLdouble leny){ this->leny = leny; }
+		void setLenY(GLdouble leny){ this->leny = leny; emit propertyChanged(); }
 		GLdouble getLenZ(){ return lenz; }
-		void setLenZ(GLdouble lenz){ this->lenz = lenz; }
+		void setLenZ(GLdouble lenz){ this->lenz = lenz; emit propertyChanged(); }
 
 	private:
 		GLdouble lenx, leny, lenz;

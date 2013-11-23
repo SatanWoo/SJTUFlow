@@ -40,6 +40,7 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(SJTUFlowClass->sizePolicy().hasHeightForWidth());
         SJTUFlowClass->setSizePolicy(sizePolicy);
+        SJTUFlowClass->setContextMenuPolicy(Qt::NoContextMenu);
         SJTUFlowClass->setStyleSheet(QLatin1String("*\n"
 "{\n"
 "	font: \"Comic Sans MS\";\n"
