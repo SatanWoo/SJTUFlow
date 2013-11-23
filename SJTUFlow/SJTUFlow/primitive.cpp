@@ -78,11 +78,17 @@ Circle::Circle( GLdouble center[2], QColor color,
 	type = T_Circle;
 }
 
-void Circle::draw()
+void Circle::draw(GLuint id)
 {
-	glLoadIdentity();
-	glTranslated(center[0], center[1], -1.0);
-	glColor3ubv(color);
+	glTranslated(center[0], center[1], 0.0);
+	if (this->id == id)
+	{
+		glColor4ub(color[0], color[1], color[2], 128);
+	}
+	else
+	{
+		glColor3ubv(color);
+	}
 	if (fill)
 	{
 		glBegin(GL_TRIANGLE_FAN);
@@ -122,11 +128,17 @@ Rectangle::Rectangle( GLdouble center[2], QColor color,
 	type = T_Rect;
 }
 
-void Rectangle::draw()
+void Rectangle::draw(GLuint id)
 {
-	glLoadIdentity();
-	glTranslated(center[0] - width / 2, center[1] - height / 2, -1.0);
-	glColor3ubv(color);
+	glTranslated(center[0], center[1], 0.0);
+	if (this->id == id)
+	{
+		glColor4ub(color[0], color[1], color[2], 128);
+	}
+	else
+	{
+		glColor3ubv(color);
+	}
 	if (fill)
 	{
 		glBegin(GL_QUADS);
@@ -136,10 +148,10 @@ void Rectangle::draw()
 		glBegin(GL_LINE_LOOP);
 	}
 
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(width, 0.0, 0.0);
-	glVertex3d(width, height, 0.0);
-	glVertex3d(0.0, height, 0.0);
+	glVertex3d(-width / 2, -height / 2, 0.0);
+	glVertex3d(width / 2, -height / 2, 0.0);
+	glVertex3d(width / 2, height / 2, 0.0);
+	glVertex3d(-width / 2, height / 2, 0.0);
 
 	glEnd();
 }
@@ -150,13 +162,20 @@ Sphere::Sphere( GLdouble center[3], QColor color,
 {
 	setRadius(radius);
 	this->quadric = quadric;
+	type = T_Sphere;
 }
 
-void Sphere::draw()
+void Sphere::draw(GLuint id)
 {
-	glLoadIdentity();
 	glTranslated(center[0], center[1], center[2]);
-	glColor3ubv(color);
+	if (this->id == id)
+	{
+		glColor4ub(color[0], color[1], color[2], 128);
+	}
+	else
+	{
+		glColor3ubv(color);
+	}
 
 	gluSphere(quadric, radius, 32, 32);
 }
@@ -177,47 +196,52 @@ Box::Box( GLdouble center[3], QColor color,
 	setLenX(len);
 	setLenY(len);
 	setLenZ(len);
+	type = T_Box;
 }
 
-void Box::draw()
+void Box::draw(GLuint id)
 {
-	glLoadIdentity();
-	glTranslated(center[0] - lenx / 2, 
-		center[1] - leny / 2, 
-		center[2] - lenz / 2);
-	glColor3ubv(color);
+	glTranslated(center[0], center[1], center[2]);
+	if (this->id == id)
+	{
+		glColor4ub(color[0], color[1], color[2], 128);
+	}
+	else
+	{
+		glColor3ubv(color);
+	}
 
 	glBegin(GL_QUADS);
 
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(0.0, 0.0, lenz);
-	glVertex3d(0.0, leny, lenz);
-	glVertex3d(0.0, leny, 0.0);
+	glVertex3d(-lenx / 2, -leny / 2, -lenz / 2);
+	glVertex3d(-lenx / 2, -leny / 2, lenz / 2);
+	glVertex3d(-lenx / 2, leny / 2, lenz / 2);
+	glVertex3d(-lenx / 2, leny / 2, -lenz / 2);
 
-	glVertex3d(0.0, 0.0, lenz);
-	glVertex3d(lenx, 0.0, lenz);
-	glVertex3d(lenx, leny, lenz);
-	glVertex3d(0.0, leny, lenz);
+	glVertex3d(-lenx / 2, -leny / 2, lenz / 2);
+	glVertex3d(lenx / 2, -leny / 2, lenz / 2);
+	glVertex3d(lenx / 2, leny / 2, lenz / 2);
+	glVertex3d(-lenx / 2, leny / 2, lenz / 2);
 
-	glVertex3d(lenx, 0.0, lenz);
-	glVertex3d(lenx, 0.0, 0.0);
-	glVertex3d(lenx, leny, 0.0);
-	glVertex3d(lenx, leny, lenz);
+	glVertex3d(lenx / 2, -leny / 2, lenz / 2);
+	glVertex3d(lenx / 2, -leny / 2, -lenz / 2);
+	glVertex3d(lenx / 2, leny / 2, -lenz / 2);
+	glVertex3d(lenx / 2, leny / 2, lenz / 2);
 
-	glVertex3d(lenx, 0.0, 0.0);
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(0.0, leny, 0.0);
-	glVertex3d(lenx, leny, 0.0);
+	glVertex3d(lenx / 2, -leny / 2, -lenz / 2);
+	glVertex3d(-lenx / 2, -leny / 2, -lenz / 2);
+	glVertex3d(-lenx / 2, leny / 2, -lenz / 2);
+	glVertex3d(lenx / 2, leny / 2, -lenz / 2);
 
-	glVertex3d(0.0, leny, 0.0);
-	glVertex3d(0.0, leny, lenz);
-	glVertex3d(lenx, leny, lenz);
-	glVertex3d(lenx, leny, 0.0);
+	glVertex3d(-lenx / 2, leny / 2, -lenz / 2);
+	glVertex3d(-lenx / 2, leny / 2, lenz / 2);
+	glVertex3d(lenx / 2, leny / 2, lenz / 2);
+	glVertex3d(lenx / 2, leny / 2, -lenz / 2);
 
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(lenx, 0.0, 0.0);
-	glVertex3d(lenx, 0.0, lenz);
-	glVertex3d(0.0, 0.0, lenz);
+	glVertex3d(-lenx / 2, -leny / 2, -lenz / 2);
+	glVertex3d(lenx / 2, -leny / 2, -lenz / 2);
+	glVertex3d(lenx / 2, -leny / 2, lenz / 2);
+	glVertex3d(-lenx / 2, -leny / 2, lenz / 2);
 
 	glEnd();
 }

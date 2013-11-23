@@ -21,12 +21,14 @@ private:
 
 	QColorDialog *colorDialog;
 	Scene *scene;
+	SceneUnit::Primitive *selectedObj;
 
-	int selectedObjectId;
+	void changePropertyWidget();
 
 private slots:
 	void showProperty();
 
+	void selectedObjChanged(int id);
 	void colorChanged(QColor color);
 };
 

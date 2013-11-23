@@ -7,11 +7,13 @@ SceneDesignWidget::SceneDesignWidget(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	selectedObjectId = 0;
+	selectedObj = NULL;
 
 	scene = new Scene;
 	setCentralWidget(scene);
-	scene->newRectangle();
+
+	connect(scene, SIGNAL(selectedObjChanged(int)), 
+		this, SLOT(selectedObjChanged(int)));
 
 /************************************************************************/
 /*                              menu                                    */
@@ -63,9 +65,14 @@ SceneDesignWidget::~SceneDesignWidget()
 
 }
 
+void SceneDesignWidget::changePropertyWidget()
+{
+	
+}
+
 void SceneDesignWidget::showProperty()
 {
-	if (selectedObjectId >= 0)
+	if (selectedObj != NULL)
 	{
 		ui.lineEditObjName->setEnabled(true);
 		ui.lineEditPosX->setEnabled(true);
@@ -74,35 +81,33 @@ void SceneDesignWidget::showProperty()
 		ui.checkBoxFill->setEnabled(true);
 		ui.pushButtonColor->setEnabled(true);
 
-		SceneUnit::Primitive *p = scene->getPrimitive(selectedObjectId);
-
-		connect(ui.lineEditObjName, SIGNAL(textChanged(QString)), p, SLOT(setName(QString)));
-		connect(ui.checkBoxFill, SIGNAL(toggled(bool)), p, SLOT(setFill(bool)));
+		connect(ui.lineEditObjName, SIGNAL(textChanged(QString)), selectedObj, SLOT(setName(QString)));
+		connect(ui.checkBoxFill, SIGNAL(toggled(bool)), selectedObj, SLOT(setFill(bool)));
 		connect(colorDialog, SIGNAL(colorSelected(QColor)), this, SLOT(colorChanged(QColor)));
 
 		GLdouble center[3];
-		p->getCenter(center);
+		selectedObj->getCenter(center);
 
 		ui.lineEditPosX->setText(QString::number(center[0]));
 		ui.lineEditPosY->setText(QString::number(center[1]));
 		ui.lineEditPosZ->setText(QString::number(center[2]));
 
-		ui.lineEditObjName->setText(p->getName());
-		ui.checkBoxFill->setChecked(p->isFilled());
+		ui.lineEditObjName->setText(selectedObj->getName());
+		ui.checkBoxFill->setChecked(selectedObj->isFilled());
 
 		QPixmap pix(ui.pushButtonColor->iconSize());
-		pix.fill(p->getColor());
+		pix.fill(selectedObj->getColor());
 		ui.pushButtonColor->setIcon(QIcon(pix));
-		colorDialog->setCurrentColor(p->getColor());
+		colorDialog->setCurrentColor(selectedObj->getColor());
 
-		if (p->getType() == SceneUnit::Primitive::T_Circle ||
-			p->getType() == SceneUnit::Primitive::T_Rect)
+		if (selectedObj->getType() == SceneUnit::Primitive::T_Circle ||
+			selectedObj->getType() == SceneUnit::Primitive::T_Rect)
 		{
 			ui.labelPosZ->setVisible(false);
 			ui.lineEditPosZ->setVisible(false);
 		}
-		else if (p->getType() == SceneUnit::Primitive::T_Sphere ||
-			p->getType() == SceneUnit::Primitive::T_Box)
+		else if (selectedObj->getType() == SceneUnit::Primitive::T_Sphere ||
+			selectedObj->getType() == SceneUnit::Primitive::T_Box)
 		{
 			ui.labelPosZ->setVisible(true);
 			ui.lineEditPosZ->setVisible(true);
@@ -117,16 +122,24 @@ void SceneDesignWidget::showProperty()
 		ui.checkBoxFill->setEnabled(false);
 		ui.pushButtonColor->setEnabled(false);
 	}
-
 	ui.dockWidgetProperty->show();
+}
+
+
+void SceneDesignWidget::selectedObjChanged( int id )
+{
+	selectedObj = scene->getPrimitive(id);
+	showProperty();
 }
 
 void SceneDesignWidget::colorChanged( QColor color )
 {
-	QPixmap pix(ui.pushButtonColor->iconSize());
-	pix.fill(color);
-	ui.pushButtonColor->setIcon(QIcon(pix));
+	if (selectedObj != NULL)
+	{
+		QPixmap pix(ui.pushButtonColor->iconSize());
+		pix.fill(color);
+		ui.pushButtonColor->setIcon(QIcon(pix));
 
-	SceneUnit::Primitive *p = scene->getPrimitive(selectedObjectId);
-	p->setColor(color);
+		selectedObj->setColor(color);
+	}
 }

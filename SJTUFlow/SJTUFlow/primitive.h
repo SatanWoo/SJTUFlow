@@ -18,10 +18,10 @@ namespace SceneUnit
 
 		enum Type{T_Rect, T_Circle, T_Box, T_Sphere};
 
-		virtual void draw() = 0;
+		virtual void draw(GLuint id) = 0;
 
 		Type getType(){ return type; }
-		int getId(){ return id; }
+		GLuint getId(){ return id; }
 		void setId(int id){ this->id = id; }
 		QString getName(){ return name; }
 
@@ -30,17 +30,17 @@ namespace SceneUnit
 		QColor getColor();
 		bool isFilled(){ return fill; }
 
-signals:
+	signals:
 		void propertyChanged();
 
-		public slots:
-			void setName(QString name){ this->name = name; }
-			void setFill(bool fill){ this->fill = fill; emit propertyChanged(); }
-			void setColor(QColor color);
+	public slots:
+		void setName(QString name){ this->name = name; }
+		void setFill(bool fill){ this->fill = fill; emit propertyChanged(); }
+		void setColor(QColor color);
 
 	protected:
 		Type type;
-		int id;
+		GLuint id;
 		QString name;
 
 		GLdouble center[3];
@@ -53,7 +53,7 @@ signals:
 	public:
 		Primitive2D(GLdouble center[2], QColor color, bool fill = true);
 
-		virtual void draw() = 0;
+		virtual void draw(GLuint id) = 0;
 		void setCenter(GLdouble center[2]);
 	};
 
@@ -62,7 +62,7 @@ signals:
 	public:
 		Primitive3D(GLdouble center[3], QColor color);
 
-		virtual void draw() = 0;
+		virtual void draw(GLuint id) = 0;
 		void setCenter(GLdouble center[3]);
 	};
 
@@ -72,7 +72,7 @@ signals:
 		Circle(GLdouble center[2], QColor color, 
 			GLdouble radius, bool fill = true);
 
-		void draw();
+		void draw(GLuint id);
 		GLdouble getRadius(){ return radius; }
 		void setRadius(GLdouble radius){ this->radius = radius; emit propertyChanged(); }
 
@@ -88,7 +88,7 @@ signals:
 		Rectangle(GLdouble center[2], QColor color, 
 			GLdouble width, bool fill = true);
 
-		void draw();
+		void draw(GLuint id);
 		GLdouble getWidth(){ return width; }
 		void setWidth(GLdouble width){ this->width = width; emit propertyChanged(); }
 		GLdouble getHeight(){ return height; }
@@ -105,7 +105,7 @@ signals:
 		Sphere(GLdouble center[3], QColor color, 
 			GLdouble radius, GLUquadric *quadric);
 
-		void draw();
+		void draw(GLuint id);
 		GLdouble getRadius(){ return radius; }
 		void setRadius(GLdouble radius){ this->radius = radius; emit propertyChanged(); }
 
@@ -121,7 +121,7 @@ signals:
 			GLdouble lenx, GLdouble leny, GLdouble lenz);
 		Box(GLdouble center[3], QColor color, GLdouble len);
 
-		void draw();
+		void draw(GLuint id);
 		GLdouble getLenX(){ return lenx; }
 		void setLenX(GLdouble lenx){ this->lenx = lenx; emit propertyChanged(); }
 		GLdouble getLenY(){ return leny; }

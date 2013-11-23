@@ -5,26 +5,22 @@
 
 #include "primitive.h"
 
+#include <qglviewer.h>
+
 #define PROPORTION_TO_SCENE	0.01
 
-class Scene : public QGLWidget
+#define RAND_255 rand() % 255
+#define RAND_COLOR QColor(RAND_255, RAND_255, RAND_255)
+
+class Scene : public QGLViewer
 {
 	Q_OBJECT
 
 public:
-	Scene(QWidget *parent = 0);
-	~Scene();
+	SceneUnit::Primitive *getPrimitive(int id);
 
-	SceneUnit::Primitive *getPrimitive(int id){ return primitives.at(id); }
-
-protected:
-	void initializeGL();
-	void paintGL();
-	void resizeGL(int width, int height);
-	void mousePressEvent(QMouseEvent *event);
-	void mouseMoveEvent(QMouseEvent *event);
-
-	void timerEvent(QTimerEvent *);
+signals:
+	void selectedObjChanged(int);
 
 public slots:
 	void newCircle();
@@ -34,17 +30,32 @@ public slots:
 
 	void clearPrimitives(){ primitives.clear(); }
 
+protected:
+	void mousePressEvent(QMouseEvent *event);
+	void draw();
+	void drawWithNames();
+	void postDraw();
+	void postSelection(const QPoint& point);
+	void init();
+
+	void timerEvent(QTimerEvent *);
+
 private:
 	QList<SceneUnit::Primitive *> primitives;
 	GLUquadric *quadric;
+
+	qglviewer::Vec orig, dir, selectedPoint;
 
 	int circleNum;
 	int rectangleNum;
 	int boxNum;
 	int sphereNum;
+	int id;
 
 	GLfloat rtri;
 	GLfloat rquad;
+
+	void drawCornerAxis();
 };
 
 #endif // GLWIDGET_H
