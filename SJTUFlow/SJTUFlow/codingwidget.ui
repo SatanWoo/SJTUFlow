@@ -119,6 +119,8 @@ QTabBar::tab:selected
      <string>Run</string>
     </property>
     <addaction name="actionRunModule"/>
+    <addaction name="separator"/>
+    <addaction name="actionSettingRun"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -133,9 +135,16 @@ QTabBar::tab:selected
     <addaction name="actionDelete"/>
     <addaction name="actionSelectAll"/>
    </widget>
+   <widget class="QMenu" name="menuRender">
+    <property name="title">
+     <string>Render</string>
+    </property>
+    <addaction name="actionSettingRender"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuRun"/>
+   <addaction name="menuRender"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="movable">
@@ -325,6 +334,16 @@ QTabBar::tab:selected
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionSettingRun">
+   <property name="text">
+    <string>Setting</string>
+   </property>
+  </action>
+  <action name="actionSettingRender">
+   <property name="text">
+    <string>Setting</string>
    </property>
   </action>
  </widget>

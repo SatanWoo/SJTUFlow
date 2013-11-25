@@ -17,6 +17,11 @@ class Scene : public QGLViewer
 	Q_OBJECT
 
 public:
+	enum Mode{SCENE_2D = 0, SCENE_3D};
+
+	Scene(QWidget *parent = 0);
+
+	// get the id-specific primitive
 	SceneUnit::Primitive *getPrimitive(int id);
 
 signals:
@@ -28,16 +33,18 @@ public slots:
 	void newBox();
 	void newSphere();
 
-	void clearPrimitives(){ primitives.clear(); }
+	// clear the scene and set to the specific mode
+	void clear(Mode m);
 
 protected:
-	void mousePressEvent(QMouseEvent *event);
+	void init();
 	void draw();
 	void drawWithNames();
 	void postDraw();
 	void postSelection(const QPoint& point);
-	void init();
 
+	void mousePressEvent(QMouseEvent *event);
+	void keyPressEvent(QKeyEvent *event){};
 	void timerEvent(QTimerEvent *);
 
 private:
@@ -45,6 +52,7 @@ private:
 	GLUquadric *quadric;
 
 	qglviewer::Vec orig, dir, selectedPoint;
+	qglviewer::Camera *camera_;
 
 	int circleNum;
 	int rectangleNum;
@@ -52,10 +60,8 @@ private:
 	int sphereNum;
 	int id;
 
-	GLfloat rtri;
-	GLfloat rquad;
-
 	void drawCornerAxis();
+	void setSceneMode(Mode m);
 };
 
 #endif // GLWIDGET_H

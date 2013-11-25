@@ -41,6 +41,8 @@ public:
     QAction *actionPaste;
     QAction *actionDelete;
     QAction *actionSelectAll;
+    QAction *actionSettingRun;
+    QAction *actionSettingRender;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
@@ -48,6 +50,7 @@ public:
     QMenu *menuFile;
     QMenu *menuRun;
     QMenu *menuEdit;
+    QMenu *menuRender;
     QToolBar *toolBar;
 
     void setupUi(QMainWindow *CodingWidget)
@@ -165,6 +168,10 @@ public:
         actionDelete->setEnabled(false);
         actionSelectAll = new QAction(CodingWidget);
         actionSelectAll->setObjectName(QStringLiteral("actionSelectAll"));
+        actionSettingRun = new QAction(CodingWidget);
+        actionSettingRun->setObjectName(QStringLiteral("actionSettingRun"));
+        actionSettingRender = new QAction(CodingWidget);
+        actionSettingRender->setObjectName(QStringLiteral("actionSettingRender"));
         centralWidget = new QWidget(CodingWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -189,6 +196,8 @@ public:
         menuRun->setObjectName(QStringLiteral("menuRun"));
         menuEdit = new QMenu(menuBar);
         menuEdit->setObjectName(QStringLiteral("menuEdit"));
+        menuRender = new QMenu(menuBar);
+        menuRender->setObjectName(QStringLiteral("menuRender"));
         CodingWidget->setMenuBar(menuBar);
         toolBar = new QToolBar(CodingWidget);
         toolBar->setObjectName(QStringLiteral("toolBar"));
@@ -200,6 +209,7 @@ public:
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
         menuBar->addAction(menuRun->menuAction());
+        menuBar->addAction(menuRender->menuAction());
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
         menuFile->addSeparator();
@@ -209,6 +219,8 @@ public:
         menuFile->addAction(actionClose);
         menuFile->addAction(actionCloseAll);
         menuRun->addAction(actionRunModule);
+        menuRun->addSeparator();
+        menuRun->addAction(actionSettingRun);
         menuEdit->addAction(actionUndo);
         menuEdit->addAction(actionRedo);
         menuEdit->addSeparator();
@@ -217,6 +229,7 @@ public:
         menuEdit->addAction(actionPaste);
         menuEdit->addAction(actionDelete);
         menuEdit->addAction(actionSelectAll);
+        menuRender->addAction(actionSettingRender);
 
         retranslateUi(CodingWidget);
 
@@ -256,9 +269,12 @@ public:
         actionDelete->setShortcut(QApplication::translate("CodingWidget", "Del", 0));
         actionSelectAll->setText(QApplication::translate("CodingWidget", "Select All", 0));
         actionSelectAll->setShortcut(QApplication::translate("CodingWidget", "Ctrl+A", 0));
+        actionSettingRun->setText(QApplication::translate("CodingWidget", "Setting", 0));
+        actionSettingRender->setText(QApplication::translate("CodingWidget", "Setting", 0));
         menuFile->setTitle(QApplication::translate("CodingWidget", "&File", 0));
         menuRun->setTitle(QApplication::translate("CodingWidget", "Run", 0));
         menuEdit->setTitle(QApplication::translate("CodingWidget", "&Edit", 0));
+        menuRender->setTitle(QApplication::translate("CodingWidget", "Render", 0));
     } // retranslateUi
 
 };

@@ -14,6 +14,9 @@ CodingWidget::CodingWidget(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	settingRun = new RunSetting;
+	settingRender = new RenderSetting;
+
 	codingTabNum = 0;
 	savedIcon = QIcon(":/Coding/Resources/Icons/CodingSaved.png");
 	unsavedIcon = QIcon(":/Coding/Resources/Icons/CodingUnsaved.png");
@@ -50,6 +53,9 @@ CodingWidget::CodingWidget(QWidget *parent)
 	connect(ui.actionCloseAll, SIGNAL(triggered()), this, SLOT(closeAll()));
 
 	connect(ui.actionRunModule, SIGNAL(triggered()), this, SLOT(runModule()));
+	connect(ui.actionSettingRun, SIGNAL(triggered()), settingRun, SLOT(show()));
+
+	connect(ui.actionSettingRender, SIGNAL(triggered()), settingRender, SLOT(show()));
 }
 
 CodingWidget::~CodingWidget()

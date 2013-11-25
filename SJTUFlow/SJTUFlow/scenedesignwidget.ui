@@ -69,12 +69,6 @@ QToolBar
     <addaction name="separator"/>
     <addaction name="actionImport"/>
    </widget>
-   <widget class="QMenu" name="menuRender">
-    <property name="title">
-     <string>&amp;Render</string>
-    </property>
-    <addaction name="actionSetting"/>
-   </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>&amp;Edit</string>
@@ -92,7 +86,6 @@ QToolBar
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
-   <addaction name="menuRender"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="contextMenuPolicy">
@@ -407,6 +400,12 @@ QPushButton
    </property>
   </action>
   <action name="actionMove">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="sjtuflow.qrc">
      <normaloff>:/Design/Resources/Icons/Move.png</normaloff>:/Design/Resources/Icons/Move.png</iconset>
@@ -419,6 +418,9 @@ QPushButton
    </property>
   </action>
   <action name="actionRotate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="sjtuflow.qrc">
      <normaloff>:/Design/Resources/Icons/Rotate.png</normaloff>:/Design/Resources/Icons/Rotate.png</iconset>
@@ -431,6 +433,9 @@ QPushButton
    </property>
   </action>
   <action name="actionScale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="sjtuflow.qrc">
      <normaloff>:/Design/Resources/Icons/Scale.png</normaloff>:/Design/Resources/Icons/Scale.png</iconset>

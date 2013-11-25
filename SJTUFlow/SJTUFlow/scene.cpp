@@ -4,6 +4,15 @@
 #include <GL/glut.h>
 #include <time.h>
 
+using namespace qglviewer;
+
+Scene::Scene( QWidget *parent ) : QGLViewer(parent)
+{
+	srand(time(NULL));
+
+	clear(SCENE_2D);
+}
+
 SceneUnit::Primitive * Scene::getPrimitive( int id )
 {
 	if (id < 0 || id >= this->id)
@@ -84,13 +93,39 @@ void Scene::newSphere()
 	updateGL();
 }
 
+void Scene::clear(Mode m)
+{
+	circleNum = 0;
+	rectangleNum = 0;
+	boxNum = 0;
+	sphereNum = 0;
+	id = 0;	
+
+	primitives.clear();
+
+	setSceneMode(m);
+}
+
+void Scene::init()
+{
+	quadric = gluNewQuadric();
+
+	setHandlerKeyboardModifiers(QGLViewer::CAMERA, Qt::ControlModifier);
+
+// 	setHandlerKeyboardModifiers(QGLViewer::FRAME,  Qt::NoModifier);
+// 
+// 	setManipulatedFrame(new qglviewer::ManipulatedFrame());
+
+//	restoreStateFromFile();
+
+//	setAxisIsDrawn();
+}
+
 void Scene::draw()
 {
 	glPushMatrix();
 
 	//glMultMatrixd(manipulatedFrame()->matrix());
-
-	drawAxis(0.5);
 
 	for (int i = 0; i < primitives.count(); i++)
 	{
@@ -137,30 +172,6 @@ void Scene::postSelection(const QPoint& point)
 	emit selectedObjChanged(selectedName());
 }
 
-void Scene::init()
-{
-	srand(time(NULL));
-	rtri = 0;
-	rquad = 0;
-
-	circleNum = 0;
-	rectangleNum = 0;
-	boxNum = 0;
-	sphereNum = 0;
-	id = 0;
-
-	quadric = gluNewQuadric();
-
- 	setHandlerKeyboardModifiers(QGLViewer::CAMERA, Qt::ControlModifier);
-// 	setHandlerKeyboardModifiers(QGLViewer::FRAME,  Qt::NoModifier);
-// 
-// 	setManipulatedFrame(new qglviewer::ManipulatedFrame());
-
-	restoreStateFromFile();
-
-	//setAxisIsDrawn();
-}
-
 void Scene::mousePressEvent(QMouseEvent *event)
 {
 	QGLViewer::mousePressEvent(event);
@@ -177,10 +188,7 @@ void Scene::mousePressEvent(QMouseEvent *event)
 
 void Scene::timerEvent(QTimerEvent *)
 {
-	rtri += 0.2f;										// Increase The Rotation Variable For The Triangle ( NEW )
-	rquad -= 0.15f;										// Decrease The Rotation Variable For The Quad ( NEW )
-
-	//updateGL();
+	updateGL();
 }
 
 void Scene::drawCornerAxis()
@@ -241,4 +249,32 @@ void Scene::drawCornerAxis()
 	// The viewport and the scissor are restored.
 	glScissor(scissor[0],scissor[1],scissor[2],scissor[3]);
 	glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+}
+
+void Scene::setSceneMode( Mode m )
+{
+	AxisPlaneConstraint *constraint = new LocalConstraint;
+	switch (m)
+	{
+	case SCENE_2D:
+ 		camera()->setPosition(Vec(0.0, 0.0, 1.0));
+ 		camera()->setOrientation(0.0, 0.0);
+ 		camera()->lookAt(sceneCenter());
+		camera()->setType(Camera::ORTHOGRAPHIC);
+		camera()->fitSphere(Vec(0, 0, 0), 1.0);
+
+		constraint->setTranslationConstraintType(AxisPlaneConstraint::PLANE);
+		constraint->setTranslationConstraintDirection(Vec(0.0, 0.0, 1.0));
+		constraint->setRotationConstraintType(AxisPlaneConstraint::FORBIDDEN);
+		break;
+	case SCENE_3D:
+	default:
+		camera()->setType(Camera::PERSPECTIVE);
+		camera()->fitSphere(Vec(0, 0, 0), 1.0);
+
+		constraint->setTranslationConstraintType(AxisPlaneConstraint::FREE);
+		constraint->setRotationConstraintType(AxisPlaneConstraint::FREE);
+		break;
+	}
+	camera()->frame()->setConstraint(constraint);
 }

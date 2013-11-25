@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include "ui_codingwidget.h"
 
+#include "runsetting.h"
+#include "rendersetting.h"
+
 #define TEMP_FILE_NAME ".tmp"
 
 class CodingWidget : public QMainWindow
@@ -18,6 +21,9 @@ protected:
 
 private:
 	Ui::CodingWidget ui;
+
+	RunSetting *settingRun;
+	RenderSetting *settingRender;
 
 	int codingTabNum; // record how many tabs have been added
 	QIcon savedIcon;

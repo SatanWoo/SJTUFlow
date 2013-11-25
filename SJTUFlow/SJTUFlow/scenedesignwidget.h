@@ -23,9 +23,12 @@ private:
 	Scene *scene;
 	SceneUnit::Primitive *selectedObj;
 
-	void changePropertyWidget();
-
 private slots:
+/************************************************************************/
+/*                                menu                                  */
+/************************************************************************/
+	void new2DScene();
+	void new3DScene();
 	void showProperty();
 
 	void selectedObjChanged(int id);

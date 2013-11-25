@@ -14,18 +14,19 @@ SceneDesignWidget::SceneDesignWidget(QWidget *parent)
 
 	connect(scene, SIGNAL(selectedObjChanged(int)), 
 		this, SLOT(selectedObjChanged(int)));
+	new2DScene();
 
 /************************************************************************/
 /*                              menu                                    */
 /************************************************************************/
+	connect(ui.actionScene2D, SIGNAL(triggered()), this, SLOT(new2DScene()));
+	connect(ui.actionScene3D, SIGNAL(triggered()), this, SLOT(new3DScene()));
+
 	connect(ui.actionProperty, SIGNAL(triggered()), this, SLOT(showProperty()));
 
 /************************************************************************/
 /*                             toolbar                                  */
 /************************************************************************/
-//	ui.toolBar2D->setVisible(false);
-//	ui.toolBar3D->setVisible(false);
-
 	ui.mainToolBar->addAction(ui.actionMove);
 	ui.mainToolBar->addAction(ui.actionRotate);
 	ui.mainToolBar->addAction(ui.actionScale);
@@ -43,7 +44,7 @@ SceneDesignWidget::SceneDesignWidget(QWidget *parent)
 /************************************************************************/
 /*                            property                                  */
 /************************************************************************/
-	//ui.dockWidgetProperty->setVisible(false);
+	ui.dockWidgetProperty->setVisible(false);
 	ui.lineEditPosX->setValidator(new QDoubleValidator());
 	ui.lineEditPosY->setValidator(new QDoubleValidator());
 	ui.lineEditPosZ->setValidator(new QDoubleValidator());
@@ -56,8 +57,6 @@ SceneDesignWidget::SceneDesignWidget(QWidget *parent)
 	colorDialog->setModal(true);
 	colorDialog->setCurrentColor(Qt::white);
 	connect(ui.pushButtonColor, SIGNAL(clicked()), colorDialog, SLOT(show()));
-
-	showProperty();
 }
 
 SceneDesignWidget::~SceneDesignWidget()
@@ -65,9 +64,18 @@ SceneDesignWidget::~SceneDesignWidget()
 
 }
 
-void SceneDesignWidget::changePropertyWidget()
+void SceneDesignWidget::new2DScene()
 {
-	
+	scene->clear(Scene::SCENE_2D);
+	ui.toolBar2D->show();
+	ui.toolBar3D->close();
+}
+
+void SceneDesignWidget::new3DScene()
+{
+	scene->clear(Scene::SCENE_3D);
+	ui.toolBar2D->close();
+	ui.toolBar3D->show();
 }
 
 void SceneDesignWidget::showProperty()
@@ -129,7 +137,10 @@ void SceneDesignWidget::showProperty()
 void SceneDesignWidget::selectedObjChanged( int id )
 {
 	selectedObj = scene->getPrimitive(id);
-	showProperty();
+	if (ui.dockWidgetProperty->isVisible())
+	{
+		showProperty();
+	}
 }
 
 void SceneDesignWidget::colorChanged( QColor color )

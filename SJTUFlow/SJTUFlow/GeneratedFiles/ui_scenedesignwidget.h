@@ -51,7 +51,6 @@ public:
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuNew;
-    QMenu *menuRender;
     QMenu *menuEdit;
     QToolBar *mainToolBar;
     QToolBar *toolBar2D;
@@ -116,16 +115,20 @@ public:
         actionDelete->setObjectName(QStringLiteral("actionDelete"));
         actionMove = new QAction(SceneDesignWidget);
         actionMove->setObjectName(QStringLiteral("actionMove"));
+        actionMove->setCheckable(true);
+        actionMove->setChecked(true);
         QIcon icon;
         icon.addFile(QStringLiteral(":/Design/Resources/Icons/Move.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionMove->setIcon(icon);
         actionRotate = new QAction(SceneDesignWidget);
         actionRotate->setObjectName(QStringLiteral("actionRotate"));
+        actionRotate->setCheckable(true);
         QIcon icon1;
         icon1.addFile(QStringLiteral(":/Design/Resources/Icons/Rotate.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionRotate->setIcon(icon1);
         actionScale = new QAction(SceneDesignWidget);
         actionScale->setObjectName(QStringLiteral("actionScale"));
+        actionScale->setCheckable(true);
         QIcon icon2;
         icon2.addFile(QStringLiteral(":/Design/Resources/Icons/Scale.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionScale->setIcon(icon2);
@@ -148,8 +151,6 @@ public:
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuNew = new QMenu(menuFile);
         menuNew->setObjectName(QStringLiteral("menuNew"));
-        menuRender = new QMenu(menuBar);
-        menuRender->setObjectName(QStringLiteral("menuRender"));
         menuEdit = new QMenu(menuBar);
         menuEdit->setObjectName(QStringLiteral("menuEdit"));
         SceneDesignWidget->setMenuBar(menuBar);
@@ -300,7 +301,6 @@ public:
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
-        menuBar->addAction(menuRender->menuAction());
         menuFile->addAction(menuNew->menuAction());
         menuFile->addAction(actionOpen);
         menuFile->addSeparator();
@@ -310,7 +310,6 @@ public:
         menuFile->addAction(actionImport);
         menuNew->addAction(actionScene2D);
         menuNew->addAction(actionScene3D);
-        menuRender->addAction(actionSetting);
         menuEdit->addAction(actionUndo);
         menuEdit->addAction(actionRedo);
         menuEdit->addSeparator();
@@ -355,7 +354,6 @@ public:
         actionScene3D->setText(QApplication::translate("SceneDesignWidget", "3D Scene", 0));
         menuFile->setTitle(QApplication::translate("SceneDesignWidget", "&File", 0));
         menuNew->setTitle(QApplication::translate("SceneDesignWidget", "New", 0));
-        menuRender->setTitle(QApplication::translate("SceneDesignWidget", "&Render", 0));
         menuEdit->setTitle(QApplication::translate("SceneDesignWidget", "&Edit", 0));
         mainToolBar->setWindowTitle(QApplication::translate("SceneDesignWidget", "Main ToolBar", 0));
         toolBar2D->setWindowTitle(QApplication::translate("SceneDesignWidget", "2D toolBar", 0));
