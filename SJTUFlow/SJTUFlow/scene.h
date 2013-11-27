@@ -32,6 +32,7 @@ public slots:
 	void newRectangle();
 	void newBox();
 	void newSphere();
+	void deleteObject(int id);
 
 	// clear the scene and set to the specific mode
 	void clear(Mode m);
@@ -59,6 +60,8 @@ private:
 	int boxNum;
 	int sphereNum;
 	int id;
+
+	int getPrimitiveIndex(int id);
 
 	void drawCornerAxis();
 	void setSceneMode(Mode m);

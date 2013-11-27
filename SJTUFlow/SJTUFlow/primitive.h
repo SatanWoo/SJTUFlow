@@ -16,7 +16,7 @@ namespace SceneUnit
 		Primitive(void);
 		~Primitive(void);
 
-		enum Type{T_Rect, T_Circle, T_Box, T_Sphere};
+		enum Type{T_Rect, T_Circle, T_Box, T_Sphere, T_Object};
 
 		virtual void draw(GLuint id) = 0;
 
@@ -26,7 +26,7 @@ namespace SceneUnit
 		QString getName(){ return name; }
 
 		void getCenter(GLdouble center[3]);
-		virtual void setCenter(GLdouble center[]) = 0;
+		virtual void setCenter(GLdouble center[3]);
 		QColor getColor();
 		bool isFilled(){ return fill; }
 
@@ -37,6 +37,13 @@ namespace SceneUnit
 		void setName(QString name){ this->name = name; }
 		void setFill(bool fill){ this->fill = fill; emit propertyChanged(); }
 		void setColor(QColor color);
+		void setCenterX(QString str){ center[0] = str.toDouble(); emit propertyChanged(); }
+		void setCenterY(QString str){ center[1] = str.toDouble(); emit propertyChanged(); }
+		void setCenterZ(QString str){ center[2] = str.toDouble(); emit propertyChanged(); }
+		virtual void setRadius(QString str){};
+		virtual void setLenX(QString str){};
+		virtual void setLenY(QString str){};
+		virtual void setLenZ(QString str){};
 
 	protected:
 		Type type;
@@ -48,89 +55,88 @@ namespace SceneUnit
 		bool fill;
 	};
 
-	class Primitive2D : public Primitive
+	class Circle : public Primitive
 	{
+		Q_OBJECT
+
 	public:
-		Primitive2D(GLdouble center[2], QColor color, bool fill = true);
-
-		virtual void draw(GLuint id) = 0;
-		void setCenter(GLdouble center[2]);
-	};
-
-	class Primitive3D : public Primitive
-	{
-	public:
-		Primitive3D(GLdouble center[3], QColor color);
-
-		virtual void draw(GLuint id) = 0;
-		void setCenter(GLdouble center[3]);
-	};
-
-	class Circle : public Primitive2D
-	{
-	public:
+		Circle(){}
 		Circle(GLdouble center[2], QColor color, 
 			GLdouble radius, bool fill = true);
 
-		void draw(GLuint id);
+		virtual void draw(GLuint id);
+		virtual void setCenter(GLdouble center[2]);
 		GLdouble getRadius(){ return radius; }
 		void setRadius(GLdouble radius){ this->radius = radius; emit propertyChanged(); }
 
-	private:
+	public slots:
+		void setRadius(QString str){ setRadius(str.toDouble()); }
+
+	protected:
 		GLdouble radius;
 	};
 
-	class Rectangle : public Primitive2D
+	class Sphere : public Circle
 	{
-	public:
-		Rectangle(GLdouble center[2], QColor color, 
-			GLdouble width, GLdouble height, bool fill = true);
-		Rectangle(GLdouble center[2], QColor color, 
-			GLdouble width, bool fill = true);
+		Q_OBJECT
 
-		void draw(GLuint id);
-		GLdouble getWidth(){ return width; }
-		void setWidth(GLdouble width){ this->width = width; emit propertyChanged(); }
-		GLdouble getHeight(){ return height; }
-		void setHeight(GLdouble height){ this->height = height; emit propertyChanged(); }
-
-	private:
-		GLdouble width;
-		GLdouble height;
-	};
-
-	class Sphere : public Primitive3D
-	{
 	public:
 		Sphere(GLdouble center[3], QColor color, 
 			GLdouble radius, GLUquadric *quadric);
 
 		void draw(GLuint id);
-		GLdouble getRadius(){ return radius; }
-		void setRadius(GLdouble radius){ this->radius = radius; emit propertyChanged(); }
+		void setCenter(GLdouble center[3]){ Primitive::setCenter(center); }
 
 	private:
-		GLdouble radius;
 		GLUquadric *quadric;
 	};
 
-	class Box : public Primitive3D
+	class Rectangle : public Primitive
 	{
+		Q_OBJECT
+
+	public:
+		Rectangle(){}
+		Rectangle(GLdouble center[2], QColor color, 
+			GLdouble lenx, GLdouble leny, bool fill = true);
+		Rectangle(GLdouble center[2], QColor color, 
+			GLdouble lenx, bool fill = true);
+
+		virtual void draw(GLuint id);
+		virtual void setCenter(GLdouble center[2]);
+		GLdouble getLenX(){ return lenx; }
+		void setLenX(GLdouble lenx){ this->lenx = lenx; emit propertyChanged(); }
+		GLdouble getLenY(){ return leny; }
+		void setLenY(GLdouble leny){ this->leny = leny; emit propertyChanged(); }
+
+	public slots:
+		void setLenX(QString str){ setLenX(str.toDouble()); }
+		void setLenY(QString str){ setLenY(str.toDouble()); }
+
+	protected:
+		GLdouble lenx;
+		GLdouble leny;
+	};
+
+	class Box : public Rectangle
+	{
+		Q_OBJECT
+
 	public:
 		Box(GLdouble center[3], QColor color, 
 			GLdouble lenx, GLdouble leny, GLdouble lenz);
 		Box(GLdouble center[3], QColor color, GLdouble len);
 
 		void draw(GLuint id);
-		GLdouble getLenX(){ return lenx; }
-		void setLenX(GLdouble lenx){ this->lenx = lenx; emit propertyChanged(); }
-		GLdouble getLenY(){ return leny; }
-		void setLenY(GLdouble leny){ this->leny = leny; emit propertyChanged(); }
+		void setCenter(GLdouble center[3]){ Primitive::setCenter(center); }
 		GLdouble getLenZ(){ return lenz; }
 		void setLenZ(GLdouble lenz){ this->lenz = lenz; emit propertyChanged(); }
 
+	public slots:
+		void setLenZ(QString str){ setLenZ(str.toDouble()); }
+
 	private:
-		GLdouble lenx, leny, lenz;
+		GLdouble lenz;
 	};
 };
 

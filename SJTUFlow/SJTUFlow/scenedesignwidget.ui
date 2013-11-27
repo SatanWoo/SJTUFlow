@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>504</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -142,7 +142,7 @@ QToolBar
    <property name="minimumSize">
     <size>
      <width>200</width>
-     <height>205</height>
+     <height>295</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -227,7 +227,7 @@ QPushButton
        </property>
       </widget>
      </item>
-     <item row="7" column="0" colspan="3">
+     <item row="10" column="0" colspan="3">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -342,6 +342,75 @@ QPushButton
         </spacer>
        </item>
       </layout>
+     </item>
+     <item row="6" column="2">
+      <widget class="QLineEdit" name="lineEditRadius">
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="labelRadius">
+       <property name="text">
+        <string>radius</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLabel" name="labelSizeX">
+       <property name="text">
+        <string>x</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLabel" name="labelSizeY">
+       <property name="text">
+        <string>y</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QLabel" name="labelSizeZ">
+       <property name="text">
+        <string>z</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" rowspan="3">
+      <widget class="QLabel" name="labelSize">
+       <property name="text">
+        <string>size</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <widget class="QLineEdit" name="lineEditSizeX">
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QLineEdit" name="lineEditSizeY">
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="2">
+      <widget class="QLineEdit" name="lineEditSizeZ">
+       <property name="contextMenuPolicy">
+        <enum>Qt::NoContextMenu</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

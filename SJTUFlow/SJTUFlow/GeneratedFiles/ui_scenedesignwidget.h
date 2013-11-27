@@ -73,12 +73,21 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *pushButtonColor;
     QSpacerItem *horizontalSpacer;
+    QLineEdit *lineEditRadius;
+    QLabel *labelRadius;
+    QLabel *labelSizeX;
+    QLabel *labelSizeY;
+    QLabel *labelSizeZ;
+    QLabel *labelSize;
+    QLineEdit *lineEditSizeX;
+    QLineEdit *lineEditSizeY;
+    QLineEdit *lineEditSizeZ;
 
     void setupUi(QMainWindow *SceneDesignWidget)
     {
         if (SceneDesignWidget->objectName().isEmpty())
             SceneDesignWidget->setObjectName(QStringLiteral("SceneDesignWidget"));
-        SceneDesignWidget->resize(400, 300);
+        SceneDesignWidget->resize(400, 504);
         SceneDesignWidget->setContextMenuPolicy(Qt::NoContextMenu);
         SceneDesignWidget->setStyleSheet(QLatin1String("QMenuBar\n"
 "{\n"
@@ -174,7 +183,7 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(dockWidgetProperty->sizePolicy().hasHeightForWidth());
         dockWidgetProperty->setSizePolicy(sizePolicy);
-        dockWidgetProperty->setMinimumSize(QSize(200, 205));
+        dockWidgetProperty->setMinimumSize(QSize(200, 295));
         dockWidgetProperty->setMaximumSize(QSize(200, 10000));
         dockWidgetProperty->setStyleSheet(QLatin1String("*\n"
 "{\n"
@@ -231,7 +240,7 @@ public:
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout->addItem(verticalSpacer, 7, 0, 1, 3);
+        gridLayout->addItem(verticalSpacer, 10, 0, 1, 3);
 
         labelColor = new QLabel(dockWidgetContents);
         labelColor->setObjectName(QStringLiteral("labelColor"));
@@ -292,6 +301,57 @@ public:
 
 
         gridLayout->addLayout(horizontalLayout, 5, 2, 1, 1);
+
+        lineEditRadius = new QLineEdit(dockWidgetContents);
+        lineEditRadius->setObjectName(QStringLiteral("lineEditRadius"));
+        lineEditRadius->setContextMenuPolicy(Qt::NoContextMenu);
+
+        gridLayout->addWidget(lineEditRadius, 6, 2, 1, 1);
+
+        labelRadius = new QLabel(dockWidgetContents);
+        labelRadius->setObjectName(QStringLiteral("labelRadius"));
+        labelRadius->setAlignment(Qt::AlignCenter);
+
+        gridLayout->addWidget(labelRadius, 6, 0, 1, 1);
+
+        labelSizeX = new QLabel(dockWidgetContents);
+        labelSizeX->setObjectName(QStringLiteral("labelSizeX"));
+
+        gridLayout->addWidget(labelSizeX, 7, 1, 1, 1);
+
+        labelSizeY = new QLabel(dockWidgetContents);
+        labelSizeY->setObjectName(QStringLiteral("labelSizeY"));
+
+        gridLayout->addWidget(labelSizeY, 8, 1, 1, 1);
+
+        labelSizeZ = new QLabel(dockWidgetContents);
+        labelSizeZ->setObjectName(QStringLiteral("labelSizeZ"));
+
+        gridLayout->addWidget(labelSizeZ, 9, 1, 1, 1);
+
+        labelSize = new QLabel(dockWidgetContents);
+        labelSize->setObjectName(QStringLiteral("labelSize"));
+        labelSize->setAlignment(Qt::AlignCenter);
+
+        gridLayout->addWidget(labelSize, 7, 0, 3, 1);
+
+        lineEditSizeX = new QLineEdit(dockWidgetContents);
+        lineEditSizeX->setObjectName(QStringLiteral("lineEditSizeX"));
+        lineEditSizeX->setContextMenuPolicy(Qt::NoContextMenu);
+
+        gridLayout->addWidget(lineEditSizeX, 7, 2, 1, 1);
+
+        lineEditSizeY = new QLineEdit(dockWidgetContents);
+        lineEditSizeY->setObjectName(QStringLiteral("lineEditSizeY"));
+        lineEditSizeY->setContextMenuPolicy(Qt::NoContextMenu);
+
+        gridLayout->addWidget(lineEditSizeY, 8, 2, 1, 1);
+
+        lineEditSizeZ = new QLineEdit(dockWidgetContents);
+        lineEditSizeZ->setObjectName(QStringLiteral("lineEditSizeZ"));
+        lineEditSizeZ->setContextMenuPolicy(Qt::NoContextMenu);
+
+        gridLayout->addWidget(lineEditSizeZ, 9, 2, 1, 1);
 
         dockWidgetProperty->setWidget(dockWidgetContents);
         SceneDesignWidget->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockWidgetProperty);
@@ -367,6 +427,11 @@ public:
         labelPosZ->setText(QApplication::translate("SceneDesignWidget", "z", 0));
         checkBoxFill->setText(QApplication::translate("SceneDesignWidget", "fill", 0));
         pushButtonColor->setText(QString());
+        labelRadius->setText(QApplication::translate("SceneDesignWidget", "radius", 0));
+        labelSizeX->setText(QApplication::translate("SceneDesignWidget", "x", 0));
+        labelSizeY->setText(QApplication::translate("SceneDesignWidget", "y", 0));
+        labelSizeZ->setText(QApplication::translate("SceneDesignWidget", "z", 0));
+        labelSize->setText(QApplication::translate("SceneDesignWidget", "size", 0));
     } // retranslateUi
 
 };

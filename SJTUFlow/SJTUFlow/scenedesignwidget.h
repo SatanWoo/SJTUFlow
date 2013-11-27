@@ -16,6 +16,19 @@ public:
 	SceneDesignWidget(QWidget *parent = 0);
 	~SceneDesignWidget();
 
+private slots:
+/************************************************************************/
+/*                                menu                                  */
+/************************************************************************/
+	void new2DScene();
+	void new3DScene();
+	void deleteObject();
+
+	void showProperty();
+
+	void selectedObjChanged(int id);
+	void colorChanged(QColor color);
+
 private:
 	Ui::SceneDesignWidget ui;
 
@@ -23,16 +36,7 @@ private:
 	Scene *scene;
 	SceneUnit::Primitive *selectedObj;
 
-private slots:
-/************************************************************************/
-/*                                menu                                  */
-/************************************************************************/
-	void new2DScene();
-	void new3DScene();
-	void showProperty();
-
-	void selectedObjChanged(int id);
-	void colorChanged(QColor color);
+	void changePropertyWidget();
 };
 
 #endif // SCENEDESIGNWIDGET_H

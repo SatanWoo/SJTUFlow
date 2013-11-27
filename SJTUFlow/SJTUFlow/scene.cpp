@@ -15,18 +15,12 @@ Scene::Scene( QWidget *parent ) : QGLViewer(parent)
 
 SceneUnit::Primitive * Scene::getPrimitive( int id )
 {
-	if (id < 0 || id >= this->id)
+	int i = getPrimitiveIndex(id);
+	if (i < 0)
 	{
 		return NULL;
 	}
-	for (int i = 0; i < primitives.count(); i++)
-	{
-		if (primitives.at(i)->getId() == id)
-		{
-			return primitives.at(i);
-		}
-	}
-	return NULL;
+	return primitives.at(i);
 }
 
 void Scene::newCircle()
@@ -93,6 +87,19 @@ void Scene::newSphere()
 	updateGL();
 }
 
+void Scene::deleteObject( int id )
+{
+	int i = getPrimitiveIndex(id);
+	if (i >= 0)
+	{
+		SceneUnit::Primitive *p = primitives.at(i);
+		primitives.removeAt(i);
+		delete p;
+	}
+
+	updateGL();
+}
+
 void Scene::clear(Mode m)
 {
 	circleNum = 0;
@@ -104,6 +111,8 @@ void Scene::clear(Mode m)
 	primitives.clear();
 
 	setSceneMode(m);
+
+	updateGL();
 }
 
 void Scene::init()
@@ -111,6 +120,8 @@ void Scene::init()
 	quadric = gluNewQuadric();
 
 	setHandlerKeyboardModifiers(QGLViewer::CAMERA, Qt::ControlModifier);
+
+	setMouseBinding(Qt::ControlModifier | Qt::LeftButton  | Qt::MidButton,  NO_CLICK_ACTION);
 
 // 	setHandlerKeyboardModifiers(QGLViewer::FRAME,  Qt::NoModifier);
 // 
@@ -174,8 +185,6 @@ void Scene::postSelection(const QPoint& point)
 
 void Scene::mousePressEvent(QMouseEvent *event)
 {
-	QGLViewer::mousePressEvent(event);
-
 	Qt::KeyboardModifiers kms = event->modifiers();
 	Qt::MouseButtons mbs = event->buttons();
 	if (((kms & Qt::ShiftModifier) == Qt::ShiftModifier) &&
@@ -184,11 +193,31 @@ void Scene::mousePressEvent(QMouseEvent *event)
 		select(event);
 		updateGL();
 	}
+	else
+	{
+		QGLViewer::mousePressEvent(event);
+	}
 }
 
 void Scene::timerEvent(QTimerEvent *)
 {
 	updateGL();
+}
+
+int Scene::getPrimitiveIndex( int id )
+{
+	if (id < 0 || id >= this->id)
+	{
+		return -1;
+	}
+	for (int i = 0; i < primitives.count(); i++)
+	{
+		if (primitives.at(i)->getId() == id)
+		{
+			return i;
+		}
+	}
+	return -1;
 }
 
 void Scene::drawCornerAxis()
@@ -261,19 +290,25 @@ void Scene::setSceneMode( Mode m )
  		camera()->setOrientation(0.0, 0.0);
  		camera()->lookAt(sceneCenter());
 		camera()->setType(Camera::ORTHOGRAPHIC);
-		camera()->fitSphere(Vec(0, 0, 0), 1.0);
+		camera()->fitScreenRegion(rect());
 
 		constraint->setTranslationConstraintType(AxisPlaneConstraint::PLANE);
 		constraint->setTranslationConstraintDirection(Vec(0.0, 0.0, 1.0));
-		constraint->setRotationConstraintType(AxisPlaneConstraint::FORBIDDEN);
+
+		setMouseBinding(Qt::ControlModifier | Qt::LeftButton,  CAMERA, TRANSLATE);
+		setMouseBinding(Qt::ControlModifier | Qt::RightButton, NO_CLICK_ACTION);
+
 		break;
 	case SCENE_3D:
 	default:
 		camera()->setType(Camera::PERSPECTIVE);
-		camera()->fitSphere(Vec(0, 0, 0), 1.0);
+		camera()->fitScreenRegion(rect());
 
 		constraint->setTranslationConstraintType(AxisPlaneConstraint::FREE);
-		constraint->setRotationConstraintType(AxisPlaneConstraint::FREE);
+
+		setMouseBinding(Qt::ControlModifier | Qt::LeftButton,  CAMERA, ROTATE);
+		setMouseBinding(Qt::ControlModifier | Qt::RightButton, CAMERA, TRANSLATE);
+
 		break;
 	}
 	camera()->frame()->setConstraint(constraint);
