@@ -10,10 +10,14 @@ Scene::Scene( QWidget *parent ) : QGLViewer(parent)
 {
 	srand(time(NULL));
 
+	dx = 0.01;
+
+	setAnimate(false);
+
 	clear(SCENE_2D);
 }
 
-SceneUnit::Primitive * Scene::getPrimitive( int id )
+SceneUnit::Primitive *Scene::getPrimitive( int id )
 {
 	int i = getPrimitiveIndex(id);
 	if (i < 0)
@@ -183,6 +187,29 @@ void Scene::postSelection(const QPoint& point)
 	emit selectedObjChanged(selectedName());
 }
 
+void Scene::animate()
+{
+	if (ifAnimate)
+	{
+		for (int i = 0; i < primitives.count(); i++)
+		{
+			GLdouble center[3];
+			SceneUnit::Primitive *p = primitives.at(i);
+			p->getCenter(center);
+			center[0] += dx;
+			if (center[0] < -0.5)
+			{
+				dx = 0.01;
+			}
+			else if (center[0] > 0.5)
+			{
+				dx = -0.01;
+			}
+			p->setCenter(center);
+		}
+	}
+}
+
 void Scene::mousePressEvent(QMouseEvent *event)
 {
 	Qt::KeyboardModifiers kms = event->modifiers();
@@ -199,9 +226,10 @@ void Scene::mousePressEvent(QMouseEvent *event)
 	}
 }
 
-void Scene::timerEvent(QTimerEvent *)
+void Scene::timerEvent(QTimerEvent *e)
 {
-	updateGL();
+	QGLViewer::timerEvent(e);
+	//updateGL();
 }
 
 int Scene::getPrimitiveIndex( int id )

@@ -1,6 +1,6 @@
-#include "rendersetting.h"
+#include "dllmanager.h"
 
-RenderSetting::RenderSetting(QWidget *parent)
+DLLManager::DLLManager(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -9,9 +9,10 @@ RenderSetting::RenderSetting(QWidget *parent)
 		~Qt::WindowMinMaxButtonsHint & 
 		~Qt::WindowContextHelpButtonHint);
 	setModal(true);
+
 }
 
-RenderSetting::~RenderSetting()
+DLLManager::~DLLManager()
 {
 
 }

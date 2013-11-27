@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "ui_codingwidget.h"
 
+#include "dllmanager.h"
 #include "runsetting.h"
 #include "rendersetting.h"
 
@@ -22,6 +23,7 @@ protected:
 private:
 	Ui::CodingWidget ui;
 
+	DLLManager *dllManager;
 	RunSetting *settingRun;
 	RenderSetting *settingRender;
 

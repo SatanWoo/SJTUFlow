@@ -6,8 +6,18 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 	ui.setupUi(this);
 
 	scene = new Scene;
-	scene->startTimer(1);
+
 	setCentralWidget(scene);
+
+	//example
+	scene->clear(Scene::SCENE_3D);
+	scene->newBox();
+	SceneUnit::Primitive *p = scene->getPrimitive(0);
+	GLdouble center[3] = {0.0, 0.0, 0.0};
+	p->setCenter(center);
+	scene->setAnimate();
+
+	scene->startAnimation();
 }
 
 DisplayWidget::~DisplayWidget()

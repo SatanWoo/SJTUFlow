@@ -14,6 +14,7 @@ CodingWidget::CodingWidget(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	dllManager = new DLLManager;
 	settingRun = new RunSetting;
 	settingRender = new RenderSetting;
 
@@ -51,6 +52,8 @@ CodingWidget::CodingWidget(QWidget *parent)
 	connect(ui.actionSaveAs, SIGNAL(triggered()), this, SLOT(saveAs()));
 	connect(ui.actionClose, SIGNAL(triggered()), this, SLOT(closeFile()));
 	connect(ui.actionCloseAll, SIGNAL(triggered()), this, SLOT(closeAll()));
+
+	connect(ui.actionAddAlgorithm, SIGNAL(triggered()), dllManager, SLOT(show()));
 
 	connect(ui.actionRunModule, SIGNAL(triggered()), this, SLOT(runModule()));
 	connect(ui.actionSettingRun, SIGNAL(triggered()), settingRun, SLOT(show()));

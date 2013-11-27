@@ -23,6 +23,7 @@ public:
 
 	// get the id-specific primitive
 	SceneUnit::Primitive *getPrimitive(int id);
+	void setAnimate(bool animate = true) { ifAnimate = animate; }
 
 signals:
 	void selectedObjChanged(int);
@@ -43,6 +44,7 @@ protected:
 	void drawWithNames();
 	void postDraw();
 	void postSelection(const QPoint& point);
+	void animate();
 
 	void mousePressEvent(QMouseEvent *event);
 	void keyPressEvent(QKeyEvent *event){};
@@ -55,11 +57,16 @@ private:
 	qglviewer::Vec orig, dir, selectedPoint;
 	qglviewer::Camera *camera_;
 
+	bool ifAnimate;
+
 	int circleNum;
 	int rectangleNum;
 	int boxNum;
 	int sphereNum;
 	int id;
+
+	//example
+	GLdouble dx;
 
 	int getPrimitiveIndex(int id);
 

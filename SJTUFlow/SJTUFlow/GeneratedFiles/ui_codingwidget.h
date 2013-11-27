@@ -43,6 +43,7 @@ public:
     QAction *actionSelectAll;
     QAction *actionSettingRun;
     QAction *actionSettingRender;
+    QAction *actionAddAlgorithm;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
@@ -51,6 +52,7 @@ public:
     QMenu *menuRun;
     QMenu *menuEdit;
     QMenu *menuRender;
+    QMenu *menuAlgorithm;
     QToolBar *toolBar;
 
     void setupUi(QMainWindow *CodingWidget)
@@ -172,6 +174,8 @@ public:
         actionSettingRun->setObjectName(QStringLiteral("actionSettingRun"));
         actionSettingRender = new QAction(CodingWidget);
         actionSettingRender->setObjectName(QStringLiteral("actionSettingRender"));
+        actionAddAlgorithm = new QAction(CodingWidget);
+        actionAddAlgorithm->setObjectName(QStringLiteral("actionAddAlgorithm"));
         centralWidget = new QWidget(CodingWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -198,6 +202,8 @@ public:
         menuEdit->setObjectName(QStringLiteral("menuEdit"));
         menuRender = new QMenu(menuBar);
         menuRender->setObjectName(QStringLiteral("menuRender"));
+        menuAlgorithm = new QMenu(menuBar);
+        menuAlgorithm->setObjectName(QStringLiteral("menuAlgorithm"));
         CodingWidget->setMenuBar(menuBar);
         toolBar = new QToolBar(CodingWidget);
         toolBar->setObjectName(QStringLiteral("toolBar"));
@@ -208,8 +214,9 @@ public:
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
-        menuBar->addAction(menuRun->menuAction());
+        menuBar->addAction(menuAlgorithm->menuAction());
         menuBar->addAction(menuRender->menuAction());
+        menuBar->addAction(menuRun->menuAction());
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
         menuFile->addSeparator();
@@ -230,6 +237,7 @@ public:
         menuEdit->addAction(actionDelete);
         menuEdit->addAction(actionSelectAll);
         menuRender->addAction(actionSettingRender);
+        menuAlgorithm->addAction(actionAddAlgorithm);
 
         retranslateUi(CodingWidget);
 
@@ -271,10 +279,12 @@ public:
         actionSelectAll->setShortcut(QApplication::translate("CodingWidget", "Ctrl+A", 0));
         actionSettingRun->setText(QApplication::translate("CodingWidget", "Setting", 0));
         actionSettingRender->setText(QApplication::translate("CodingWidget", "Setting", 0));
+        actionAddAlgorithm->setText(QApplication::translate("CodingWidget", "Add Algorithm", 0));
         menuFile->setTitle(QApplication::translate("CodingWidget", "&File", 0));
-        menuRun->setTitle(QApplication::translate("CodingWidget", "Run", 0));
+        menuRun->setTitle(QApplication::translate("CodingWidget", "&Run", 0));
         menuEdit->setTitle(QApplication::translate("CodingWidget", "&Edit", 0));
-        menuRender->setTitle(QApplication::translate("CodingWidget", "Render", 0));
+        menuRender->setTitle(QApplication::translate("CodingWidget", "Ren&der", 0));
+        menuAlgorithm->setTitle(QApplication::translate("CodingWidget", "&Algorithm", 0));
     } // retranslateUi
 
 };
