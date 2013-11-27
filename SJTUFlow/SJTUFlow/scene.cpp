@@ -6,6 +6,8 @@
 
 using namespace qglviewer;
 
+GLUquadric *Scene::quadric = gluNewQuadric();
+
 Scene::Scene( QWidget *parent ) : QGLViewer(parent)
 {
 	srand(time(NULL));
@@ -121,8 +123,6 @@ void Scene::clear(Mode m)
 
 void Scene::init()
 {
-	quadric = gluNewQuadric();
-
 	setHandlerKeyboardModifiers(QGLViewer::CAMERA, Qt::ControlModifier);
 
 	setMouseBinding(Qt::ControlModifier | Qt::LeftButton  | Qt::MidButton,  NO_CLICK_ACTION);

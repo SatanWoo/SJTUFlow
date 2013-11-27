@@ -52,7 +52,7 @@ protected:
 
 private:
 	QList<SceneUnit::Primitive *> primitives;
-	GLUquadric *quadric;
+	static GLUquadric *quadric;
 
 	qglviewer::Vec orig, dir, selectedPoint;
 	qglviewer::Camera *camera_;

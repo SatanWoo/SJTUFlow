@@ -11,7 +11,7 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 
 	//example
 	scene->clear(Scene::SCENE_3D);
-	scene->newBox();
+	scene->newSphere();
 	SceneUnit::Primitive *p = scene->getPrimitive(0);
 	GLdouble center[3] = {0.0, 0.0, 0.0};
 	p->setCenter(center);
