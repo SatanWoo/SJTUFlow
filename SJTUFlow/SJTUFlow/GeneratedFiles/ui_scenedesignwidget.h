@@ -187,6 +187,7 @@ public:
         dockWidgetProperty->setMaximumSize(QSize(200, 10000));
         dockWidgetProperty->setStyleSheet(QLatin1String("*\n"
 "{\n"
+"	color: white;\n"
 "	border-color: rgb(100, 100, 100);\n"
 "	background-color: rgb(100, 100, 100);\n"
 "}\n"

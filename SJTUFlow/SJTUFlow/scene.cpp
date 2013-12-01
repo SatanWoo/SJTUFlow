@@ -1,7 +1,12 @@
 #include "scene.h"
 
-#include <QMouseEvent>
+#ifdef Q_OS_MAC
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
+
+#include <QMouseEvent>
 #include <time.h>
 
 using namespace qglviewer;
@@ -125,7 +130,12 @@ void Scene::init()
 {
 	setHandlerKeyboardModifiers(QGLViewer::CAMERA, Qt::ControlModifier);
 
-	setMouseBinding(Qt::ControlModifier | Qt::LeftButton  | Qt::MidButton,  NO_CLICK_ACTION);
+#ifdef Q_OS_MAC
+    setMouseBinding(int(Qt::ControlModifier) | int(Qt::LeftButton)
+                    | int(Qt::MidButton),  NO_CLICK_ACTION);
+#else
+    setMouseBinding(Qt::ControlModifier | Qt::LeftButton | Qt::MidButton,  NO_CLICK_ACTION);
+#endif
 
 // 	setHandlerKeyboardModifiers(QGLViewer::FRAME,  Qt::NoModifier);
 // 
@@ -323,8 +333,13 @@ void Scene::setSceneMode( Mode m )
 		constraint->setTranslationConstraintType(AxisPlaneConstraint::PLANE);
 		constraint->setTranslationConstraintDirection(Vec(0.0, 0.0, 1.0));
 
-		setMouseBinding(Qt::ControlModifier | Qt::LeftButton,  CAMERA, TRANSLATE);
-		setMouseBinding(Qt::ControlModifier | Qt::RightButton, NO_CLICK_ACTION);
+#ifdef Q_OS_MAC
+        setMouseBinding(int(Qt::ControlModifier) | int(Qt::LeftButton),  CAMERA, TRANSLATE);
+        setMouseBinding(int(Qt::ControlModifier) | int(Qt::RightButton), NO_CLICK_ACTION);
+#else
+        setMouseBinding(Qt::ControlModifier | Qt::LeftButton,  CAMERA, TRANSLATE);
+        setMouseBinding(Qt::ControlModifier | Qt::RightButton, NO_CLICK_ACTION);
+#endif
 
 		break;
 	case SCENE_3D:
@@ -334,8 +349,13 @@ void Scene::setSceneMode( Mode m )
 
 		constraint->setTranslationConstraintType(AxisPlaneConstraint::FREE);
 
-		setMouseBinding(Qt::ControlModifier | Qt::LeftButton,  CAMERA, ROTATE);
-		setMouseBinding(Qt::ControlModifier | Qt::RightButton, CAMERA, TRANSLATE);
+#ifdef Q_OS_MAC
+        setMouseBinding(int(Qt::ControlModifier) | int(Qt::LeftButton),  CAMERA, ROTATE);
+        setMouseBinding(int(Qt::ControlModifier) | int(Qt::RightButton), CAMERA, TRANSLATE);
+#else
+        setMouseBinding(Qt::ControlModifier | Qt::LeftButton,  CAMERA, ROTATE);
+        setMouseBinding(Qt::ControlModifier | Qt::RightButton, CAMERA, TRANSLATE);
+#endif
 
 		break;
 	}

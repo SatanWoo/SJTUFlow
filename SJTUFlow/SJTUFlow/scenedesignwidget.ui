@@ -154,6 +154,7 @@ QToolBar
    <property name="styleSheet">
     <string notr="true">*
 {
+	color: white;
 	border-color: rgb(100, 100, 100);
 	background-color: rgb(100, 100, 100);
 }

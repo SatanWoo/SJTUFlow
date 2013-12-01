@@ -11,6 +11,8 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 	setGeometry(50, 30, width(), height());
 	setFixedSize(width(), height());
 
+    QMenuBar *menubar = new QMenuBar;
+
 /************************************************************************/
 /*                             tab widget                               */
 /************************************************************************/
@@ -34,7 +36,7 @@ SJTUFlow::~SJTUFlow()
 
 }
 
-void SJTUFlow::paintEvent( QPaintEvent *e )
+void SJTUFlow::paintEvent( QPaintEvent *)
 {
 	QPainter painter(this);
 	painter.drawPixmap(rect(), bgImage);

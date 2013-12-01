@@ -47,7 +47,7 @@ protected:
 	void animate();
 
 	void mousePressEvent(QMouseEvent *event);
-	void keyPressEvent(QKeyEvent *event){};
+    void keyPressEvent(QKeyEvent *){};
 	void timerEvent(QTimerEvent *);
 
 private:

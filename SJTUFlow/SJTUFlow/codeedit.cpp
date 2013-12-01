@@ -90,7 +90,7 @@ void CodeEdit::resizeEvent( QResizeEvent *event )
 	lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
-void CodeEdit::updateLineNumberAreaWidth( int newBlockCount )
+void CodeEdit::updateLineNumberAreaWidth( int )
 {
 	setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }

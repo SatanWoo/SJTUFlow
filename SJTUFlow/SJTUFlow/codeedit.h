@@ -26,7 +26,7 @@ public:
 
 protected:
 	void resizeEvent(QResizeEvent *event);
-	void contextMenuEvent(QContextMenuEvent *e){}
+    void contextMenuEvent(QContextMenuEvent *){}
 
 private slots:
  	void updateLineNumberAreaWidth(int newBlockCount);

@@ -1,7 +1,14 @@
 #ifndef PRIMITIVE_H
 #define PRIMITIVE_H
 
+#include <QtGlobal>
+
+#ifdef Q_OS_MAC
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
+
 #include <QString>
 #include <QObject>
 #include <QColor>
@@ -40,10 +47,10 @@ namespace SceneUnit
 		void setCenterX(QString str){ center[0] = str.toDouble(); emit propertyChanged(); }
 		void setCenterY(QString str){ center[1] = str.toDouble(); emit propertyChanged(); }
 		void setCenterZ(QString str){ center[2] = str.toDouble(); emit propertyChanged(); }
-		virtual void setRadius(QString str){};
-		virtual void setLenX(QString str){};
-		virtual void setLenY(QString str){};
-		virtual void setLenZ(QString str){};
+        virtual void setRadius(QString){};
+        virtual void setLenX(QString){};
+        virtual void setLenY(QString){};
+        virtual void setLenZ(QString){};
 
 	protected:
 		Type type;
