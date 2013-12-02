@@ -13,6 +13,8 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 
     ui.verticalLayout->insertWidget(1, ui.menuBar);
 
+    setting = new Setting;
+
 /************************************************************************/
 /*                             tab widget                               */
 /************************************************************************/
@@ -42,6 +44,8 @@ SJTUFlow::SJTUFlow(QWidget *parent)
     connect(ui.actionUndo, SIGNAL(triggered()), this, SLOT(sharedUndo()));
     connect(ui.actionRedo, SIGNAL(triggered()), this, SLOT(sharedRedo()));
     connect(ui.actionDelete, SIGNAL(triggered()), this, SLOT(sharedDelete()));
+
+    connect(ui.actionSetting, SIGNAL(triggered()), setting, SLOT(show()));
 }
 
 SJTUFlow::~SJTUFlow()

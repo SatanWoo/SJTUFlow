@@ -34,7 +34,7 @@ public:
     QAction *actionMove;
     QAction *actionRotate;
     QAction *actionScale;
-    QAction *actionImport_Object;
+    QAction *actionImport;
     QAction *actionProperty;
     QAction *actionUndo;
     QAction *actionRedo;
@@ -43,17 +43,27 @@ public:
     QAction *actionPaste;
     QAction *actionDelete;
     QAction *actionSelectAll;
-    QAction *actionOption;
+    QAction *actionSetting;
     QAction *actionRun;
+    QAction *actionAbout;
+    QAction *actionNewFile;
+    QAction *action2DScene;
+    QAction *action3DScene;
+    QAction *actionOpen;
+    QAction *actionSave;
+    QAction *actionSaveAs;
+    QAction *actionClose;
+    QAction *actionCloseAll;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     TitleBar *titleBar;
     QHorizontalTabWidget *tabWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
+    QMenu *menuNewScene;
     QMenu *menuPrimitive;
     QMenu *menuEdit;
-    QMenu *menuTools;
+    QMenu *menuTool;
     QMenu *menuHelp;
 
     void setupUi(QMainWindow *SJTUFlowClass)
@@ -82,9 +92,13 @@ public:
 "{\n"
 "	background-color: transparent;\n"
 "}\n"
-"QMenuBar::item:pressed\n"
+"QMenuBar::item:pressed:enabled\n"
 "{\n"
 "	background-color: rgba(20, 59, 255, 100);\n"
+"}\n"
+"QMenuBar::item:!enabled\n"
+"{\n"
+"	color: gray;\n"
 "}\n"
 "QTabWidget, QTabWidget::pane\n"
 "{\n"
@@ -141,43 +155,83 @@ public:
         QIcon icon6;
         icon6.addFile(QStringLiteral(":/Design/Resources/Icons/Scale.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionScale->setIcon(icon6);
-        actionImport_Object = new QAction(SJTUFlowClass);
-        actionImport_Object->setObjectName(QStringLiteral("actionImport_Object"));
+        actionImport = new QAction(SJTUFlowClass);
+        actionImport->setObjectName(QStringLiteral("actionImport"));
         actionProperty = new QAction(SJTUFlowClass);
         actionProperty->setObjectName(QStringLiteral("actionProperty"));
         actionUndo = new QAction(SJTUFlowClass);
         actionUndo->setObjectName(QStringLiteral("actionUndo"));
+        actionUndo->setEnabled(false);
         QIcon icon7;
         icon7.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingUndo.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionUndo->setIcon(icon7);
         actionRedo = new QAction(SJTUFlowClass);
         actionRedo->setObjectName(QStringLiteral("actionRedo"));
+        actionRedo->setEnabled(false);
         QIcon icon8;
         icon8.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingRedo.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionRedo->setIcon(icon8);
         actionCut = new QAction(SJTUFlowClass);
         actionCut->setObjectName(QStringLiteral("actionCut"));
+        actionCut->setEnabled(false);
         QIcon icon9;
         icon9.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingCut.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionCut->setIcon(icon9);
         actionCopy = new QAction(SJTUFlowClass);
         actionCopy->setObjectName(QStringLiteral("actionCopy"));
+        actionCopy->setEnabled(false);
         QIcon icon10;
         icon10.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingCopy.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionCopy->setIcon(icon10);
         actionPaste = new QAction(SJTUFlowClass);
         actionPaste->setObjectName(QStringLiteral("actionPaste"));
+        actionPaste->setEnabled(false);
         QIcon icon11;
         icon11.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingPaste.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionPaste->setIcon(icon11);
         actionDelete = new QAction(SJTUFlowClass);
         actionDelete->setObjectName(QStringLiteral("actionDelete"));
+        actionDelete->setEnabled(false);
         actionSelectAll = new QAction(SJTUFlowClass);
         actionSelectAll->setObjectName(QStringLiteral("actionSelectAll"));
-        actionOption = new QAction(SJTUFlowClass);
-        actionOption->setObjectName(QStringLiteral("actionOption"));
+        actionSetting = new QAction(SJTUFlowClass);
+        actionSetting->setObjectName(QStringLiteral("actionSetting"));
         actionRun = new QAction(SJTUFlowClass);
         actionRun->setObjectName(QStringLiteral("actionRun"));
+        actionAbout = new QAction(SJTUFlowClass);
+        actionAbout->setObjectName(QStringLiteral("actionAbout"));
+        actionNewFile = new QAction(SJTUFlowClass);
+        actionNewFile->setObjectName(QStringLiteral("actionNewFile"));
+        QIcon icon12;
+        icon12.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingNewFile.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionNewFile->setIcon(icon12);
+        action2DScene = new QAction(SJTUFlowClass);
+        action2DScene->setObjectName(QStringLiteral("action2DScene"));
+        action3DScene = new QAction(SJTUFlowClass);
+        action3DScene->setObjectName(QStringLiteral("action3DScene"));
+        actionOpen = new QAction(SJTUFlowClass);
+        actionOpen->setObjectName(QStringLiteral("actionOpen"));
+        QIcon icon13;
+        icon13.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingOpenFile.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionOpen->setIcon(icon13);
+        actionSave = new QAction(SJTUFlowClass);
+        actionSave->setObjectName(QStringLiteral("actionSave"));
+        actionSave->setEnabled(false);
+        QIcon icon14;
+        icon14.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingSaveFile.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSave->setIcon(icon14);
+        actionSaveAs = new QAction(SJTUFlowClass);
+        actionSaveAs->setObjectName(QStringLiteral("actionSaveAs"));
+        actionClose = new QAction(SJTUFlowClass);
+        actionClose->setObjectName(QStringLiteral("actionClose"));
+        QIcon icon15;
+        icon15.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingCloseFile.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionClose->setIcon(icon15);
+        actionCloseAll = new QAction(SJTUFlowClass);
+        actionCloseAll->setObjectName(QStringLiteral("actionCloseAll"));
+        QIcon icon16;
+        icon16.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingCloseAll.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionCloseAll->setIcon(icon16);
         centralWidget = new QWidget(SJTUFlowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -213,12 +267,14 @@ public:
         menuBar->setGeometry(QRect(0, 0, 1024, 23));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
+        menuNewScene = new QMenu(menuFile);
+        menuNewScene->setObjectName(QStringLiteral("menuNewScene"));
         menuPrimitive = new QMenu(menuBar);
         menuPrimitive->setObjectName(QStringLiteral("menuPrimitive"));
         menuEdit = new QMenu(menuBar);
         menuEdit->setObjectName(QStringLiteral("menuEdit"));
-        menuTools = new QMenu(menuBar);
-        menuTools->setObjectName(QStringLiteral("menuTools"));
+        menuTool = new QMenu(menuBar);
+        menuTool->setObjectName(QStringLiteral("menuTool"));
         menuHelp = new QMenu(menuBar);
         menuHelp->setObjectName(QStringLiteral("menuHelp"));
         SJTUFlowClass->setMenuBar(menuBar);
@@ -226,8 +282,19 @@ public:
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
         menuBar->addAction(menuPrimitive->menuAction());
-        menuBar->addAction(menuTools->menuAction());
+        menuBar->addAction(menuTool->menuAction());
         menuBar->addAction(menuHelp->menuAction());
+        menuFile->addAction(actionNewFile);
+        menuFile->addAction(menuNewScene->menuAction());
+        menuFile->addAction(actionOpen);
+        menuFile->addSeparator();
+        menuFile->addAction(actionSave);
+        menuFile->addAction(actionSaveAs);
+        menuFile->addSeparator();
+        menuFile->addAction(actionClose);
+        menuFile->addAction(actionCloseAll);
+        menuNewScene->addAction(action2DScene);
+        menuNewScene->addAction(action3DScene);
         menuPrimitive->addAction(actionCircle);
         menuPrimitive->addAction(actionRectangle);
         menuPrimitive->addAction(actionSphere);
@@ -237,7 +304,7 @@ public:
         menuPrimitive->addAction(actionRotate);
         menuPrimitive->addAction(actionScale);
         menuPrimitive->addSeparator();
-        menuPrimitive->addAction(actionImport_Object);
+        menuPrimitive->addAction(actionImport);
         menuPrimitive->addSeparator();
         menuPrimitive->addAction(actionProperty);
         menuEdit->addAction(actionUndo);
@@ -248,9 +315,10 @@ public:
         menuEdit->addAction(actionPaste);
         menuEdit->addAction(actionDelete);
         menuEdit->addAction(actionSelectAll);
-        menuTools->addAction(actionRun);
-        menuTools->addSeparator();
-        menuTools->addAction(actionOption);
+        menuTool->addAction(actionRun);
+        menuTool->addSeparator();
+        menuTool->addAction(actionSetting);
+        menuHelp->addAction(actionAbout);
 
         retranslateUi(SJTUFlowClass);
 
@@ -291,7 +359,10 @@ public:
         actionRotate->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+E", 0));
         actionScale->setText(QApplication::translate("SJTUFlowClass", "Scale", 0));
         actionScale->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+R", 0));
-        actionImport_Object->setText(QApplication::translate("SJTUFlowClass", "Import Object", 0));
+        actionImport->setText(QApplication::translate("SJTUFlowClass", "Import", 0));
+#ifndef QT_NO_TOOLTIP
+        actionImport->setToolTip(QApplication::translate("SJTUFlowClass", "Import object", 0));
+#endif // QT_NO_TOOLTIP
         actionProperty->setText(QApplication::translate("SJTUFlowClass", "Property", 0));
         actionUndo->setText(QApplication::translate("SJTUFlowClass", "Undo", 0));
         actionUndo->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Z", 0));
@@ -307,13 +378,34 @@ public:
         actionDelete->setShortcut(QApplication::translate("SJTUFlowClass", "Del", 0));
         actionSelectAll->setText(QApplication::translate("SJTUFlowClass", "Select All", 0));
         actionSelectAll->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+A", 0));
-        actionOption->setText(QApplication::translate("SJTUFlowClass", "Option", 0));
+        actionSetting->setText(QApplication::translate("SJTUFlowClass", "Setting", 0));
         actionRun->setText(QApplication::translate("SJTUFlowClass", "Run", 0));
+#ifndef QT_NO_TOOLTIP
+        actionRun->setToolTip(QApplication::translate("SJTUFlowClass", "Run module", 0));
+#endif // QT_NO_TOOLTIP
         actionRun->setShortcut(QApplication::translate("SJTUFlowClass", "F5", 0));
+        actionAbout->setText(QApplication::translate("SJTUFlowClass", "&About", 0));
+        actionNewFile->setText(QApplication::translate("SJTUFlowClass", "New File", 0));
+        actionNewFile->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+N", 0));
+        action2DScene->setText(QApplication::translate("SJTUFlowClass", "2D Scene", 0));
+        action3DScene->setText(QApplication::translate("SJTUFlowClass", "3D Scene", 0));
+        actionOpen->setText(QApplication::translate("SJTUFlowClass", "Open", 0));
+        actionOpen->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+O", 0));
+        actionSave->setText(QApplication::translate("SJTUFlowClass", "Save", 0));
+        actionSave->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+S", 0));
+        actionSaveAs->setText(QApplication::translate("SJTUFlowClass", "Save As", 0));
+        actionSaveAs->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Shift+S", 0));
+        actionClose->setText(QApplication::translate("SJTUFlowClass", "Close", 0));
+        actionClose->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+W", 0));
+        actionCloseAll->setText(QApplication::translate("SJTUFlowClass", "Close All", 0));
+#ifndef QT_NO_TOOLTIP
+        actionCloseAll->setToolTip(QApplication::translate("SJTUFlowClass", "Close all", 0));
+#endif // QT_NO_TOOLTIP
         menuFile->setTitle(QApplication::translate("SJTUFlowClass", "&File", 0));
+        menuNewScene->setTitle(QApplication::translate("SJTUFlowClass", "New Scene", 0));
         menuPrimitive->setTitle(QApplication::translate("SJTUFlowClass", "&Primitive", 0));
         menuEdit->setTitle(QApplication::translate("SJTUFlowClass", "&Edit", 0));
-        menuTools->setTitle(QApplication::translate("SJTUFlowClass", "&Tools", 0));
+        menuTool->setTitle(QApplication::translate("SJTUFlowClass", "&Tool", 0));
         menuHelp->setTitle(QApplication::translate("SJTUFlowClass", "&Help", 0));
     } // retranslateUi
 

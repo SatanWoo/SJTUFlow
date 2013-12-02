@@ -42,24 +42,19 @@ RCC_DIR += ./GeneratedFiles
 HEADERS += ./qhorizontaltabbar.h \
     ./qhorizontaltabwidget.h \
     ./sjtuflow.h \
-    ./rendersetting.h \
-    ./runsetting.h \
     ./titlebar.h \
     ./codingwidget.h \
     ./displaywidget.h \
     ./codeedit.h \
-    ./dllmanager.h \
     ./pysyntaxhighlighter.h \
     ./scene.h \
     ./primitive.h \
-    ./scenedesignwidget.h
+    ./scenedesignwidget.h \
+    ./setting.h
 SOURCES += ./codeedit.cpp \
     ./codingwidget.cpp \
     ./displaywidget.cpp \
-    ./dllmanager.cpp \
     ./primitive.cpp \
-    ./rendersetting.cpp \
-    ./runsetting.cpp \
     ./scene.cpp \
     ./main.cpp \
     ./pysyntaxhighlighter.cpp \
@@ -67,13 +62,12 @@ SOURCES += ./codeedit.cpp \
     ./qhorizontaltabwidget.cpp \
     ./scenedesignwidget.cpp \
     ./sjtuflow.cpp \
-    ./titlebar.cpp
+    ./titlebar.cpp \
+    ./setting.cpp
 FORMS += ./sjtuflow.ui \
     ./scenedesignwidget.ui \
     ./codingwidget.ui \
     ./displaywidget.ui \
     ./titlebar.ui \
-    ./runsetting.ui \
-    ./rendersetting.ui \
-    ./dllmanager.ui
+    ./setting.ui
 RESOURCES += sjtuflow.qrc

@@ -8,6 +8,7 @@
 #include "scenedesignwidget.h"
 #include "codingwidget.h"
 #include "displaywidget.h"
+#include "setting.h"
 
 class SJTUFlow : public QMainWindow
 {
@@ -29,6 +30,7 @@ private:
 	SceneDesignWidget *sceneDesignWidget;
 	CodingWidget *codingWidget;
 	DisplayWidget *displayWidget;
+    Setting *setting;
 
 private slots:
     void tabChanged(int index);

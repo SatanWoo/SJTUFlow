@@ -3,11 +3,8 @@
 
 #include <QMap>
 #include <QMainWindow>
+#include <QMenuBar>
 #include "ui_codingwidget.h"
-
-#include "dllmanager.h"
-#include "runsetting.h"
-#include "rendersetting.h"
 
 #define TEMP_FILE_NAME ".tmp"
 
@@ -25,10 +22,6 @@ private:
 	Ui::CodingWidget ui;
 
     QMap<QString, QAction *> actions;
-
-	DLLManager *dllManager;
-	RunSetting *settingRun;
-	RenderSetting *settingRender;
 
 	int codingTabNum; // record how many tabs have been added
 	QIcon savedIcon;

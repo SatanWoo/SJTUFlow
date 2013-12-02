@@ -6,6 +6,7 @@
 
 #include <QColorDialog>
 #include <QMap>
+#include <QMenuBar>
 
 #include "scene.h"
 

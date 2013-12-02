@@ -194,7 +194,7 @@ QTabBar::tab:selected
     </property>
     <addaction name="actionRun"/>
     <addaction name="separator"/>
-    <addaction name="actionOption"/>
+    <addaction name="actionSetting"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -414,9 +414,9 @@ QTabBar::tab:selected
     <string>Ctrl+A</string>
    </property>
   </action>
-  <action name="actionOption">
+  <action name="actionSetting">
    <property name="text">
-    <string>Option</string>
+    <string>Setting</string>
    </property>
   </action>
   <action name="actionRun">

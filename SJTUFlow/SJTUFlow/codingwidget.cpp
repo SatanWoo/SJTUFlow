@@ -16,10 +16,6 @@ CodingWidget::CodingWidget(QMenuBar *menubar, QWidget *parent)
 
     parseMenuActions(menubar);
 
-	dllManager = new DLLManager;
-	settingRun = new RunSetting;
-	settingRender = new RenderSetting;
-
 	codingTabNum = 0;
 	savedIcon = QIcon(":/Coding/Resources/Icons/CodingSaved.png");
 	unsavedIcon = QIcon(":/Coding/Resources/Icons/CodingUnsaved.png");
@@ -58,12 +54,7 @@ CodingWidget::CodingWidget(QMenuBar *menubar, QWidget *parent)
     connect(actions["paste"], SIGNAL(triggered()), this, SLOT(paste()));
     connect(actions["selectAll"], SIGNAL(triggered()), this, SLOT(seletAll()));
 
-	connect(ui.actionAddAlgorithm, SIGNAL(triggered()), dllManager, SLOT(show()));
-
     connect(actions["run"], SIGNAL(triggered()), this, SLOT(runModule()));
-	connect(ui.actionSettingRun, SIGNAL(triggered()), settingRun, SLOT(show()));
-
-	connect(ui.actionSettingRender, SIGNAL(triggered()), settingRender, SLOT(show()));
 }
 
 CodingWidget::~CodingWidget()

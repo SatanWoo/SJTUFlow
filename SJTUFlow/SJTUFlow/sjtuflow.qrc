@@ -6,6 +6,9 @@
         <file>Resources/Icons/SceneDesign.png</file>
         <file>Resources/Icons/Coding.png</file>
         <file>Resources/Icons/Display.png</file>
+        <file>Resources/Icons/Libraries.png</file>
+        <file>Resources/Icons/Render.png</file>
+        <file>Resources/Icons/Run.png</file>
     </qresource>
     <qresource prefix="/Coding">
         <file>Resources/Icons/CodingCloseAll.png</file>

@@ -21,8 +21,6 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QToolBar>
@@ -33,24 +31,7 @@ QT_BEGIN_NAMESPACE
 class Ui_SceneDesignWidget
 {
 public:
-    QAction *actionOpen;
-    QAction *actionSave;
-    QAction *actionSave_as;
-    QAction *actionUndo;
-    QAction *actionRedo;
-    QAction *actionDelete;
-    QAction *actionMove;
-    QAction *actionRotate;
-    QAction *actionScale;
-    QAction *actionProperty;
-    QAction *actionImport;
-    QAction *actionScene2D;
-    QAction *actionScene3D;
     QWidget *centralWidget;
-    QMenuBar *menuBar;
-    QMenu *menuFile;
-    QMenu *menuNew;
-    QMenu *menuEdit;
     QToolBar *mainToolBar;
     QToolBar *toolBar2D;
     QToolBar *toolBar3D;
@@ -107,59 +88,9 @@ public:
 "	border-color: rgb(209, 209, 209);\n"
 "	background-color: rgb(209, 209, 209);\n"
 "}"));
-        actionOpen = new QAction(SceneDesignWidget);
-        actionOpen->setObjectName(QStringLiteral("actionOpen"));
-        actionSave = new QAction(SceneDesignWidget);
-        actionSave->setObjectName(QStringLiteral("actionSave"));
-        actionSave_as = new QAction(SceneDesignWidget);
-        actionSave_as->setObjectName(QStringLiteral("actionSave_as"));
-        actionUndo = new QAction(SceneDesignWidget);
-        actionUndo->setObjectName(QStringLiteral("actionUndo"));
-        actionRedo = new QAction(SceneDesignWidget);
-        actionRedo->setObjectName(QStringLiteral("actionRedo"));
-        actionDelete = new QAction(SceneDesignWidget);
-        actionDelete->setObjectName(QStringLiteral("actionDelete"));
-        actionMove = new QAction(SceneDesignWidget);
-        actionMove->setObjectName(QStringLiteral("actionMove"));
-        actionMove->setCheckable(true);
-        actionMove->setChecked(true);
-        QIcon icon;
-        icon.addFile(QStringLiteral(":/Design/Resources/Icons/Move.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionMove->setIcon(icon);
-        actionRotate = new QAction(SceneDesignWidget);
-        actionRotate->setObjectName(QStringLiteral("actionRotate"));
-        actionRotate->setCheckable(true);
-        QIcon icon1;
-        icon1.addFile(QStringLiteral(":/Design/Resources/Icons/Rotate.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionRotate->setIcon(icon1);
-        actionScale = new QAction(SceneDesignWidget);
-        actionScale->setObjectName(QStringLiteral("actionScale"));
-        actionScale->setCheckable(true);
-        QIcon icon2;
-        icon2.addFile(QStringLiteral(":/Design/Resources/Icons/Scale.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionScale->setIcon(icon2);
-        actionProperty = new QAction(SceneDesignWidget);
-        actionProperty->setObjectName(QStringLiteral("actionProperty"));
-        actionImport = new QAction(SceneDesignWidget);
-        actionImport->setObjectName(QStringLiteral("actionImport"));
-        actionScene2D = new QAction(SceneDesignWidget);
-        actionScene2D->setObjectName(QStringLiteral("actionScene2D"));
-        actionScene3D = new QAction(SceneDesignWidget);
-        actionScene3D->setObjectName(QStringLiteral("actionScene3D"));
         centralWidget = new QWidget(SceneDesignWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         SceneDesignWidget->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(SceneDesignWidget);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 23));
-        menuBar->setContextMenuPolicy(Qt::NoContextMenu);
-        menuFile = new QMenu(menuBar);
-        menuFile->setObjectName(QStringLiteral("menuFile"));
-        menuNew = new QMenu(menuFile);
-        menuNew->setObjectName(QStringLiteral("menuNew"));
-        menuEdit = new QMenu(menuBar);
-        menuEdit->setObjectName(QStringLiteral("menuEdit"));
-        SceneDesignWidget->setMenuBar(menuBar);
         mainToolBar = new QToolBar(SceneDesignWidget);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
         mainToolBar->setContextMenuPolicy(Qt::NoContextMenu);
@@ -361,28 +292,6 @@ public:
         QWidget::setTabOrder(lineEditPosX, lineEditPosY);
         QWidget::setTabOrder(lineEditPosY, lineEditPosZ);
 
-        menuBar->addAction(menuFile->menuAction());
-        menuBar->addAction(menuEdit->menuAction());
-        menuFile->addAction(menuNew->menuAction());
-        menuFile->addAction(actionOpen);
-        menuFile->addSeparator();
-        menuFile->addAction(actionSave);
-        menuFile->addAction(actionSave_as);
-        menuFile->addSeparator();
-        menuFile->addAction(actionImport);
-        menuNew->addAction(actionScene2D);
-        menuNew->addAction(actionScene3D);
-        menuEdit->addAction(actionUndo);
-        menuEdit->addAction(actionRedo);
-        menuEdit->addSeparator();
-        menuEdit->addAction(actionDelete);
-        menuEdit->addSeparator();
-        menuEdit->addAction(actionMove);
-        menuEdit->addAction(actionRotate);
-        menuEdit->addAction(actionScale);
-        menuEdit->addSeparator();
-        menuEdit->addAction(actionProperty);
-
         retranslateUi(SceneDesignWidget);
 
         QMetaObject::connectSlotsByName(SceneDesignWidget);
@@ -391,31 +300,6 @@ public:
     void retranslateUi(QMainWindow *SceneDesignWidget)
     {
         SceneDesignWidget->setWindowTitle(QApplication::translate("SceneDesignWidget", "SceneDesignWidget", 0));
-        actionOpen->setText(QApplication::translate("SceneDesignWidget", "Open", 0));
-        actionOpen->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+O", 0));
-        actionSave->setText(QApplication::translate("SceneDesignWidget", "Save", 0));
-        actionSave->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+S", 0));
-        actionSave_as->setText(QApplication::translate("SceneDesignWidget", "Save as", 0));
-        actionSave_as->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+Shift+S", 0));
-        actionUndo->setText(QApplication::translate("SceneDesignWidget", "Undo", 0));
-        actionUndo->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+Z", 0));
-        actionRedo->setText(QApplication::translate("SceneDesignWidget", "Redo", 0));
-        actionRedo->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+Y", 0));
-        actionDelete->setText(QApplication::translate("SceneDesignWidget", "Delete", 0));
-        actionDelete->setShortcut(QApplication::translate("SceneDesignWidget", "Del", 0));
-        actionMove->setText(QApplication::translate("SceneDesignWidget", "Move", 0));
-        actionMove->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+W", 0));
-        actionRotate->setText(QApplication::translate("SceneDesignWidget", "Rotate", 0));
-        actionRotate->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+E", 0));
-        actionScale->setText(QApplication::translate("SceneDesignWidget", "Scale", 0));
-        actionScale->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+R", 0));
-        actionProperty->setText(QApplication::translate("SceneDesignWidget", "Property", 0));
-        actionImport->setText(QApplication::translate("SceneDesignWidget", "Import", 0));
-        actionScene2D->setText(QApplication::translate("SceneDesignWidget", "2D Scene", 0));
-        actionScene3D->setText(QApplication::translate("SceneDesignWidget", "3D Scene", 0));
-        menuFile->setTitle(QApplication::translate("SceneDesignWidget", "&File", 0));
-        menuNew->setTitle(QApplication::translate("SceneDesignWidget", "New", 0));
-        menuEdit->setTitle(QApplication::translate("SceneDesignWidget", "&Edit", 0));
         mainToolBar->setWindowTitle(QApplication::translate("SceneDesignWidget", "Main ToolBar", 0));
         toolBar2D->setWindowTitle(QApplication::translate("SceneDesignWidget", "2D toolBar", 0));
         toolBar3D->setWindowTitle(QApplication::translate("SceneDesignWidget", "3D toolBar", 0));

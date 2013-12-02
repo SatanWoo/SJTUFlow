@@ -92,37 +92,6 @@ QTabBar::tab:selected
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>400</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuRun">
-    <property name="title">
-     <string>&amp;Run</string>
-    </property>
-    <addaction name="actionSettingRun"/>
-   </widget>
-   <widget class="QMenu" name="menuRender">
-    <property name="title">
-     <string>Ren&amp;der</string>
-    </property>
-    <addaction name="actionSettingRender"/>
-   </widget>
-   <widget class="QMenu" name="menuAlgorithm">
-    <property name="title">
-     <string>&amp;Algorithm</string>
-    </property>
-    <addaction name="actionAddAlgorithm"/>
-   </widget>
-   <addaction name="menuAlgorithm"/>
-   <addaction name="menuRender"/>
-   <addaction name="menuRun"/>
-  </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="movable">
     <bool>false</bool>
@@ -143,21 +112,6 @@ QTabBar::tab:selected
     <bool>false</bool>
    </attribute>
   </widget>
-  <action name="actionSettingRun">
-   <property name="text">
-    <string>Setting</string>
-   </property>
-  </action>
-  <action name="actionSettingRender">
-   <property name="text">
-    <string>Setting</string>
-   </property>
-  </action>
-  <action name="actionAddAlgorithm">
-   <property name="text">
-    <string>Add Algorithm</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
