@@ -158,7 +158,7 @@ void Scene::draw()
 		primitives.at(i)->draw(selectedName());
 		if (primitives.at(i)->getId() == selectedName())
 		{
-			drawAxis(0.2);
+            drawAxis(0.2f);
 		}
 		glPopMatrix();
 	}

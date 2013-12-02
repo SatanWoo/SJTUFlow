@@ -10,6 +10,7 @@ DLLManager::DLLManager(QWidget *parent)
 		~Qt::WindowContextHelpButtonHint);
 	setModal(true);
 
+    connect(ui.pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 DLLManager::~DLLManager()

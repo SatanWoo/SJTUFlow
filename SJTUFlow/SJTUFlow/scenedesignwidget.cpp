@@ -1,11 +1,14 @@
 #include "scenedesignwidget.h"
 
 #include "primitive.h"
+#include <QDebug>
 
-SceneDesignWidget::SceneDesignWidget(QWidget *parent)
+SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+
+    parseMenuActions(menubar);
 
 	selectedObj = NULL;
 
@@ -19,30 +22,34 @@ SceneDesignWidget::SceneDesignWidget(QWidget *parent)
 /************************************************************************/
 /*                              menu                                    */
 /************************************************************************/
-	ui.actionDelete->setEnabled(false);
+    actions["delete"]->setEnabled(false);
 
-	connect(ui.actionScene2D, SIGNAL(triggered()), this, SLOT(new2DScene()));
-	connect(ui.actionScene3D, SIGNAL(triggered()), this, SLOT(new3DScene()));
-	connect(ui.actionDelete, SIGNAL(triggered()), this, SLOT(deleteObject()));
+    connect(actions["2DScene"], SIGNAL(triggered()), this, SLOT(new2DScene()));
+    connect(actions["3DScene"], SIGNAL(triggered()), this, SLOT(new3DScene()));
 
-	connect(ui.actionProperty, SIGNAL(triggered()), this, SLOT(showProperty()));
+    connect(actions["circle"], SIGNAL(triggered()), scene, SLOT(newCircle()));
+    connect(actions["rectangle"], SIGNAL(triggered()), scene, SLOT(newRectangle()));
+    connect(actions["sphere"], SIGNAL(triggered()), scene, SLOT(newSphere()));
+    connect(actions["box"], SIGNAL(triggered()), scene, SLOT(newBox()));
+
+    connect(actions["move"], SIGNAL(triggered()), this, SLOT(move()));
+    connect(actions["rotate"], SIGNAL(triggered()), this, SLOT(rotate()));
+    connect(actions["scale"], SIGNAL(triggered()), this, SLOT(scale()));
+
+    connect(actions["property"], SIGNAL(triggered()), this, SLOT(showProperty()));
 
 /************************************************************************/
 /*                             toolbar                                  */
 /************************************************************************/
-	ui.mainToolBar->addAction(ui.actionMove);
-	ui.mainToolBar->addAction(ui.actionRotate);
-	ui.mainToolBar->addAction(ui.actionScale);
+    ui.mainToolBar->addAction(actions["move"]);
+    ui.mainToolBar->addAction(actions["rotate"]);
+    ui.mainToolBar->addAction(actions["scale"]);
 
-	ui.toolBar2D->addAction(QIcon(":/Design/Resources/Icons/Rectangle.png"), 
-		tr("New Rectangle"), scene, SLOT(newRectangle()));
-	ui.toolBar2D->addAction(QIcon(":/Design/Resources/Icons/Circle.png"),
-		tr("New Circle"), scene, SLOT(newCircle()));
+    ui.toolBar2D->addAction(actions["circle"]);
+    ui.toolBar2D->addAction(actions["rectangle"]);
 
-	ui.toolBar3D->addAction(QIcon(":/Design/Resources/Icons/Box.png"), 
-		tr("New Box"), scene, SLOT(newBox()));
-	ui.toolBar3D->addAction(QIcon(":/Design/Resources/Icons/Sphere.png"),
-		tr("New Sphere"), scene, SLOT(newSphere()));
+    ui.toolBar3D->addAction(actions["sphere"]);
+    ui.toolBar3D->addAction(actions["box"]);
 
 /************************************************************************/
 /*                            property                                  */
@@ -71,12 +78,29 @@ SceneDesignWidget::~SceneDesignWidget()
 
 }
 
+void SceneDesignWidget::checkState()
+{
+    if (selectedObj == NULL)
+    {
+        actions["delete"]->setEnabled(false);
+    }
+    else
+    {
+        actions["delete"]->setEnabled(true);
+    }
+}
+
 void SceneDesignWidget::new2DScene()
 {
 	scene->clear(Scene::SCENE_2D);
 	ui.dockWidgetProperty->close();
 	ui.toolBar2D->show();
 	ui.toolBar3D->close();
+
+    actions["circle"]->setVisible(true);
+    actions["rectangle"]->setVisible(true);
+    actions["sphere"]->setVisible(false);
+    actions["box"]->setVisible(false);
 }
 
 void SceneDesignWidget::new3DScene()
@@ -85,6 +109,11 @@ void SceneDesignWidget::new3DScene()
 	ui.dockWidgetProperty->close();
 	ui.toolBar2D->close();
 	ui.toolBar3D->show();
+
+    actions["circle"]->setVisible(false);
+    actions["rectangle"]->setVisible(false);
+    actions["sphere"]->setVisible(true);
+    actions["box"]->setVisible(true);
 }
 
 void SceneDesignWidget::deleteObject()
@@ -93,9 +122,30 @@ void SceneDesignWidget::deleteObject()
 	{
 		scene->deleteObject(selectedObj->getId());
 		selectedObj = NULL;
-		ui.actionDelete->setEnabled(false);
+        actions["delete"]->setEnabled(false);
 		changePropertyWidget();
-	}
+    }
+}
+
+void SceneDesignWidget::move()
+{
+    actions["move"]->setChecked(true);
+    actions["rotate"]->setChecked(false);
+    actions["scale"]->setChecked(false);
+}
+
+void SceneDesignWidget::rotate()
+{
+    actions["move"]->setChecked(false);
+    actions["rotate"]->setChecked(true);
+    actions["scale"]->setChecked(false);
+}
+
+void SceneDesignWidget::scale()
+{
+    actions["move"]->setChecked(false);
+    actions["rotate"]->setChecked(false);
+    actions["scale"]->setChecked(true);
 }
 
 void SceneDesignWidget::showProperty()
@@ -132,11 +182,11 @@ void SceneDesignWidget::selectedObjChanged( int id )
 	selectedObj = scene->getPrimitive(id);
 	if (selectedObj == NULL)
 	{
-		ui.actionDelete->setEnabled(false);
+        actions["delete"]->setEnabled(false);
 	}
 	else
 	{
-		ui.actionDelete->setEnabled(true);
+        actions["delete"]->setEnabled(true);
 	}
 	changePropertyWidget();
 }
@@ -277,5 +327,96 @@ void SceneDesignWidget::changePropertyWidget()
 		ui.lineEditSizeY->setVisible(false);
 		ui.labelSizeZ->setVisible(false);
 		ui.lineEditSizeZ->setVisible(false);
-	}
+    }
+}
+
+void SceneDesignWidget::parseMenuActions(QMenuBar *menubar)
+{
+    QMenu *menu = menubar->findChild<QMenu *>(tr("menuFile"));
+    menu = menu->findChild<QMenu *>(tr("menuNewScene"));
+    QList<QAction *> actionsList = menu->actions();
+    for (int i = 0; i < actionsList.count(); i++)
+    {
+        QAction *action = actionsList.at(i);
+        if (tr("action2DScene") == action->objectName())
+        {
+            actions["2DScene"] = action;
+        }
+        else if (tr("action3DScene") == action->objectName())
+        {
+            actions["3DScene"] = action;
+        }
+        else if (tr("actionOpen") == action->objectName())
+        {
+            actions["open"] = action;
+        }
+        else if (tr("actionSave") == action->objectName())
+        {
+            actions["save"] = action;
+        }
+        else if (tr("actionSaveAs") == action->objectName())
+        {
+            actions["saveAs"] = action;
+        }
+    }
+    menu = menubar->findChild<QMenu *>(tr("menuEdit"));
+    actionsList = menu->actions();
+    for (int i = 0; i < actionsList.count(); i++)
+    {
+        QAction *action = actionsList.at(i);
+        if (tr("actionUndo") == action->objectName())
+        {
+            actions["undo"] = action;
+        }
+        else if (tr("actionRedo") == action->objectName())
+        {
+            actions["redo"] = action;
+        }
+        else if (tr("actionDelete") == action->objectName())
+        {
+            actions["delete"] = action;
+        }
+    }
+    menu = menubar->findChild<QMenu *>(tr("menuPrimitive"));
+    actionsList = menu->actions();
+    for (int i = 0; i < actionsList.count(); i++)
+    {
+        QAction *action = actionsList.at(i);
+        if (tr("actionCircle") == action->objectName())
+        {
+            actions["circle"] = action;
+        }
+        else if (tr("actionRectangle") == action->objectName())
+        {
+            actions["rectangle"] = action;
+        }
+        else if (tr("actionSphere") == action->objectName())
+        {
+            actions["sphere"] = action;
+        }
+        else if (tr("actionBox") == action->objectName())
+        {
+            actions["box"] = action;
+        }
+        else if (tr("actionMove") == action->objectName())
+        {
+            actions["move"] = action;
+        }
+        else if (tr("actionRotate") == action->objectName())
+        {
+            actions["rotate"] = action;
+        }
+        else if (tr("actionScale") == action->objectName())
+        {
+            actions["scale"] = action;
+        }
+        else if (tr("actionImport") == action->objectName())
+        {
+            actions["import"] = action;
+        }
+        else if (tr("actionProperty") == action->objectName())
+        {
+            actions["property"] = action;
+        }
+    }
 }

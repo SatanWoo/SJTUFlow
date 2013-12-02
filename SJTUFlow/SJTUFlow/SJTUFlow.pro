@@ -8,9 +8,9 @@ QT += core opengl widgets gui
 DEFINES += QT_DLL QT_OPENGL_LIB QT_WIDGETS_LIB
 INCLUDEPATH += . \
     ../include
-LIBS += -lopengl32 \
-    -lglu32
 win32{
+    LIBS += -lopengl32 \
+        -lglu32
     CONFIG(debug, debug|release){
         LIBS += -L../lib/ -lQGLViewerd2
         DESTDIR = ../Win32/Debug
@@ -24,6 +24,17 @@ win32{
     }
     RC_FILE = SJTUFlow.rc
 }macx{
+    CONFIG(debug, debug|release){
+        LIBS += -L../lib/ -lQGLViewerd.2.4.0
+        DESTDIR = ../Mac/Debug
+        MOC_DIR += ./GeneratedFiles/debug
+        OBJECTS_DIR += debug
+    }else{
+        LIBS += -L../lib/ -lQGLViewer.2.4.0
+        DESTDIR = ../Mac/Release
+        MOC_DIR += ./GeneratedFiles/release
+        OBJECTS_DIR += release
+    }
 }
 DEPENDPATH += .
 UI_DIR += ./GeneratedFiles

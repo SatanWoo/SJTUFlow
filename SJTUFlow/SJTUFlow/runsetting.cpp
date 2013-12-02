@@ -9,6 +9,8 @@ RunSetting::RunSetting(QWidget *parent)
 		~Qt::WindowMinMaxButtonsHint & 
 		~Qt::WindowContextHelpButtonHint);
 	setModal(true);
+
+    connect(ui.pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 RunSetting::~RunSetting()

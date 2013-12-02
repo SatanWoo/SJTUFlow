@@ -9,10 +9,12 @@
 
 #include "codeedit.h"
 
-CodingWidget::CodingWidget(QWidget *parent)
+CodingWidget::CodingWidget(QMenuBar *menubar, QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+
+    parseMenuActions(menubar);
 
 	dllManager = new DLLManager;
 	settingRun = new RunSetting;
@@ -28,34 +30,37 @@ CodingWidget::CodingWidget(QWidget *parent)
 /************************************************************************/
 /*                             toolBar                                  */
 /************************************************************************/
-	ui.toolBar->addAction(ui.actionNew);
-	ui.toolBar->addAction(ui.actionOpen);
-	ui.toolBar->addAction(ui.actionSave);
-	ui.toolBar->addAction(ui.actionClose);
-	ui.toolBar->addAction(ui.actionCloseAll);
+    ui.toolBar->addAction(actions["newFile"]);
+    ui.toolBar->addAction(actions["open"]);
+    ui.toolBar->addAction(actions["save"]);
+    ui.toolBar->addAction(actions["close"]);
+    ui.toolBar->addAction(actions["closeAll"]);
 	ui.toolBar->addSeparator();
-	ui.toolBar->addAction(ui.actionCut);
-	ui.toolBar->addAction(ui.actionCopy);
-	ui.toolBar->addAction(ui.actionPaste);
+    ui.toolBar->addAction(actions["cut"]);
+    ui.toolBar->addAction(actions["copy"]);
+    ui.toolBar->addAction(actions["paste"]);
 	ui.toolBar->addSeparator();
-	ui.toolBar->addAction(ui.actionUndo);
-	ui.toolBar->addAction(ui.actionRedo);
+    ui.toolBar->addAction(actions["undo"]);
+    ui.toolBar->addAction(actions["redo"]);
 
 /************************************************************************/
 /*                          signals and slots                           */
 /************************************************************************/
 	connect(ui.tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+    connect(ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(checkState(int)));
 
-	connect(ui.actionNew, SIGNAL(triggered()), this, SLOT(newFile()));
-	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
-	connect(ui.actionSave, SIGNAL(triggered()), this, SLOT(saveFile()));
-	connect(ui.actionSaveAs, SIGNAL(triggered()), this, SLOT(saveAs()));
-	connect(ui.actionClose, SIGNAL(triggered()), this, SLOT(closeFile()));
-	connect(ui.actionCloseAll, SIGNAL(triggered()), this, SLOT(closeAll()));
+    connect(actions["newFile"], SIGNAL(triggered()), this, SLOT(newFile()));
+    connect(actions["close"], SIGNAL(triggered()), this, SLOT(closeFile()));
+    connect(actions["closeAll"], SIGNAL(triggered()), this, SLOT(closeAll()));
+
+    connect(actions["cut"], SIGNAL(triggered()), this, SLOT(cut()));
+    connect(actions["copy"], SIGNAL(triggered()), this, SLOT(copy()));
+    connect(actions["paste"], SIGNAL(triggered()), this, SLOT(paste()));
+    connect(actions["selectAll"], SIGNAL(triggered()), this, SLOT(seletAll()));
 
 	connect(ui.actionAddAlgorithm, SIGNAL(triggered()), dllManager, SLOT(show()));
 
-	connect(ui.actionRunModule, SIGNAL(triggered()), this, SLOT(runModule()));
+    connect(actions["run"], SIGNAL(triggered()), this, SLOT(runModule()));
 	connect(ui.actionSettingRun, SIGNAL(triggered()), settingRun, SLOT(show()));
 
 	connect(ui.actionSettingRender, SIGNAL(triggered()), settingRender, SLOT(show()));
@@ -124,7 +129,85 @@ void CodingWidget::saveFile(const QString &fileName)
 
 	QTextStream out(&file);
 	QTextEdit *textEdit = (QTextEdit *)ui.tabWidget->currentWidget();
-	out << textEdit->toPlainText();
+    out << textEdit->toPlainText();
+}
+
+void CodingWidget::parseMenuActions(QMenuBar *menubar)
+{
+    QMenu *menu = menubar->findChild<QMenu *>(tr("menuFile"));
+    QList<QAction *> actionsList = menu->actions();
+    for (int i = 0; i < actionsList.count(); i++)
+    {
+        QAction *action = actionsList.at(i);
+        if (tr("actionNewFile") == action->objectName())
+        {
+            actions["newFile"] = action;
+        }
+        else if (tr("actionOpen") == action->objectName())
+        {
+            actions["open"] = action;
+        }
+        else if (tr("actionSave") == action->objectName())
+        {
+            actions["save"] = action;
+        }
+        else if (tr("actionSaveAs") == action->objectName())
+        {
+            actions["saveAs"] = action;
+        }
+        else if (tr("actionClose") == action->objectName())
+        {
+            actions["close"] = action;
+        }
+        else if (tr("actionCloseAll") == action->objectName())
+        {
+            actions["closeAll"] = action;
+        }
+    }
+    menu = menubar->findChild<QMenu *>(tr("menuEdit"));
+    actionsList = menu->actions();
+    for (int i = 0; i < actionsList.count(); i++)
+    {
+        QAction *action = actionsList.at(i);
+        if (tr("actionUndo") == action->objectName())
+        {
+            actions["undo"] = action;
+        }
+        else if (tr("actionRedo") == action->objectName())
+        {
+            actions["redo"] = action;
+        }
+        else if (tr("actionCut") == action->objectName())
+        {
+            actions["cut"] = action;
+        }
+        else if (tr("actionCopy") == action->objectName())
+        {
+            actions["copy"] = action;
+        }
+        else if (tr("actionPaste") == action->objectName())
+        {
+            actions["paste"] = action;
+        }
+        else if (tr("actionDelete") == action->objectName())
+        {
+            actions["delete"] = action;
+        }
+        else if (tr("actionSelectAll") == action->objectName())
+        {
+            actions["selectAll"] = action;
+        }
+    }
+    menu = menubar->findChild<QMenu *>(tr("menuTool"));
+    actionsList = menu->actions();
+    for (int i = 0; i < actionsList.count(); i++)
+    {
+        QAction *action = actionsList.at(i);
+        if (tr("actionRun") == action->objectName())
+        {
+            actions["run"] = action;
+        }
+    }
 }
 
 void CodingWidget::newFile()
@@ -133,16 +216,8 @@ void CodingWidget::newFile()
 	
 	connect(textEdit, SIGNAL(modificationChanged(bool)), this, SLOT(textChanged(bool)));
 	connect(textEdit, SIGNAL(copyAvailable(bool)), this, SLOT(copyAvailable(bool)));
-	connect(textEdit, SIGNAL(redoAvailable(bool)), ui.actionRedo, SLOT(setEnabled(bool)));
-	connect(textEdit, SIGNAL(undoAvailable(bool)), ui.actionUndo, SLOT(setEnabled(bool)));
-
-	connect(ui.actionUndo, SIGNAL(triggered()), textEdit, SLOT(undo()));
-	connect(ui.actionRedo, SIGNAL(triggered()), textEdit, SLOT(redo()));
-	connect(ui.actionCut, SIGNAL(triggered()), textEdit, SLOT(cut()));
-	connect(ui.actionCopy, SIGNAL(triggered()), textEdit, SLOT(copy()));
-	connect(ui.actionPaste, SIGNAL(triggered()), textEdit, SLOT(paste()));
-	connect(ui.actionDelete, SIGNAL(triggered()), textEdit, SLOT(clear()));
-	connect(ui.actionSelectAll, SIGNAL(triggered()), textEdit, SLOT(selectAll()));
+    connect(textEdit, SIGNAL(redoAvailable(bool)), actions["redo"], SLOT(setEnabled(bool)));
+    connect(textEdit, SIGNAL(undoAvailable(bool)), actions["undo"], SLOT(setEnabled(bool)));
 
 	ui.tabWidget->addTab(textEdit, savedIcon, QString("New %1").arg(++codingTabNum));
 	ui.tabWidget->setCurrentIndex(ui.tabWidget->count() - 1);
@@ -162,11 +237,11 @@ void CodingWidget::openFile()
 void CodingWidget::saveFile()
 {
 	CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
-	if (!codeEdit->isChanged())
+    if (!codeEdit->changed())
 	{
 		return;
 	}
-	if (codeEdit->isSaved())
+    if (codeEdit->saved())
 	{
 		saveFile(codeEdit->getFileName());
 	}
@@ -211,7 +286,49 @@ void CodingWidget::closeAll()
 		}
 		count--;
 	}
-	ui.tabWidget->currentWidget()->setFocus();
+    ui.tabWidget->currentWidget()->setFocus();
+}
+
+void CodingWidget::undo()
+{
+    CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+    codeEdit->undo();
+}
+
+void CodingWidget::redo()
+{
+    CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+    codeEdit->redo();
+}
+
+void CodingWidget::cut()
+{
+    CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+    codeEdit->cut();
+}
+
+void CodingWidget::copy()
+{
+    CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+    codeEdit->copy();
+}
+
+void CodingWidget::paste()
+{
+    CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+    codeEdit->paste();
+}
+
+void CodingWidget::deleteSelection()
+{
+    CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+    codeEdit->clear();
+}
+
+void CodingWidget::seletAll()
+{
+    CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+    codeEdit->selectAll();
 }
 
 void CodingWidget::runModule()
@@ -230,6 +347,22 @@ void CodingWidget::runModule()
 // 			QMessageBox::information(this, tr("Output"), output, QMessageBox::Ok);
 //		}	
 	}	
+}
+
+void CodingWidget::checkState(int)
+{
+    CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+    if (codeEdit)
+    {
+        bool flag = (codeEdit->textCursor().selectedText() != "");
+        actions["copy"]->setEnabled(flag);
+        actions["cut"]->setEnabled(flag);
+        actions["delete"]->setEnabled(flag);
+        actions["paste"]->setEnabled(codeEdit->canPaste());
+        actions["save"]->setEnabled(codeEdit->changed());
+        actions["undo"]->setEnabled(codeEdit->canUndo());
+        actions["redo"]->setEnabled(codeEdit->canRedo());
+    }
 }
 
 bool CodingWidget::closeTab( int index )
@@ -261,12 +394,12 @@ void CodingWidget::textChanged(bool changed)
 	{
 		ui.tabWidget->setTabIcon(ui.tabWidget->currentIndex(), savedIcon);
 	}
-	ui.actionSave->setEnabled(changed);
+    actions["save"]->setEnabled(changed);
 }
 
 void CodingWidget::copyAvailable( bool yes )
 {
-	ui.actionCopy->setEnabled(yes);
-	ui.actionCut->setEnabled(yes);
-	ui.actionDelete->setEnabled(yes);
+    actions["copy"]->setEnabled(yes);
+    actions["cut"]->setEnabled(yes);
+    actions["delete"]->setEnabled(yes);
 }

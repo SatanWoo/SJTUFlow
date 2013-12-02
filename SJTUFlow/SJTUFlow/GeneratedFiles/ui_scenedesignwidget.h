@@ -36,7 +36,6 @@ public:
     QAction *actionOpen;
     QAction *actionSave;
     QAction *actionSave_as;
-    QAction *actionSetting;
     QAction *actionUndo;
     QAction *actionRedo;
     QAction *actionDelete;
@@ -114,8 +113,6 @@ public:
         actionSave->setObjectName(QStringLiteral("actionSave"));
         actionSave_as = new QAction(SceneDesignWidget);
         actionSave_as->setObjectName(QStringLiteral("actionSave_as"));
-        actionSetting = new QAction(SceneDesignWidget);
-        actionSetting->setObjectName(QStringLiteral("actionSetting"));
         actionUndo = new QAction(SceneDesignWidget);
         actionUndo->setObjectName(QStringLiteral("actionUndo"));
         actionRedo = new QAction(SceneDesignWidget);
@@ -166,16 +163,19 @@ public:
         mainToolBar = new QToolBar(SceneDesignWidget);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
         mainToolBar->setContextMenuPolicy(Qt::NoContextMenu);
+        mainToolBar->setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
         mainToolBar->setFloatable(false);
-        SceneDesignWidget->addToolBar(Qt::TopToolBarArea, mainToolBar);
+        SceneDesignWidget->addToolBar(Qt::LeftToolBarArea, mainToolBar);
         toolBar2D = new QToolBar(SceneDesignWidget);
         toolBar2D->setObjectName(QStringLiteral("toolBar2D"));
         toolBar2D->setContextMenuPolicy(Qt::NoContextMenu);
-        SceneDesignWidget->addToolBar(Qt::TopToolBarArea, toolBar2D);
+        toolBar2D->setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
+        SceneDesignWidget->addToolBar(Qt::LeftToolBarArea, toolBar2D);
         toolBar3D = new QToolBar(SceneDesignWidget);
         toolBar3D->setObjectName(QStringLiteral("toolBar3D"));
         toolBar3D->setContextMenuPolicy(Qt::NoContextMenu);
-        SceneDesignWidget->addToolBar(Qt::TopToolBarArea, toolBar3D);
+        toolBar3D->setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
+        SceneDesignWidget->addToolBar(Qt::LeftToolBarArea, toolBar3D);
         dockWidgetProperty = new QDockWidget(SceneDesignWidget);
         dockWidgetProperty->setObjectName(QStringLiteral("dockWidgetProperty"));
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -195,6 +195,7 @@ public:
 "{\n"
 "	border-color: transparent;\n"
 "	background-color: white;\n"
+"	color: black;\n"
 "}\n"
 "QLineEdit:!enabled\n"
 "{\n"
@@ -396,7 +397,6 @@ public:
         actionSave->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+S", 0));
         actionSave_as->setText(QApplication::translate("SceneDesignWidget", "Save as", 0));
         actionSave_as->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+Shift+S", 0));
-        actionSetting->setText(QApplication::translate("SceneDesignWidget", "Setting", 0));
         actionUndo->setText(QApplication::translate("SceneDesignWidget", "Undo", 0));
         actionUndo->setShortcut(QApplication::translate("SceneDesignWidget", "Ctrl+Z", 0));
         actionRedo->setText(QApplication::translate("SceneDesignWidget", "Redo", 0));
@@ -421,6 +421,7 @@ public:
         toolBar3D->setWindowTitle(QApplication::translate("SceneDesignWidget", "3D toolBar", 0));
         dockWidgetProperty->setWindowTitle(QApplication::translate("SceneDesignWidget", "Property", 0));
         labelPosX->setText(QApplication::translate("SceneDesignWidget", "x", 0));
+        lineEditObjName->setText(QString());
         labelPos->setText(QApplication::translate("SceneDesignWidget", "position", 0));
         labelObjName->setText(QApplication::translate("SceneDesignWidget", "objectName", 0));
         labelColor->setText(QApplication::translate("SceneDesignWidget", "color", 0));

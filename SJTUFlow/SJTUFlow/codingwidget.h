@@ -1,6 +1,7 @@
 #ifndef CODINGWIDGET_H
 #define CODINGWIDGET_H
 
+#include <QMap>
 #include <QMainWindow>
 #include "ui_codingwidget.h"
 
@@ -15,13 +16,15 @@ class CodingWidget : public QMainWindow
 	Q_OBJECT
 
 public:
-	CodingWidget(QWidget *parent = 0);
+    CodingWidget(QMenuBar *menubar, QWidget *parent = 0);
 	~CodingWidget();
 
 protected:
 
 private:
 	Ui::CodingWidget ui;
+
+    QMap<QString, QAction *> actions;
 
 	DLLManager *dllManager;
 	RunSetting *settingRun;
@@ -34,8 +37,9 @@ private:
 	void loadFile(const QString &fileName);
 	int saveOrNot(int index);
 	void saveFile(const QString &fileName);
+    void parseMenuActions(QMenuBar *menubar);
 
-private slots:
+public slots:
 /************************************************************************/
 /*                        menu slots                                    */
 /************************************************************************/
@@ -46,11 +50,20 @@ private slots:
 	void closeFile();
 	void closeAll();
 
+    void undo();
+    void redo();
+    void cut();
+    void copy();
+    void paste();
+    void deleteSelection();
+    void seletAll();
+
 	void runModule();
 
 /************************************************************************/
 /*                        tab slots                                     */
 /************************************************************************/
+    void checkState(int);
 	bool closeTab(int index);
 	void textChanged(bool changed);
 

@@ -20,9 +20,11 @@ public:
 
 	void setFileName(QString name){ fileName = name; }
 	QString getFileName(){ return fileName; }
-	void setSaved(){ saved = true; }
-	bool isSaved(){ return saved; }
-	bool isChanged(){ return changed; }
+    void setSaved(){ stateSaved = true; }
+    bool saved(){ return stateSaved; }
+    bool changed(){ return stateChanged; }
+    bool canUndo(){ return stateCanUndo; }
+    bool canRedo(){ return stateCanRedo; }
 
 protected:
 	void resizeEvent(QResizeEvent *event);
@@ -31,14 +33,18 @@ protected:
 private slots:
  	void updateLineNumberAreaWidth(int newBlockCount);
 	void updateLineNumberArea(const QRect &, int);
-	void contentChanged(bool changed);
+    void contentChanged(bool changed);
+    void changeUndoState(bool canUndo);
+    void changeRedoState(bool canRedo);
 
 private:
 	PySyntaxHighlighter *highlighter;
 	LineNumberArea *lineNumberArea;
 	QString fileName;
-	bool saved;
-	bool changed;
+    bool stateSaved;
+    bool stateChanged;
+    bool stateCanUndo;
+    bool stateCanRedo;
 	int tabWidth;
 };
 

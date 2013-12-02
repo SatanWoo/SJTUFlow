@@ -31,7 +31,14 @@ private:
 	DisplayWidget *displayWidget;
 
 private slots:
+    void tabChanged(int index);
 
+    void sharedOpen();
+    void sharedSave();
+    void sharedSaveAs();
+    void sharedUndo();
+    void sharedRedo();
+    void sharedDelete();
 };
 
 #endif // SJTUFLOW_H

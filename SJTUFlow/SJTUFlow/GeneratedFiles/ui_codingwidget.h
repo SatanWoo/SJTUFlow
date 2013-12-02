@@ -208,9 +208,9 @@ public:
         toolBar = new QToolBar(CodingWidget);
         toolBar->setObjectName(QStringLiteral("toolBar"));
         toolBar->setMovable(false);
-        toolBar->setIconSize(QSize(16, 16));
+        toolBar->setIconSize(QSize(24, 24));
         toolBar->setFloatable(false);
-        CodingWidget->addToolBar(Qt::TopToolBarArea, toolBar);
+        CodingWidget->addToolBar(Qt::LeftToolBarArea, toolBar);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());

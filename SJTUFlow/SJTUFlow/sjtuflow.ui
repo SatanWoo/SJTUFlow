@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>750</height>
+    <height>773</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,6 +27,24 @@
 {
 	font: &quot;Comic Sans MS&quot;;
 	border-color: transparent;
+}
+QMenuBar
+{
+	border-color: transparent;
+	background-color: transparent;
+	color: white;
+}
+QMenuBar::item
+{
+	background-color: transparent;
+}
+QMenuBar::item:pressed:enabled
+{
+	background-color: rgba(20, 59, 255, 100);
+}
+QMenuBar::item:!enabled
+{
+	color: gray;
 }
 QTabWidget, QTabWidget::pane
 {
@@ -110,6 +128,394 @@ QTabBar::tab:selected
    <zorder>tabWidget</zorder>
    <zorder>titleBar</zorder>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1024</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="menuNewScene">
+     <property name="title">
+      <string>New Scene</string>
+     </property>
+     <addaction name="action2DScene"/>
+     <addaction name="action3DScene"/>
+    </widget>
+    <addaction name="actionNewFile"/>
+    <addaction name="menuNewScene"/>
+    <addaction name="actionOpen"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose"/>
+    <addaction name="actionCloseAll"/>
+   </widget>
+   <widget class="QMenu" name="menuPrimitive">
+    <property name="title">
+     <string>&amp;Primitive</string>
+    </property>
+    <addaction name="actionCircle"/>
+    <addaction name="actionRectangle"/>
+    <addaction name="actionSphere"/>
+    <addaction name="actionBox"/>
+    <addaction name="separator"/>
+    <addaction name="actionMove"/>
+    <addaction name="actionRotate"/>
+    <addaction name="actionScale"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport"/>
+    <addaction name="separator"/>
+    <addaction name="actionProperty"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionDelete"/>
+    <addaction name="actionSelectAll"/>
+   </widget>
+   <widget class="QMenu" name="menuTool">
+    <property name="title">
+     <string>&amp;Tool</string>
+    </property>
+    <addaction name="actionRun"/>
+    <addaction name="separator"/>
+    <addaction name="actionOption"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuPrimitive"/>
+   <addaction name="menuTool"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionCircle">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Circle.png</normaloff>:/Design/Resources/Icons/Circle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Circle</string>
+   </property>
+   <property name="toolTip">
+    <string>New circle</string>
+   </property>
+  </action>
+  <action name="actionRectangle">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Rectangle.png</normaloff>:/Design/Resources/Icons/Rectangle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rectangle</string>
+   </property>
+   <property name="toolTip">
+    <string>New rectangle</string>
+   </property>
+  </action>
+  <action name="actionSphere">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Sphere.png</normaloff>:/Design/Resources/Icons/Sphere.png</iconset>
+   </property>
+   <property name="text">
+    <string>Sphere</string>
+   </property>
+   <property name="toolTip">
+    <string>New sphere</string>
+   </property>
+  </action>
+  <action name="actionBox">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Box.png</normaloff>:/Design/Resources/Icons/Box.png</iconset>
+   </property>
+   <property name="text">
+    <string>Box</string>
+   </property>
+   <property name="toolTip">
+    <string>New box</string>
+   </property>
+  </action>
+  <action name="actionMove">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Move.png</normaloff>:/Design/Resources/Icons/Move.png</iconset>
+   </property>
+   <property name="text">
+    <string>Move</string>
+   </property>
+   <property name="toolTip">
+    <string>Move the object</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionRotate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Rotate.png</normaloff>:/Design/Resources/Icons/Rotate.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rotate</string>
+   </property>
+   <property name="toolTip">
+    <string>Rotate the object</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionScale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Design/Resources/Icons/Scale.png</normaloff>:/Design/Resources/Icons/Scale.png</iconset>
+   </property>
+   <property name="text">
+    <string>Scale</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="text">
+    <string>Import</string>
+   </property>
+   <property name="toolTip">
+    <string>Import object</string>
+   </property>
+  </action>
+  <action name="actionProperty">
+   <property name="text">
+    <string>Property</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingUndo.png</normaloff>:/Coding/Resources/Icons/CodingUndo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingRedo.png</normaloff>:/Coding/Resources/Icons/CodingRedo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingCut.png</normaloff>:/Coding/Resources/Icons/CodingCut.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingCopy.png</normaloff>:/Coding/Resources/Icons/CodingCopy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingPaste.png</normaloff>:/Coding/Resources/Icons/CodingPaste.png</iconset>
+   </property>
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionSelectAll">
+   <property name="text">
+    <string>Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionOption">
+   <property name="text">
+    <string>Option</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="text">
+    <string>Run</string>
+   </property>
+   <property name="toolTip">
+    <string>Run module</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionNewFile">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingNewFile.png</normaloff>:/Coding/Resources/Icons/CodingNewFile.png</iconset>
+   </property>
+   <property name="text">
+    <string>New File</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action2DScene">
+   <property name="text">
+    <string>2D Scene</string>
+   </property>
+  </action>
+  <action name="action3DScene">
+   <property name="text">
+    <string>3D Scene</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingOpenFile.png</normaloff>:/Coding/Resources/Icons/CodingOpenFile.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingSaveFile.png</normaloff>:/Coding/Resources/Icons/CodingSaveFile.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>Save As</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingCloseFile.png</normaloff>:/Coding/Resources/Icons/CodingCloseFile.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionCloseAll">
+   <property name="icon">
+    <iconset resource="sjtuflow.qrc">
+     <normaloff>:/Coding/Resources/Icons/CodingCloseAll.png</normaloff>:/Coding/Resources/Icons/CodingCloseAll.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close All</string>
+   </property>
+   <property name="toolTip">
+    <string>Close all</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
