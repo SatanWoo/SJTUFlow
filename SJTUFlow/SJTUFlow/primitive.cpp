@@ -180,7 +180,7 @@ void Rectangle::setCenter( QVector2D center )
 
 Box::Box() : Rectangle()
 {
-    leny = 0.2;
+    lenz = 0.2;
     type = T_Box;
 }
 

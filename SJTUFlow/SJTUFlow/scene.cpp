@@ -187,7 +187,7 @@ void Scene::drawWithNames()
 void Scene::postDraw()
 {
 	QGLViewer::postDraw();
-	//drawCornerAxis();
+	drawCornerAxis();
 }
 
 void Scene::postSelection(const QPoint& point)
