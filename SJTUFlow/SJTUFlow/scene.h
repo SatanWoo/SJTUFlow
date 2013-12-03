@@ -18,12 +18,14 @@ class Scene : public QGLViewer
 
 public:
 	enum Mode{SCENE_2D = 0, SCENE_3D};
+	enum Operator{OP_MOVE = 0, OP_ROTATE, OP_SCALE};
 
 	Scene(QWidget *parent = 0);
 
 	// get the id-specific primitive
 	SceneUnit::Primitive *getPrimitive(int id);
 	void setAnimate(bool animate = true) { ifAnimate = animate; }
+	bool importObject(QString filename);
 
 signals:
 	void selectedObjChanged(int);
@@ -63,7 +65,10 @@ private:
 	int rectangleNum;
 	int boxNum;
 	int sphereNum;
+	int objectNum;
 	int id;
+
+	int selectedId;
 
 	//example
 	GLdouble dx;

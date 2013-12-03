@@ -9,6 +9,8 @@
 #include <QMouseEvent>
 #include <time.h>
 
+#include "objloader.h"
+
 using namespace qglviewer;
 
 GLUquadric *Scene::quadric = gluNewQuadric();
@@ -31,71 +33,74 @@ SceneUnit::Primitive *Scene::getPrimitive( int id )
 	{
 		return NULL;
 	}
-	return primitives.at(i);
+    return primitives.at(i);
+}
+
+bool Scene::importObject(QString filename)
+{
+	SceneUnit::Primitive *p = new SceneUnit::Object;
+	SceneUnit::Object *o = (SceneUnit::Object *)p;
+	if (ObjLoader::load(filename, o))
+	{
+		p->setColor(RAND_COLOR);
+		p->setName(QString("object_%1").arg(++objectNum));
+		p->setId(id++);
+		primitives.append(p);
+		connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
+
+		updateGL();
+
+		return true;
+	}
+	return false;
 }
 
 void Scene::newCircle()
 {
-	GLdouble center[2] = {0.2, 0.0};
-	GLdouble radius = 0.1;
-	QColor color = RAND_COLOR;
-
-	SceneUnit::Primitive *p = new SceneUnit::Circle(center, color, radius);
+	SceneUnit::Primitive *p = new SceneUnit::Circle();
+	p->setColor(RAND_COLOR);
 	p->setName(QString("circle_%1").arg(++circleNum));
 	p->setId(id++);
 	primitives.append(p);
+	updateGL();
 
 	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
-
-	updateGL();
 }
 
 void Scene::newRectangle()
 {
-	GLdouble center[2] = {-0.2, 0.0};
-	GLdouble width = 0.1;
-	QColor color = RAND_COLOR;
-
-	SceneUnit::Primitive *p = new SceneUnit::Rectangle(center, color, width);
+	SceneUnit::Primitive *p = new SceneUnit::Rectangle();
+	p->setColor(RAND_COLOR);
 	p->setName(QString("rect_%1").arg(++rectangleNum));
 	p->setId(id++);
 	primitives.append(p);
+	updateGL();
 
 	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
-
-	updateGL();
 }
 
 void Scene::newBox()
 {
-	GLdouble center[3] = {0.0, 0.2, -0.2};
-	GLdouble len = 0.1;
-	QColor color = RAND_COLOR;
-
-	SceneUnit::Primitive *p = new SceneUnit::Box(center, color, len);
+	SceneUnit::Primitive *p = new SceneUnit::Box();
+	p->setColor(RAND_COLOR);
 	p->setName(QString("box_%1").arg(++boxNum));
 	p->setId(id++);
 	primitives.append(p);
+	updateGL();
 
 	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
-
-	updateGL();
 }
 
 void Scene::newSphere()
 {
-	GLdouble center[3] = {0.0, -0.2, 0.2};
-	GLdouble radius = 0.1;
-	QColor color = RAND_COLOR;
-
-	SceneUnit::Primitive *p = new SceneUnit::Sphere(center, color, radius, quadric);
+	SceneUnit::Primitive *p = new SceneUnit::Sphere(quadric);
+	p->setColor(RAND_COLOR);
 	p->setName(QString("sphere_%1").arg(++sphereNum));
 	p->setId(id++);
 	primitives.append(p);
+	updateGL();
 
 	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
-
-	updateGL();
 }
 
 void Scene::deleteObject( int id )
@@ -117,7 +122,10 @@ void Scene::clear(Mode m)
 	rectangleNum = 0;
 	boxNum = 0;
 	sphereNum = 0;
+	objectNum = 0;
 	id = 0;	
+
+	selectedId = -1;
 
 	primitives.clear();
 
@@ -137,13 +145,7 @@ void Scene::init()
     setMouseBinding(Qt::ControlModifier | Qt::LeftButton | Qt::MidButton,  NO_CLICK_ACTION);
 #endif
 
-// 	setHandlerKeyboardModifiers(QGLViewer::FRAME,  Qt::NoModifier);
-// 
-// 	setManipulatedFrame(new qglviewer::ManipulatedFrame());
-
-//	restoreStateFromFile();
-
-//	setAxisIsDrawn();
+	setForegroundColor(QColor(255, 255, 255));
 }
 
 void Scene::draw()
@@ -155,10 +157,14 @@ void Scene::draw()
 	for (int i = 0; i < primitives.count(); i++)
 	{
 		glPushMatrix();
-		primitives.at(i)->draw(selectedName());
-		if (primitives.at(i)->getId() == selectedName())
+		if (primitives[i]->getId() == selectedId)
 		{
+			primitives[i]->draw(true);
             drawAxis(0.2f);
+		}
+		else
+		{
+			primitives[i]->draw(false);
 		}
 		glPopMatrix();
 	}
@@ -170,20 +176,18 @@ void Scene::drawWithNames()
 {
 	for (int i = 0; i < primitives.count(); i++)
 	{
+		glPushName(primitives[i]->getId());
 		glPushMatrix();
-
-		glPushName(primitives.at(i)->getId());
-		primitives.at(i)->draw(-1);
-		glPopName();
-
+		primitives[i]->draw(false);
 		glPopMatrix();
+		glPopName();
 	}
 }
 
 void Scene::postDraw()
 {
 	QGLViewer::postDraw();
-	drawCornerAxis();
+	//drawCornerAxis();
 }
 
 void Scene::postSelection(const QPoint& point)
@@ -194,6 +198,8 @@ void Scene::postSelection(const QPoint& point)
 	selectedPoint = camera()->pointUnderPixel(point, found);
 	selectedPoint -= 0.01f * dir;
 
+	selectedId = selectedName();
+
 	emit selectedObjChanged(selectedName());
 }
 
@@ -203,15 +209,14 @@ void Scene::animate()
 	{
 		for (int i = 0; i < primitives.count(); i++)
 		{
-			GLdouble center[3];
 			SceneUnit::Primitive *p = primitives.at(i);
-			p->getCenter(center);
-			center[0] += dx;
-			if (center[0] < -0.5)
+			QVector3D center = p->getCenter();
+			center += QVector3D(dx, 0, 0);
+			if (center.x() < -0.5)
 			{
 				dx = 0.01;
 			}
-			else if (center[0] > 0.5)
+			else if (center.x() > 0.5)
 			{
 				dx = -0.01;
 			}
@@ -224,16 +229,17 @@ void Scene::mousePressEvent(QMouseEvent *event)
 {
 	Qt::KeyboardModifiers kms = event->modifiers();
 	Qt::MouseButtons mbs = event->buttons();
-	if (((kms & Qt::ShiftModifier) == Qt::ShiftModifier) &&
+	if (((kms & Qt::ControlModifier) != Qt::ControlModifier) &&
 		((mbs & Qt::LeftButton) == Qt::LeftButton))
 	{
-		select(event);
+		select(event->pos());
 		updateGL();
 	}
-	else
+	else if ((kms & Qt::ControlModifier) == Qt::ControlModifier)
 	{
 		QGLViewer::mousePressEvent(event);
 	}
+
 }
 
 void Scene::timerEvent(QTimerEvent *e)

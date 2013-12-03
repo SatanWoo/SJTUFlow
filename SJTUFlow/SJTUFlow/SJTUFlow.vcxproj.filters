@@ -137,6 +137,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_setting.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="objloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="sjtuflow.h">
@@ -215,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_setting.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="objloader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

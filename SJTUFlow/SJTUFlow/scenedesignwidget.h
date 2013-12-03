@@ -33,6 +33,8 @@ public slots:
     void rotate();
     void scale();
 
+	void import();
+
 	void showProperty();
 
 	void selectedObjChanged(int id);

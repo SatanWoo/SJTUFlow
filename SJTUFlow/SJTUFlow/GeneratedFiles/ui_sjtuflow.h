@@ -358,12 +358,18 @@ public:
 #endif // QT_NO_TOOLTIP
         actionRotate->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+E", 0));
         actionScale->setText(QApplication::translate("SJTUFlowClass", "Scale", 0));
+#ifndef QT_NO_TOOLTIP
+        actionScale->setToolTip(QApplication::translate("SJTUFlowClass", "Scale the object", 0));
+#endif // QT_NO_TOOLTIP
         actionScale->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+R", 0));
-        actionImport->setText(QApplication::translate("SJTUFlowClass", "Import", 0));
+        actionImport->setText(QApplication::translate("SJTUFlowClass", "Import...", 0));
 #ifndef QT_NO_TOOLTIP
         actionImport->setToolTip(QApplication::translate("SJTUFlowClass", "Import object", 0));
 #endif // QT_NO_TOOLTIP
         actionProperty->setText(QApplication::translate("SJTUFlowClass", "Property", 0));
+#ifndef QT_NO_TOOLTIP
+        actionProperty->setToolTip(QApplication::translate("SJTUFlowClass", "The property of a object", 0));
+#endif // QT_NO_TOOLTIP
         actionUndo->setText(QApplication::translate("SJTUFlowClass", "Undo", 0));
         actionUndo->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Z", 0));
         actionRedo->setText(QApplication::translate("SJTUFlowClass", "Redo", 0));

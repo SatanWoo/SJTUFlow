@@ -12,6 +12,9 @@
 #include <QString>
 #include <QObject>
 #include <QColor>
+#include <QVector>
+#include <QVector2D>
+#include <QVector3D>
 
 namespace SceneUnit
 {
@@ -25,15 +28,15 @@ namespace SceneUnit
 
 		enum Type{T_Rect, T_Circle, T_Box, T_Sphere, T_Object};
 
-		virtual void draw(GLuint id) = 0;
+		virtual void draw(bool selected);
 
 		Type getType(){ return type; }
 		GLuint getId(){ return id; }
 		void setId(int id){ this->id = id; }
 		QString getName(){ return name; }
 
-		void getCenter(GLdouble center[3]);
-		virtual void setCenter(GLdouble center[3]);
+		QVector3D getCenter(){ return center; }
+		virtual void setCenter(QVector3D center);
 		QColor getColor();
 		bool isFilled(){ return fill; }
 
@@ -44,20 +47,20 @@ namespace SceneUnit
 		void setName(QString name){ this->name = name; }
 		void setFill(bool fill){ this->fill = fill; emit propertyChanged(); }
 		void setColor(QColor color);
-		void setCenterX(QString str){ center[0] = str.toDouble(); emit propertyChanged(); }
-		void setCenterY(QString str){ center[1] = str.toDouble(); emit propertyChanged(); }
-		void setCenterZ(QString str){ center[2] = str.toDouble(); emit propertyChanged(); }
-        virtual void setRadius(QString){};
-        virtual void setLenX(QString){};
-        virtual void setLenY(QString){};
-        virtual void setLenZ(QString){};
+		void setCenterX(QString str){ center.setX(str.toFloat()); emit propertyChanged(); }
+		void setCenterY(QString str){ center.setY(str.toFloat()); emit propertyChanged(); }
+		void setCenterZ(QString str){ center.setZ(str.toFloat()); emit propertyChanged(); }
+		virtual void setRadius(QString){};
+		virtual void setLenX(QString){};
+		virtual void setLenY(QString){};
+		virtual void setLenZ(QString){};
 
 	protected:
 		Type type;
 		GLuint id;
 		QString name;
 
-		GLdouble center[3];
+		QVector3D center;
 		GLubyte color[3];
 		bool fill;
 	};
@@ -67,12 +70,12 @@ namespace SceneUnit
 		Q_OBJECT
 
 	public:
-		Circle(){}
-		Circle(GLdouble center[2], QColor color, 
+        Circle();
+		Circle(QVector2D center, QColor color, 
 			GLdouble radius, bool fill = true);
 
-		virtual void draw(GLuint id);
-		virtual void setCenter(GLdouble center[2]);
+		virtual void draw(bool selected);
+		virtual void setCenter(QVector2D center);
 		GLdouble getRadius(){ return radius; }
 		void setRadius(GLdouble radius){ this->radius = radius; emit propertyChanged(); }
 
@@ -88,11 +91,12 @@ namespace SceneUnit
 		Q_OBJECT
 
 	public:
-		Sphere(GLdouble center[3], QColor color, 
+        Sphere(GLUquadric *quadric);
+		Sphere(QVector3D center, QColor color, 
 			GLdouble radius, GLUquadric *quadric);
 
-		void draw(GLuint id);
-		void setCenter(GLdouble center[3]){ Primitive::setCenter(center); }
+		void draw(bool selected);
+		void setCenter(QVector3D center){ Primitive::setCenter(center); }
 
 	private:
 		GLUquadric *quadric;
@@ -103,14 +107,14 @@ namespace SceneUnit
 		Q_OBJECT
 
 	public:
-		Rectangle(){}
-		Rectangle(GLdouble center[2], QColor color, 
+        Rectangle();
+		Rectangle(QVector2D center, QColor color, 
 			GLdouble lenx, GLdouble leny, bool fill = true);
-		Rectangle(GLdouble center[2], QColor color, 
+		Rectangle(QVector2D center, QColor color, 
 			GLdouble lenx, bool fill = true);
 
-		virtual void draw(GLuint id);
-		virtual void setCenter(GLdouble center[2]);
+		virtual void draw(bool selected);
+		virtual void setCenter(QVector2D center);
 		GLdouble getLenX(){ return lenx; }
 		void setLenX(GLdouble lenx){ this->lenx = lenx; emit propertyChanged(); }
 		GLdouble getLenY(){ return leny; }
@@ -130,12 +134,13 @@ namespace SceneUnit
 		Q_OBJECT
 
 	public:
-		Box(GLdouble center[3], QColor color, 
+        Box();
+		Box(QVector3D center, QColor color, 
 			GLdouble lenx, GLdouble leny, GLdouble lenz);
-		Box(GLdouble center[3], QColor color, GLdouble len);
+		Box(QVector3D center, QColor color, GLdouble len);
 
-		void draw(GLuint id);
-		void setCenter(GLdouble center[3]){ Primitive::setCenter(center); }
+		void draw(bool selected);
+		void setCenter(QVector3D center){ Primitive::setCenter(center); }
 		GLdouble getLenZ(){ return lenz; }
 		void setLenZ(GLdouble lenz){ this->lenz = lenz; emit propertyChanged(); }
 
@@ -144,6 +149,51 @@ namespace SceneUnit
 
 	private:
 		GLdouble lenz;
+	};
+
+	class Object : public Primitive
+	{
+		Q_OBJECT
+
+	public:
+		struct TriangleFace
+		{
+			GLuint v[3]; // vertex indices
+			GLuint t[3]; // texture indices
+			GLuint n[3]; // normal indices
+			bool hasT;
+			bool hasN;
+		};
+		struct Group
+		{
+			QString name;
+			QVector<GLuint> tIndices;
+		};
+
+		Object() : Primitive(){ type = T_Object; }
+
+		void draw(bool selected);
+		void adjust();	// adjust the coordinate to the relative coordinate to center
+
+		QString pathName(){ return pathname; }
+		void setPathName(QString path){ pathname = path; }
+		QString mtlLibName(){ return mtllibname; }
+		void setMtlLibName(QString name){ mtllibname = name; }
+		void addVertex(QVector3D v);
+		void addNormal(QVector3D n){ normals.append(n); }
+		void addTexture(QVector2D t){ textures.append(t); }
+		void addFace(TriangleFace f){ faces.append(f); }
+		int facesNum(){ return faces.count(); }
+		Group *addGroup(Group g);
+
+	private:
+		QString pathname;
+		QString mtllibname;
+		QVector<QVector3D> vertexs;
+		QVector<QVector3D> normals;
+		QVector<QVector2D> textures;
+		QVector<TriangleFace> faces;
+		QVector<Group> groups;
 	};
 };
 

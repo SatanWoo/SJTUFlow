@@ -2,6 +2,8 @@
 
 #include "primitive.h"
 #include <QDebug>
+#include <QFileDialog>
+#include <QMessageBox>
 
 SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 	: QMainWindow(parent)
@@ -17,7 +19,7 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 
 	connect(scene, SIGNAL(selectedObjChanged(int)), 
 		this, SLOT(selectedObjChanged(int)));
-	new2DScene();
+	new3DScene();
 
 /************************************************************************/
 /*                              menu                                    */
@@ -36,6 +38,8 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
     connect(actions["rotate"], SIGNAL(triggered()), this, SLOT(rotate()));
     connect(actions["scale"], SIGNAL(triggered()), this, SLOT(scale()));
 
+	connect(actions["import"], SIGNAL(triggered()), this, SLOT(import()));
+
     connect(actions["property"], SIGNAL(triggered()), this, SLOT(showProperty()));
 
 /************************************************************************/
@@ -50,6 +54,8 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 
     ui.toolBar3D->addAction(actions["sphere"]);
     ui.toolBar3D->addAction(actions["box"]);
+
+	actions["move"]->setChecked(true);
 
 /************************************************************************/
 /*                            property                                  */
@@ -101,6 +107,7 @@ void SceneDesignWidget::new2DScene()
     actions["rectangle"]->setVisible(true);
     actions["sphere"]->setVisible(false);
     actions["box"]->setVisible(false);
+	actions["import"]->setEnabled(false);
 }
 
 void SceneDesignWidget::new3DScene()
@@ -114,6 +121,7 @@ void SceneDesignWidget::new3DScene()
     actions["rectangle"]->setVisible(false);
     actions["sphere"]->setVisible(true);
     actions["box"]->setVisible(true);
+	actions["import"]->setEnabled(true);
 }
 
 void SceneDesignWidget::deleteObject()
@@ -148,12 +156,25 @@ void SceneDesignWidget::scale()
     actions["scale"]->setChecked(true);
 }
 
+void SceneDesignWidget::import()
+{
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open"),
+		QString(), tr("Object File(*.obj)"));
+	if(!fileName.isEmpty())
+	{
+		if (!scene->importObject(fileName))
+		{
+			QMessageBox::warning(this, tr("Warning"), 
+				tr("Can't open file %1").arg(fileName), QMessageBox::Ok);
+		}
+	}
+}
+
 void SceneDesignWidget::showProperty()
 {
 	changePropertyWidget();
 	ui.dockWidgetProperty->show();
 }
-
 
 void SceneDesignWidget::selectedObjChanged( int id )
 {
@@ -224,12 +245,11 @@ void SceneDesignWidget::changePropertyWidget()
 		connect(ui.lineEditSizeY, SIGNAL(textChanged(QString)), selectedObj, SLOT(setLenY(QString)));
 		connect(ui.lineEditSizeZ, SIGNAL(textChanged(QString)), selectedObj, SLOT(setLenZ(QString)));
 
-		GLdouble center[3];
-		selectedObj->getCenter(center);
+		QVector3D center = selectedObj->getCenter();
 
-		ui.lineEditPosX->setText(QString::number(center[0]));
-		ui.lineEditPosY->setText(QString::number(center[1]));
-		ui.lineEditPosZ->setText(QString::number(center[2]));
+		ui.lineEditPosX->setText(QString::number(center.x()));
+		ui.lineEditPosY->setText(QString::number(center.y()));
+		ui.lineEditPosZ->setText(QString::number(center.z()));
 
 		ui.lineEditObjName->setText(selectedObj->getName());
 		ui.checkBoxFill->setChecked(selectedObj->isFilled());
