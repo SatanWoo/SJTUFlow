@@ -71,7 +71,7 @@ public:
         if (SJTUFlowClass->objectName().isEmpty())
             SJTUFlowClass->setObjectName(QStringLiteral("SJTUFlowClass"));
         SJTUFlowClass->resize(1024, 773);
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(SJTUFlowClass->sizePolicy().hasHeightForWidth());
@@ -234,8 +234,11 @@ public:
         actionCloseAll->setIcon(icon16);
         centralWidget = new QWidget(SJTUFlowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
-        centralWidget->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
+        centralWidget->setSizePolicy(sizePolicy1);
         centralWidget->setAutoFillBackground(false);
         centralWidget->setStyleSheet(QStringLiteral(""));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -335,18 +338,22 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionCircle->setToolTip(QApplication::translate("SJTUFlowClass", "New circle", 0));
 #endif // QT_NO_TOOLTIP
+        actionCircle->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Shift+C", 0));
         actionRectangle->setText(QApplication::translate("SJTUFlowClass", "Rectangle", 0));
 #ifndef QT_NO_TOOLTIP
         actionRectangle->setToolTip(QApplication::translate("SJTUFlowClass", "New rectangle", 0));
 #endif // QT_NO_TOOLTIP
+        actionRectangle->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Shift+R", 0));
         actionSphere->setText(QApplication::translate("SJTUFlowClass", "Sphere", 0));
 #ifndef QT_NO_TOOLTIP
         actionSphere->setToolTip(QApplication::translate("SJTUFlowClass", "New sphere", 0));
 #endif // QT_NO_TOOLTIP
+        actionSphere->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Shift+S", 0));
         actionBox->setText(QApplication::translate("SJTUFlowClass", "Box", 0));
 #ifndef QT_NO_TOOLTIP
         actionBox->setToolTip(QApplication::translate("SJTUFlowClass", "New box", 0));
 #endif // QT_NO_TOOLTIP
+        actionBox->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Shift+B", 0));
         actionMove->setText(QApplication::translate("SJTUFlowClass", "Move", 0));
 #ifndef QT_NO_TOOLTIP
         actionMove->setToolTip(QApplication::translate("SJTUFlowClass", "Move the object", 0));
@@ -366,10 +373,12 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionImport->setToolTip(QApplication::translate("SJTUFlowClass", "Import object", 0));
 #endif // QT_NO_TOOLTIP
+        actionImport->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+I", 0));
         actionProperty->setText(QApplication::translate("SJTUFlowClass", "Property", 0));
 #ifndef QT_NO_TOOLTIP
         actionProperty->setToolTip(QApplication::translate("SJTUFlowClass", "The property of a object", 0));
 #endif // QT_NO_TOOLTIP
+        actionProperty->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+P", 0));
         actionUndo->setText(QApplication::translate("SJTUFlowClass", "Undo", 0));
         actionUndo->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Z", 0));
         actionRedo->setText(QApplication::translate("SJTUFlowClass", "Redo", 0));
@@ -394,7 +403,9 @@ public:
         actionNewFile->setText(QApplication::translate("SJTUFlowClass", "New File", 0));
         actionNewFile->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+N", 0));
         action2DScene->setText(QApplication::translate("SJTUFlowClass", "2D Scene", 0));
+        action2DScene->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+2", 0));
         action3DScene->setText(QApplication::translate("SJTUFlowClass", "3D Scene", 0));
+        action3DScene->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+3", 0));
         actionOpen->setText(QApplication::translate("SJTUFlowClass", "Open", 0));
         actionOpen->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+O", 0));
         actionSave->setText(QApplication::translate("SJTUFlowClass", "Save", 0));
@@ -407,6 +418,7 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionCloseAll->setToolTip(QApplication::translate("SJTUFlowClass", "Close all", 0));
 #endif // QT_NO_TOOLTIP
+        actionCloseAll->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Shift+W", 0));
         menuFile->setTitle(QApplication::translate("SJTUFlowClass", "&File", 0));
         menuNewScene->setTitle(QApplication::translate("SJTUFlowClass", "New Scene", 0));
         menuPrimitive->setTitle(QApplication::translate("SJTUFlowClass", "&Primitive", 0));

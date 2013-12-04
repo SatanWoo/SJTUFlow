@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -219,6 +219,9 @@ QTabBar::tab:selected
    <property name="toolTip">
     <string>New circle</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+C</string>
+   </property>
   </action>
   <action name="actionRectangle">
    <property name="icon">
@@ -230,6 +233,9 @@ QTabBar::tab:selected
    </property>
    <property name="toolTip">
     <string>New rectangle</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
    </property>
   </action>
   <action name="actionSphere">
@@ -243,6 +249,9 @@ QTabBar::tab:selected
    <property name="toolTip">
     <string>New sphere</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
   </action>
   <action name="actionBox">
    <property name="icon">
@@ -254,6 +263,9 @@ QTabBar::tab:selected
    </property>
    <property name="toolTip">
     <string>New box</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+B</string>
    </property>
   </action>
   <action name="actionMove">
@@ -317,6 +329,9 @@ QTabBar::tab:selected
    <property name="toolTip">
     <string>Import object</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
   </action>
   <action name="actionProperty">
    <property name="text">
@@ -324,6 +339,9 @@ QTabBar::tab:selected
    </property>
    <property name="toolTip">
     <string>The property of a object</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionUndo">
@@ -457,10 +475,16 @@ QTabBar::tab:selected
    <property name="text">
     <string>2D Scene</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
   </action>
   <action name="action3DScene">
    <property name="text">
     <string>3D Scene</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
    </property>
   </action>
   <action name="actionOpen">
@@ -520,6 +544,9 @@ QTabBar::tab:selected
    </property>
    <property name="toolTip">
     <string>Close all</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
    </property>
   </action>
  </widget>

@@ -92,6 +92,10 @@ QToolButton:pressed
      <property name="text">
       <string>...</string>
      </property>
+     <property name="icon">
+      <iconset resource="sjtuflow.qrc">
+       <normaloff>:/SJTUFlow/Resources/TitleMin.png</normaloff>:/SJTUFlow/Resources/TitleMin.png</iconset>
+     </property>
      <property name="iconSize">
       <size>
        <width>24</width>
@@ -114,6 +118,10 @@ QToolButton:pressed
      <property name="text">
       <string>...</string>
      </property>
+     <property name="icon">
+      <iconset resource="sjtuflow.qrc">
+       <normaloff>:/SJTUFlow/Resources/TitleClose.png</normaloff>:/SJTUFlow/Resources/TitleClose.png</iconset>
+     </property>
      <property name="iconSize">
       <size>
        <width>24</width>
@@ -125,6 +133,8 @@ QToolButton:pressed
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="sjtuflow.qrc"/>
+ </resources>
  <connections/>
 </ui>

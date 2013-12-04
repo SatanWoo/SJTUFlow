@@ -13,16 +13,6 @@ TitleBar::TitleBar(QWidget *parent)
 
 	pressed = false;
 
-	QPixmap pix = style()->standardPixmap(QStyle::SP_TitleBarCloseButton);
-	QImage img = pix.toImage();
-	img.invertPixels(QImage::InvertRgb);
-	ui.toolButtonClose->setIcon(QPixmap::fromImage(img));
-	
-	pix = style()->standardPixmap(QStyle::SP_TitleBarMinButton);
-	img = pix.toImage();
-	img.invertPixels(QImage::InvertRgb);
-	ui.toolButtonMin->setIcon(QPixmap::fromImage(img));
-
 	ui.labelTitle->setText("SJTU Flow");
 	parent->setWindowTitle("SJTU Flow");
 

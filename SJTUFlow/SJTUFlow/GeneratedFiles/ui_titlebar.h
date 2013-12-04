@@ -82,6 +82,9 @@ public:
         toolButtonMin = new QToolButton(TitleBar);
         toolButtonMin->setObjectName(QStringLiteral("toolButtonMin"));
         toolButtonMin->setStyleSheet(QStringLiteral(""));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/SJTUFlow/Resources/TitleMin.png"), QSize(), QIcon::Normal, QIcon::Off);
+        toolButtonMin->setIcon(icon);
         toolButtonMin->setIconSize(QSize(24, 24));
 
         horizontalLayout->addWidget(toolButtonMin);
@@ -89,6 +92,9 @@ public:
         toolButtonClose = new QToolButton(TitleBar);
         toolButtonClose->setObjectName(QStringLiteral("toolButtonClose"));
         toolButtonClose->setStyleSheet(QStringLiteral(""));
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/SJTUFlow/Resources/TitleClose.png"), QSize(), QIcon::Normal, QIcon::Off);
+        toolButtonClose->setIcon(icon1);
         toolButtonClose->setIconSize(QSize(24, 24));
 
         horizontalLayout->addWidget(toolButtonClose);

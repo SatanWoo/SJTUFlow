@@ -159,7 +159,7 @@ void SceneDesignWidget::scale()
 void SceneDesignWidget::import()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open"),
-		QString(), tr("Object File(*.obj)"));
+		QDir::homePath(), tr("Object File(*.obj)"));
 	if(!fileName.isEmpty())
 	{
 		if (!scene->importObject(fileName))

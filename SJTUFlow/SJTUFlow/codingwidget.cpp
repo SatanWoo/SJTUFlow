@@ -218,7 +218,7 @@ void CodingWidget::newFile()
 void CodingWidget::openFile()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open"),
-		QString(), tr("Python File(*.py)"));
+		QDir::homePath(), tr("Python File(*.py)"));
 	if(!fileName.isEmpty())
 	{
 		loadFile(fileName);
@@ -246,7 +246,7 @@ void CodingWidget::saveFile()
 void CodingWidget::saveAs()
 {
 	QString fileName = QFileDialog::getSaveFileName(this, tr("Save as "), 
-		QString(), tr("Python Files(*.py)"));
+		QDir::homePath(), tr("Python Files(*.py)"));
 	if(!fileName.isEmpty())
 	{
 		CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();

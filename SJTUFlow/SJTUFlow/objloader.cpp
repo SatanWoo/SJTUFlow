@@ -20,22 +20,22 @@ bool ObjLoader::load( const QString filename, Object *object )
 	}
 	QTextStream in(&file);
 
-	QString line = in.readLine();
+	QString line;
 	float f1 = 0, f2 = 0, f3 = 0;
 	Object::Group *group;
-	while (!line.isNull())
+	while (!in.atEnd())
 	{
+		line = in.readLine();
+
 		if (line.length() == 0 ||
 			line[0] == '#')
 		{
-			line = in.readLine();
 			continue;
 		}
 		line = line.simplified();
 		QStringList strs = line.split(' ');
 		if (strs.count() == 0)
 		{
-			line = in.readLine();
 			continue;
 		}
 		QString flag = strs[0];
@@ -43,7 +43,6 @@ bool ObjLoader::load( const QString filename, Object *object )
 		{
 			if (strs.count() < 3)
 			{
-				line = in.readLine();
 				continue;
 			}
 			f1 = strs[1].toFloat();
@@ -67,7 +66,6 @@ bool ObjLoader::load( const QString filename, Object *object )
 		{
 			if (strs.count() < 4)
 			{
-				line = in.readLine();
 				continue;
 			}
 			Object::TriangleFace f;
@@ -135,8 +133,6 @@ bool ObjLoader::load( const QString filename, Object *object )
 		{
 
 		}*/
-
-		line = in.readLine();
 	}
 	object->adjust();
 

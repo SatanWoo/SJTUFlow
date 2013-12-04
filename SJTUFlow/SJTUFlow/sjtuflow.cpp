@@ -9,7 +9,6 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 
 	setWindowFlags(Qt::FramelessWindowHint);
     setGeometry(100, 20, width(), height());
-	setFixedSize(width(), height());
 
     ui.verticalLayout->insertWidget(1, ui.menuBar);
 
@@ -69,6 +68,8 @@ void SJTUFlow::tabChanged(int index)
         ui.menuPrimitive->setEnabled(true);
         ui.actionNewFile->setVisible(false);
         ui.menuNewScene->menuAction()->setVisible(true);
+		ui.action2DScene->setVisible(true);
+		ui.action3DScene->setVisible(true);
         ui.actionClose->setVisible(false);
         ui.actionCloseAll->setVisible(false);
         ui.actionRun->setEnabled(false);
@@ -84,6 +85,8 @@ void SJTUFlow::tabChanged(int index)
         ui.menuPrimitive->setEnabled(false);
         ui.actionNewFile->setVisible(true);
         ui.menuNewScene->menuAction()->setVisible(false);
+		ui.action2DScene->setVisible(false);
+		ui.action3DScene->setVisible(false);
         ui.actionClose->setVisible(true);
         ui.actionCloseAll->setVisible(true);
         ui.actionRun->setEnabled(true);
