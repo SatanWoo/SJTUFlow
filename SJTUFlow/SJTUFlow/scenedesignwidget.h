@@ -37,8 +37,12 @@ public slots:
 
 	void showProperty();
 
+/************************************************************************/
+/*                                other                                 */
+/************************************************************************/
 	void selectedObjChanged(int id);
 	void colorChanged(QColor color);
+	void propertyOperated();
 
 private:
 	Ui::SceneDesignWidget ui;

@@ -50,7 +50,8 @@ HEADERS += ./qhorizontaltabbar.h \
     ./scene.h \
     ./primitive.h \
     ./scenedesignwidget.h \
-    ./setting.h
+    ./setting.h \
+    ./objloader.h
 SOURCES += ./codeedit.cpp \
     ./codingwidget.cpp \
     ./displaywidget.cpp \
@@ -63,7 +64,8 @@ SOURCES += ./codeedit.cpp \
     ./scenedesignwidget.cpp \
     ./sjtuflow.cpp \
     ./titlebar.cpp \
-    ./setting.cpp
+    ./setting.cpp \
+    ./objloader.cpp
 FORMS += ./sjtuflow.ui \
     ./scenedesignwidget.ui \
     ./codingwidget.ui \

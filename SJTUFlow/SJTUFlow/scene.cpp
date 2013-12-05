@@ -8,12 +8,14 @@
 
 #include <QMouseEvent>
 #include <time.h>
+#include <QDebug>
 
 #include "objloader.h"
 
 using namespace qglviewer;
 
 GLUquadric *Scene::quadric = gluNewQuadric();
+Vec Scene::axisDirs[3] = {Vec(1.0, 0.0, 0.0), Vec(0.0, 1.0, 0.0), Vec(0.0, 0.0, 1.0)};
 
 Scene::Scene( QWidget *parent ) : QGLViewer(parent)
 {
@@ -118,6 +120,8 @@ void Scene::deleteObject( int id )
 
 void Scene::clear(Mode m)
 {
+    sceneMode = m;
+
 	circleNum = 0;
 	rectangleNum = 0;
 	boxNum = 0;
@@ -129,9 +133,11 @@ void Scene::clear(Mode m)
 
 	primitives.clear();
 
-	setSceneMode(m);
+    setSceneMode();
 
 	updateGL();
+
+	emit selectedObjChanged(selectedId);
 }
 
 void Scene::init()
@@ -150,17 +156,19 @@ void Scene::init()
 
 void Scene::draw()
 {
-	glPushMatrix();
-
-	//glMultMatrixd(manipulatedFrame()->matrix());
-
 	for (int i = 0; i < primitives.count(); i++)
 	{
 		glPushMatrix();
 		if (primitives[i]->getId() == selectedId)
 		{
 			primitives[i]->draw(true);
-            drawAxis(0.2f);
+
+			drawAxis(0.2, AXIS_X);
+			drawAxis(0.2, AXIS_Y);
+			if (sceneMode == SCENE_3D)
+			{
+				drawAxis(0.2, AXIS_Z);
+			}
 		}
 		else
 		{
@@ -168,19 +176,33 @@ void Scene::draw()
 		}
 		glPopMatrix();
 	}
-
-	glPopMatrix();
 }
 
 void Scene::drawWithNames()
 {
 	for (int i = 0; i < primitives.count(); i++)
 	{
-		glPushName(primitives[i]->getId());
 		glPushMatrix();
-		primitives[i]->draw(false);
+		if (primitives[i]->getId() == selectedId)
+		{
+			glPushName(primitives[i]->getId());
+			primitives[i]->draw(true);
+			glPopName();
+
+			drawAxis(0.2, AXIS_X);
+			drawAxis(0.2, AXIS_Y);
+			if (sceneMode == SCENE_3D)
+			{
+				drawAxis(0.2, AXIS_Z);
+			}
+		}
+		else
+		{
+			glPushName(primitives[i]->getId());
+			primitives[i]->draw(false);
+			glPopName();
+		}
 		glPopMatrix();
-		glPopName();
 	}
 }
 
@@ -192,15 +214,17 @@ void Scene::postDraw()
 
 void Scene::postSelection(const QPoint& point)
 {
-	camera()->convertClickToLine(point, orig, dir);
+	//camera()->convertClickToLine(point, orig, dir);
 
-	bool found;
-	selectedPoint = camera()->pointUnderPixel(point, found);
-	selectedPoint -= 0.01f * dir;
+	//bool found;
+	//selectedPoint = camera()->pointUnderPixel(point, found);
+	//selectedPoint -= 0.01f * dir;
 
-	selectedId = selectedName();
-
-	emit selectedObjChanged(selectedName());
+	if (selectedName() < AXIS_X)
+	{
+		selectedId = selectedName();
+		emit selectedObjChanged(selectedName());
+	}
 }
 
 void Scene::animate()
@@ -210,13 +234,13 @@ void Scene::animate()
 		for (int i = 0; i < primitives.count(); i++)
 		{
 			SceneUnit::Primitive *p = primitives.at(i);
-			QVector3D center = p->getCenter();
-			center += QVector3D(dx, 0, 0);
-			if (center.x() < -0.5)
+			Vec center = p->getCenter();
+			center += Vec(dx, 0, 0);
+			if (center[0] < -0.5)
 			{
 				dx = 0.01;
 			}
-			else if (center.x() > 0.5)
+			else if (center[0] > 0.5)
 			{
 				dx = -0.01;
 			}
@@ -227,19 +251,54 @@ void Scene::animate()
 
 void Scene::mousePressEvent(QMouseEvent *event)
 {
+	bool found;
+	mousePos = camera()->pointUnderPixel(event->pos(), found);
+
 	Qt::KeyboardModifiers kms = event->modifiers();
 	Qt::MouseButtons mbs = event->buttons();
-	if (((kms & Qt::ControlModifier) != Qt::ControlModifier) &&
-		((mbs & Qt::LeftButton) == Qt::LeftButton))
+	if ((kms & Qt::ControlModifier) == Qt::ControlModifier)
+	{
+		QGLViewer::mousePressEvent(event);
+	}
+	else if ((mbs & Qt::LeftButton) == Qt::LeftButton)
 	{
 		select(event->pos());
 		updateGL();
 	}
-	else if ((kms & Qt::ControlModifier) == Qt::ControlModifier)
-	{
-		QGLViewer::mousePressEvent(event);
-	}
 
+}
+
+void Scene::mouseMoveEvent(QMouseEvent *event)
+{
+	Qt::KeyboardModifiers kms = event->modifiers();
+	if ((kms & Qt::ControlModifier) == Qt::ControlModifier)
+	{
+		QGLViewer::mouseMoveEvent(event);
+	}
+    else if (selectedName() >= AXIS_X && selectedName() <= AXIS_Z)
+    {
+		SceneUnit::Primitive *p = getPrimitive(selectedId);
+		if (p != NULL)
+		{
+			bool found;
+			Vec pos = camera()->pointUnderPixel(event->pos(), found);
+			Vec d = pos - mousePos;
+			mousePos = pos;
+
+			if (sceneMode == SCENE_3D)
+			{
+				d *= 0.5;	// need to be related to zoom rate. 
+			}
+
+			p->translate(d, selectedName() - AXIS_X);
+
+			updateGL();
+		}
+    }
+    else
+    {
+        QGLViewer::mouseMoveEvent(event);
+    }
 }
 
 void Scene::timerEvent(QTimerEvent *e)
@@ -306,9 +365,12 @@ void Scene::drawCornerAxis()
 	glVertex3f(0.0, 0.0, 0.0);
 	glVertex3f(0.0, 1.0, 0.0);
 
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(0.0, 0.0, 1.0);
+	if (sceneMode == SCENE_3D)
+	{
+		glColor3f(0.0, 0.0, 1.0);
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(0.0, 0.0, 1.0);
+	}
 	glEnd();
 
 	glMatrixMode(GL_PROJECTION);
@@ -320,14 +382,14 @@ void Scene::drawCornerAxis()
 	glEnable(GL_LIGHTING);
 
 	// The viewport and the scissor are restored.
-	glScissor(scissor[0],scissor[1],scissor[2],scissor[3]);
-	glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+	glScissor(scissor[0], scissor[1], scissor[2], scissor[3]);
+	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 }
 
-void Scene::setSceneMode( Mode m )
+void Scene::setSceneMode()
 {
 	AxisPlaneConstraint *constraint = new LocalConstraint;
-	switch (m)
+    switch (sceneMode)
 	{
 	case SCENE_2D:
  		camera()->setPosition(Vec(0.0, 0.0, 1.0));
@@ -350,6 +412,9 @@ void Scene::setSceneMode( Mode m )
 		break;
 	case SCENE_3D:
 	default:
+		camera()->setPosition(Vec(0.0, 0.0, 1.0));
+		camera()->setOrientation(0.0, 0.0);
+		camera()->lookAt(sceneCenter());
 		camera()->setType(Camera::PERSPECTIVE);
 		camera()->fitScreenRegion(rect());
 
@@ -366,4 +431,32 @@ void Scene::setSceneMode( Mode m )
 		break;
 	}
 	camera()->frame()->setConstraint(constraint);
+}
+
+void Scene::drawAxis( double length, Axis axis )
+{
+	int which = axis - AXIS_X;
+	Vec axisVec = length * axisDirs[which];
+
+	glPointSize(1.0);
+	glDisable(GL_LIGHTING);
+
+	glPushName(axis);
+
+	glBegin(GL_LINES);
+	glColor3dv(axisDirs[which]);
+	glVertex3d(0.0, 0.0, 0.0);
+	glVertex3dv(axisVec);
+	glEnd();
+
+	Vec inverseColor = Vec(1.0, 1.0, 1.0) - axisDirs[which];
+	glPushMatrix();
+	glTranslated(axisVec.x, axisVec.y, axisVec.z);
+	glColor3dv(inverseColor);
+	gluSphere(quadric, 0.01, 32, 32);
+	glPopMatrix();
+
+	glPopName();
+
+	glEnable(GL_LIGHTING);
 }

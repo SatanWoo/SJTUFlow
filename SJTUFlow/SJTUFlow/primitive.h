@@ -16,8 +16,12 @@
 #include <QVector2D>
 #include <QVector3D>
 
+#include <qglviewer.h>
+
 namespace SceneUnit
 {
+#define QVec3DToVec(v) qglviewer::Vec(v.x(), v.y(), v.z())
+
 	class Primitive : public QObject
 	{
 		Q_OBJECT
@@ -35,21 +39,24 @@ namespace SceneUnit
 		void setId(int id){ this->id = id; }
 		QString getName(){ return name; }
 
-		QVector3D getCenter(){ return center; }
-		virtual void setCenter(QVector3D center);
+		qglviewer::Vec getCenter(){ return center; }
+		void setCenter(qglviewer::Vec center);
 		QColor getColor();
 		bool isFilled(){ return fill; }
 
+		void translate(qglviewer::Vec t, int axis);
+
 	signals:
 		void propertyChanged();
+		void operated();
 
 	public slots:
 		void setName(QString name){ this->name = name; }
 		void setFill(bool fill){ this->fill = fill; emit propertyChanged(); }
 		void setColor(QColor color);
-		void setCenterX(QString str){ center.setX(str.toFloat()); emit propertyChanged(); }
-		void setCenterY(QString str){ center.setY(str.toFloat()); emit propertyChanged(); }
-		void setCenterZ(QString str){ center.setZ(str.toFloat()); emit propertyChanged(); }
+		void setCenterX(QString str){ center[0] = str.toDouble(); frame->setPosition(center); emit propertyChanged(); }
+		void setCenterY(QString str){ center[1] = str.toDouble(); frame->setPosition(center); emit propertyChanged(); }
+		void setCenterZ(QString str){ center[2] = str.toDouble(); frame->setPosition(center); emit propertyChanged(); }
 		virtual void setRadius(QString){};
 		virtual void setLenX(QString){};
 		virtual void setLenY(QString){};
@@ -60,9 +67,11 @@ namespace SceneUnit
 		GLuint id;
 		QString name;
 
-		QVector3D center;
+		qglviewer::Vec center;
 		GLubyte color[3];
 		bool fill;
+
+		qglviewer::Frame *frame;
 	};
 
 	class Circle : public Primitive
@@ -71,11 +80,10 @@ namespace SceneUnit
 
 	public:
         Circle();
-		Circle(QVector2D center, QColor color, 
+		Circle(qglviewer::Vec center, QColor color, 
 			GLdouble radius, bool fill = true);
 
 		virtual void draw(bool selected);
-		virtual void setCenter(QVector2D center);
 		GLdouble getRadius(){ return radius; }
 		void setRadius(GLdouble radius){ this->radius = radius; emit propertyChanged(); }
 
@@ -92,11 +100,10 @@ namespace SceneUnit
 
 	public:
         Sphere(GLUquadric *quadric);
-		Sphere(QVector3D center, QColor color, 
+		Sphere(qglviewer::Vec center, QColor color, 
 			GLdouble radius, GLUquadric *quadric);
 
 		void draw(bool selected);
-		void setCenter(QVector3D center){ Primitive::setCenter(center); }
 
 	private:
 		GLUquadric *quadric;
@@ -108,13 +115,12 @@ namespace SceneUnit
 
 	public:
         Rectangle();
-		Rectangle(QVector2D center, QColor color, 
+		Rectangle(qglviewer::Vec center, QColor color, 
 			GLdouble lenx, GLdouble leny, bool fill = true);
-		Rectangle(QVector2D center, QColor color, 
+		Rectangle(qglviewer::Vec center, QColor color, 
 			GLdouble lenx, bool fill = true);
 
 		virtual void draw(bool selected);
-		virtual void setCenter(QVector2D center);
 		GLdouble getLenX(){ return lenx; }
 		void setLenX(GLdouble lenx){ this->lenx = lenx; emit propertyChanged(); }
 		GLdouble getLenY(){ return leny; }
@@ -135,12 +141,11 @@ namespace SceneUnit
 
 	public:
         Box();
-		Box(QVector3D center, QColor color, 
+		Box(qglviewer::Vec center, QColor color, 
 			GLdouble lenx, GLdouble leny, GLdouble lenz);
-		Box(QVector3D center, QColor color, GLdouble len);
+		Box(qglviewer::Vec center, QColor color, GLdouble len);
 
 		void draw(bool selected);
-		void setCenter(QVector3D center){ Primitive::setCenter(center); }
 		GLdouble getLenZ(){ return lenz; }
 		void setLenZ(GLdouble lenz){ this->lenz = lenz; emit propertyChanged(); }
 
@@ -179,8 +184,8 @@ namespace SceneUnit
 		void setPathName(QString path){ pathname = path; }
 		QString mtlLibName(){ return mtllibname; }
 		void setMtlLibName(QString name){ mtllibname = name; }
-		void addVertex(QVector3D v);
-		void addNormal(QVector3D n){ normals.append(n); }
+		void addVertex(qglviewer::Vec v);
+		void addNormal(qglviewer::Vec n){ normals.append(n); }
 		void addTexture(QVector2D t){ textures.append(t); }
 		void addFace(TriangleFace f){ faces.append(f); }
 		int facesNum(){ return faces.count(); }
@@ -189,8 +194,8 @@ namespace SceneUnit
 	private:
 		QString pathname;
 		QString mtllibname;
-		QVector<QVector3D> vertexs;
-		QVector<QVector3D> normals;
+		QVector<qglviewer::Vec> vertexs;
+		QVector<qglviewer::Vec> normals;
 		QVector<QVector2D> textures;
 		QVector<TriangleFace> faces;
 		QVector<Group> groups;

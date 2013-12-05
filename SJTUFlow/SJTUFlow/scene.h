@@ -7,8 +7,6 @@
 
 #include <qglviewer.h>
 
-#define PROPORTION_TO_SCENE	0.01
-
 #define RAND_255 rand() % 255
 #define RAND_COLOR QColor(RAND_255, RAND_255, RAND_255)
 
@@ -19,6 +17,7 @@ class Scene : public QGLViewer
 public:
 	enum Mode{SCENE_2D = 0, SCENE_3D};
 	enum Operator{OP_MOVE = 0, OP_ROTATE, OP_SCALE};
+	enum Axis{AXIS_X = 1000, AXIS_Y, AXIS_Z};
 
 	Scene(QWidget *parent = 0);
 
@@ -49,15 +48,18 @@ protected:
 	void animate();
 
 	void mousePressEvent(QMouseEvent *event);
-    void keyPressEvent(QKeyEvent *){};
+    void mouseMoveEvent(QMouseEvent *event);
+    void keyPressEvent(QKeyEvent *){}
 	void timerEvent(QTimerEvent *);
 
 private:
 	QList<SceneUnit::Primitive *> primitives;
 	static GLUquadric *quadric;
+	static qglviewer::Vec axisDirs[3];
 
-	qglviewer::Vec orig, dir, selectedPoint;
-	qglviewer::Camera *camera_;
+	qglviewer::Vec mousePos;
+
+    Mode sceneMode;
 
 	bool ifAnimate;
 
@@ -76,7 +78,8 @@ private:
 	int getPrimitiveIndex(int id);
 
 	void drawCornerAxis();
-	void setSceneMode(Mode m);
+    void setSceneMode();
+	void drawAxis(double length, Axis axis);
 };
 
 #endif // GLWIDGET_H

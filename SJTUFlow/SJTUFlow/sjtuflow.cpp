@@ -44,6 +44,8 @@ SJTUFlow::SJTUFlow(QWidget *parent)
     connect(ui.actionRedo, SIGNAL(triggered()), this, SLOT(sharedRedo()));
     connect(ui.actionDelete, SIGNAL(triggered()), this, SLOT(sharedDelete()));
 
+    connect(ui.actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+
     connect(ui.actionSetting, SIGNAL(triggered()), setting, SLOT(show()));
 }
 

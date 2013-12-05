@@ -5,11 +5,13 @@ using namespace SceneUnit;
 
 Primitive::Primitive(void)
 {
-	center = QVector3D(0, 0, 0);
+	center = qglviewer::Vec(0, 0, 0);
 	color[0] = 255;
 	color[1] = 255;
 	color[2] = 255;
 	fill = true;
+
+	frame = new qglviewer::Frame(center, qglviewer::Quaternion());
 }
 
 Primitive::~Primitive(void)
@@ -18,7 +20,7 @@ Primitive::~Primitive(void)
 
 void Primitive::draw(bool selected)
 {
-	glTranslatef(center.x(), center.y(), center.z());
+	glMultMatrixd(frame->matrix());
 	if (selected)
 	{
 		glColor3ub(200, 200, 200);
@@ -29,7 +31,7 @@ void Primitive::draw(bool selected)
 	}
 }
 
-void Primitive::setCenter( QVector3D center )
+void Primitive::setCenter( qglviewer::Vec center )
 {
 	this->center = center;
 
@@ -39,7 +41,17 @@ void Primitive::setCenter( QVector3D center )
 QColor Primitive::getColor()
 {
 	return QColor(this->color[0], 
-		this->color[1], this->color[2]);
+            this->color[1], this->color[2]);
+}
+
+void Primitive::translate(qglviewer::Vec t, int axis)
+{
+	qglviewer::Vec tmp;
+	tmp[axis] = t[axis];
+    frame->translate(tmp);
+    center = frame->position();
+
+	emit operated();
 }
 
 void Primitive::setColor( QColor color )
@@ -57,9 +69,10 @@ Circle::Circle() : Primitive()
     type = T_Circle;
 }
 
-Circle::Circle( QVector2D center, QColor color,
+Circle::Circle( qglviewer::Vec center, QColor color,
 	GLdouble radius, bool fill )
 {
+	center[2] = 0.0;
 	setCenter(center);
 	setColor(color);
 	setRadius(radius);
@@ -69,6 +82,7 @@ Circle::Circle( QVector2D center, QColor color,
 
 void Circle::draw(bool selected)
 {
+	glDisable(GL_LIGHTING);
 	Primitive::draw(selected);
 	if (fill)
 	{
@@ -85,17 +99,11 @@ void Circle::draw(bool selected)
 	{
 		double x = radius * cos(i);
 		double y = radius * sin(i);
-		glVertex3d(x, y, center.z());
+		glVertex3d(x, y, center[2]);
 	}
+	glEnable(GL_LIGHTING);
 
 	glEnd();
-}
-
-void Circle::setCenter( QVector2D center )
-{
-	this->center = center.toVector3D();
-
-	emit propertyChanged();
 }
 
 Sphere::Sphere(GLUquadric *quadric) : Circle()
@@ -104,7 +112,7 @@ Sphere::Sphere(GLUquadric *quadric) : Circle()
     this->quadric = quadric;
 }
 
-Sphere::Sphere( QVector3D center, QColor color,
+Sphere::Sphere( qglviewer::Vec center, QColor color,
 	GLdouble radius, GLUquadric *quadric )
 {
 	setCenter(center);
@@ -128,9 +136,10 @@ Rectangle::Rectangle() : Primitive()
     type = T_Rect;
 }
 
-Rectangle::Rectangle( QVector2D center, QColor color,
+Rectangle::Rectangle( qglviewer::Vec center, QColor color,
 	GLdouble lenx, GLdouble leny, bool fill )
 {
+	center[2] = 0.0;
 	setCenter(center);
 	setColor(color);
 	setLenX(lenx);
@@ -139,9 +148,10 @@ Rectangle::Rectangle( QVector2D center, QColor color,
 	type = T_Rect;
 }
 
-Rectangle::Rectangle( QVector2D center, QColor color, 
+Rectangle::Rectangle( qglviewer::Vec center, QColor color, 
 	GLdouble lenx, bool fill )
 {
+	center[2] = 0.0;
 	setCenter(center);
 	setColor(color);
 	setLenX(lenx);
@@ -152,6 +162,8 @@ Rectangle::Rectangle( QVector2D center, QColor color,
 
 void Rectangle::draw(bool selected)
 {
+	glDisable(GL_LIGHTING);
+
 	Primitive::draw(selected);
 
 	if (fill)
@@ -169,13 +181,8 @@ void Rectangle::draw(bool selected)
 	glVertex3d(-lenx / 2, leny / 2, 0.0);
 
 	glEnd();
-}
 
-void Rectangle::setCenter( QVector2D center )
-{
-	this->center = center.toVector3D();
-
-	emit propertyChanged();
+	glEnable(GL_LIGHTING);
 }
 
 Box::Box() : Rectangle()
@@ -184,7 +191,7 @@ Box::Box() : Rectangle()
     type = T_Box;
 }
 
-Box::Box( QVector3D center, QColor color,
+Box::Box( qglviewer::Vec center, QColor color,
 	GLdouble lenx, GLdouble leny, GLdouble lenz )
 {
 	setCenter(center);
@@ -195,7 +202,7 @@ Box::Box( QVector3D center, QColor color,
 	type = T_Box;
 }
 
-Box::Box( QVector3D center, QColor color, GLdouble len )
+Box::Box( qglviewer::Vec center, QColor color, GLdouble len )
 {
 	setCenter(center);
 	setColor(color);
@@ -259,11 +266,11 @@ void SceneUnit::Object::draw( bool selected )
 			{
 				if (face.hasN)
 				{
-					QVector3D normal = normals[face.n[i]];
-					glNormal3f(normal.x(), normal.y(), normal.z());
+					qglviewer::Vec normal = normals[face.n[i]];
+					glNormal3dv(normal);
 				}
-				QVector3D vertex = vertexs[face.v[i]];
-				glVertex3f(vertex.x(), vertex.y(), vertex.z());
+				qglviewer::Vec vertex = vertexs[face.v[i]];
+				glVertex3dv(vertex);
 			}
 		}
 		glEnd();
@@ -274,12 +281,12 @@ void Object::adjust()
 {
 	for (int i = 0; i < vertexs.count(); i++)
 	{
-		vertexs[i] -= center;
+		vertexs[i] = vertexs[i] -  center;
 	}
-	center = QVector3D(0, 0, 0);
+	center = qglviewer::Vec(0, 0, 0);
 }
 
-void Object::addVertex( QVector3D v )
+void Object::addVertex( qglviewer::Vec v )
 {
 	center *= vertexs.count();
 

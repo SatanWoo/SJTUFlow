@@ -12,7 +12,7 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 	//example
 	scene->clear(Scene::SCENE_3D);
 	scene->newSphere();
-	SceneUnit::Primitive *p = scene->getPrimitive(0);
+    //SceneUnit::Primitive *p = scene->getPrimitive(0);
 	scene->setAnimate();
 
 	scene->startAnimation();

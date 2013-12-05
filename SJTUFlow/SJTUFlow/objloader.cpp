@@ -3,6 +3,10 @@
 #include <QFile>
 #include <QTextStream>
 
+#include <vec.h>
+
+using namespace qglviewer;
+
 ObjLoader::ObjLoader(void)
 {
 }
@@ -50,12 +54,12 @@ bool ObjLoader::load( const QString filename, Object *object )
 			if (flag.length() == 1 && strs.count() > 3)
 			{
 				f3 = strs[3].toFloat();
-				object->addVertex(QVector3D(f1, f2, f3));
+				object->addVertex(Vec(f1, f2, f3));
 			}
 			else if (flag[1] == 'n' && strs.count() > 3)
 			{
 				f3 = strs[3].toFloat();
-				object->addNormal(QVector3D(f1, f2, f3));
+				object->addNormal(Vec(f1, f2, f3));
 			}
 			else if (flag[1] == 't')
 			{

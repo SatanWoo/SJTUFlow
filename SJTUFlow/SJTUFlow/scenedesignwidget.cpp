@@ -1,7 +1,6 @@
 #include "scenedesignwidget.h"
 
 #include "primitive.h"
-#include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
 
@@ -208,6 +207,8 @@ void SceneDesignWidget::selectedObjChanged( int id )
 	else
 	{
         actions["delete"]->setEnabled(true);
+
+		connect(selectedObj, SIGNAL(operated()), this, SLOT(propertyOperated()));
 	}
 	changePropertyWidget();
 }
@@ -221,6 +222,17 @@ void SceneDesignWidget::colorChanged( QColor color )
 		ui.pushButtonColor->setIcon(QIcon(pix));
 
 		selectedObj->setColor(color);
+    }
+}
+
+void SceneDesignWidget::propertyOperated()
+{
+    if (selectedObj != NULL)
+	{
+		qglviewer::Vec center = selectedObj->getCenter();
+		ui.lineEditPosX->setText(QString::number(center[0]));
+		ui.lineEditPosY->setText(QString::number(center[1]));
+		ui.lineEditPosZ->setText(QString::number(center[2]));
 	}
 }
 
@@ -245,11 +257,11 @@ void SceneDesignWidget::changePropertyWidget()
 		connect(ui.lineEditSizeY, SIGNAL(textChanged(QString)), selectedObj, SLOT(setLenY(QString)));
 		connect(ui.lineEditSizeZ, SIGNAL(textChanged(QString)), selectedObj, SLOT(setLenZ(QString)));
 
-		QVector3D center = selectedObj->getCenter();
+		qglviewer::Vec center = selectedObj->getCenter();
 
-		ui.lineEditPosX->setText(QString::number(center.x()));
-		ui.lineEditPosY->setText(QString::number(center.y()));
-		ui.lineEditPosZ->setText(QString::number(center.z()));
+		ui.lineEditPosX->setText(QString::number(center[0]));
+		ui.lineEditPosY->setText(QString::number(center[1]));
+		ui.lineEditPosZ->setText(QString::number(center[2]));
 
 		ui.lineEditObjName->setText(selectedObj->getName());
 		ui.checkBoxFill->setChecked(selectedObj->isFilled());
@@ -347,6 +359,15 @@ void SceneDesignWidget::changePropertyWidget()
 		ui.lineEditSizeY->setVisible(false);
 		ui.labelSizeZ->setVisible(false);
 		ui.lineEditSizeZ->setVisible(false);
+
+		ui.lineEditObjName->setText("");
+		ui.lineEditPosX->setText("");
+		ui.lineEditPosY->setText("");
+		ui.lineEditPosZ->setText("");
+		ui.lineEditRadius->setText("");
+		ui.lineEditSizeX->setText("");
+		ui.lineEditSizeY->setText("");
+		ui.lineEditSizeZ->setText("");
     }
 }
 

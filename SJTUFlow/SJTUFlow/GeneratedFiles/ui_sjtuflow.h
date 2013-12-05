@@ -54,6 +54,7 @@ public:
     QAction *actionSaveAs;
     QAction *actionClose;
     QAction *actionCloseAll;
+    QAction *actionQuit;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     TitleBar *titleBar;
@@ -232,6 +233,8 @@ public:
         QIcon icon16;
         icon16.addFile(QStringLiteral(":/Coding/Resources/Icons/CodingCloseAll.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionCloseAll->setIcon(icon16);
+        actionQuit = new QAction(SJTUFlowClass);
+        actionQuit->setObjectName(QStringLiteral("actionQuit"));
         centralWidget = new QWidget(SJTUFlowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -296,6 +299,8 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionClose);
         menuFile->addAction(actionCloseAll);
+        menuFile->addSeparator();
+        menuFile->addAction(actionQuit);
         menuNewScene->addAction(action2DScene);
         menuNewScene->addAction(action3DScene);
         menuPrimitive->addAction(actionCircle);
@@ -419,6 +424,8 @@ public:
         actionCloseAll->setToolTip(QApplication::translate("SJTUFlowClass", "Close all", 0));
 #endif // QT_NO_TOOLTIP
         actionCloseAll->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Shift+W", 0));
+        actionQuit->setText(QApplication::translate("SJTUFlowClass", "Quit", 0));
+        actionQuit->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+Q", 0));
         menuFile->setTitle(QApplication::translate("SJTUFlowClass", "&File", 0));
         menuNewScene->setTitle(QApplication::translate("SJTUFlowClass", "New Scene", 0));
         menuPrimitive->setTitle(QApplication::translate("SJTUFlowClass", "&Primitive", 0));
