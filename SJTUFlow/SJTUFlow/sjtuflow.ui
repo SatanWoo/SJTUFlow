@@ -285,7 +285,7 @@ QTabBar::tab:selected
     <string>Move the object</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+W</string>
+    <string>W</string>
    </property>
   </action>
   <action name="actionRotate">
@@ -303,7 +303,7 @@ QTabBar::tab:selected
     <string>Rotate the object</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+E</string>
+    <string>E</string>
    </property>
   </action>
   <action name="actionScale">
@@ -321,7 +321,7 @@ QTabBar::tab:selected
     <string>Scale the object</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+R</string>
+    <string>R</string>
    </property>
   </action>
   <action name="actionImport">

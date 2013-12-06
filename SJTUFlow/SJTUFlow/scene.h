@@ -17,7 +17,7 @@ class Scene : public QGLViewer
 public:
 	enum Mode{SCENE_2D = 0, SCENE_3D};
 	enum Operator{OP_MOVE = 0, OP_ROTATE, OP_SCALE};
-	enum Axis{AXIS_X = 1000, AXIS_Y, AXIS_Z};
+	enum Axis{AXIS_X = 0xfffff0, AXIS_Y, AXIS_Z, AXIS_SCALE};
 
 	Scene(QWidget *parent = 0);
 
@@ -25,6 +25,7 @@ public:
 	SceneUnit::Primitive *getPrimitive(int id);
 	void setAnimate(bool animate = true) { ifAnimate = animate; }
 	bool importObject(QString filename);
+	void setOperator(Operator op){ curOp = op; updateGL(); }
 
 signals:
 	void selectedObjChanged(int);
@@ -49,6 +50,7 @@ protected:
 
 	void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+	void mouseReleaseEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *){}
 	void timerEvent(QTimerEvent *);
 
@@ -56,10 +58,14 @@ private:
 	QList<SceneUnit::Primitive *> primitives;
 	static GLUquadric *quadric;
 	static qglviewer::Vec axisDirs[3];
+	static double axisRot[3][4];
 
+	bool mousePressed;
 	qglviewer::Vec mousePos;
+	QPoint mousePosInWin;
 
     Mode sceneMode;
+	Operator curOp;
 
 	bool ifAnimate;
 
@@ -71,6 +77,7 @@ private:
 	int id;
 
 	int selectedId;
+	int selectedAxis;
 
 	//example
 	GLdouble dx;
@@ -79,7 +86,12 @@ private:
 
 	void drawCornerAxis();
     void setSceneMode();
-	void drawAxis(double length, Axis axis);
+	void drawOperator(qglviewer::Vec center, qglviewer::Vec bmin, 
+		qglviewer::Vec vmax, bool withName = false);	// withName for select()
+	void drawMoveAxis(double length, Axis axis, bool withName = false);
+	void drawRotateRing(double radius, Axis axis, bool withName = false);
+	void drawScaleBox(qglviewer::Vec bmin, qglviewer::Vec bmax, bool withName = false);
+	void drawSubScaleBox(double len, double x, double y, double z = 0.0, bool s3d = true);
 };
 
 #endif // GLWIDGET_H

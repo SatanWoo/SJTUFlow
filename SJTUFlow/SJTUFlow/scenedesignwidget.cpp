@@ -14,11 +14,11 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 	selectedObj = NULL;
 
 	scene = new Scene;
+	scene->setMouseTracking(true);
 	setCentralWidget(scene);
 
 	connect(scene, SIGNAL(selectedObjChanged(int)), 
 		this, SLOT(selectedObjChanged(int)));
-	new3DScene();
 
 /************************************************************************/
 /*                              menu                                    */
@@ -54,18 +54,10 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
     ui.toolBar3D->addAction(actions["sphere"]);
     ui.toolBar3D->addAction(actions["box"]);
 
-	actions["move"]->setChecked(true);
-
 /************************************************************************/
 /*                            property                                  */
 /************************************************************************/
 	ui.dockWidgetProperty->setVisible(false);
-	ui.lineEditPosX->setValidator(new QDoubleValidator());
-	ui.lineEditPosY->setValidator(new QDoubleValidator());
-	ui.lineEditPosZ->setValidator(new QDoubleValidator());
-	ui.lineEditSizeX->setValidator(new QDoubleValidator());
-	ui.lineEditSizeY->setValidator(new QDoubleValidator());
-	ui.lineEditSizeZ->setValidator(new QDoubleValidator());
 
 	QPixmap pix(ui.pushButtonColor->iconSize());
 	pix.fill(Qt::white);
@@ -76,6 +68,8 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 	colorDialog->setCurrentColor(Qt::white);
 	connect(ui.pushButtonColor, SIGNAL(clicked()), colorDialog, SLOT(show()));
 	connect(colorDialog, SIGNAL(colorSelected(QColor)), this, SLOT(colorChanged(QColor)));
+
+	new3DScene();
 }
 
 SceneDesignWidget::~SceneDesignWidget()
@@ -107,6 +101,7 @@ void SceneDesignWidget::new2DScene()
     actions["sphere"]->setVisible(false);
     actions["box"]->setVisible(false);
 	actions["import"]->setEnabled(false);
+	actions["move"]->trigger();
 }
 
 void SceneDesignWidget::new3DScene()
@@ -121,6 +116,7 @@ void SceneDesignWidget::new3DScene()
     actions["sphere"]->setVisible(true);
     actions["box"]->setVisible(true);
 	actions["import"]->setEnabled(true);
+	actions["move"]->trigger();
 }
 
 void SceneDesignWidget::deleteObject()
@@ -139,6 +135,8 @@ void SceneDesignWidget::move()
     actions["move"]->setChecked(true);
     actions["rotate"]->setChecked(false);
     actions["scale"]->setChecked(false);
+
+	scene->setOperator(Scene::OP_MOVE);
 }
 
 void SceneDesignWidget::rotate()
@@ -146,6 +144,8 @@ void SceneDesignWidget::rotate()
     actions["move"]->setChecked(false);
     actions["rotate"]->setChecked(true);
     actions["scale"]->setChecked(false);
+
+	scene->setOperator(Scene::OP_ROTATE);
 }
 
 void SceneDesignWidget::scale()
@@ -153,6 +153,8 @@ void SceneDesignWidget::scale()
     actions["move"]->setChecked(false);
     actions["rotate"]->setChecked(false);
     actions["scale"]->setChecked(true);
+
+	scene->setOperator(Scene::OP_SCALE);
 }
 
 void SceneDesignWidget::import()
@@ -181,22 +183,24 @@ void SceneDesignWidget::selectedObjChanged( int id )
 	{
 		disconnect(ui.lineEditObjName, SIGNAL(textChanged(QString)), 
 			selectedObj, SLOT(setName(QString)));
-		disconnect(ui.lineEditPosX, SIGNAL(textChanged(QString)), 
-			selectedObj, SLOT(setCenterX(QString)));
-		disconnect(ui.lineEditPosY, SIGNAL(textChanged(QString)), 
-			selectedObj, SLOT(setCenterY(QString)));
-		disconnect(ui.lineEditPosZ, SIGNAL(textChanged(QString)), 
-			selectedObj, SLOT(setCenterZ(QString)));
+        disconnect(ui.doubleSpinBoxPosX, SIGNAL(valueChanged(double)),
+            selectedObj, SLOT(setCenterX(double)));
+        disconnect(ui.doubleSpinBoxPosY, SIGNAL(valueChanged(double)),
+            selectedObj, SLOT(setCenterY(double)));
+        disconnect(ui.doubleSpinBoxPosZ, SIGNAL(valueChanged(double)),
+            selectedObj, SLOT(setCenterZ(double)));
+		disconnect(ui.doubleSpinBoxScalar, SIGNAL(valueChanged(double)),
+			selectedObj, SLOT(setScalar(double)));
 		disconnect(ui.checkBoxFill, SIGNAL(toggled(bool)), 
 			selectedObj, SLOT(setFill(bool)));
-		disconnect(ui.lineEditRadius, SIGNAL(textChanged(QString)), 
-			selectedObj, SLOT(setRadius(QString)));
-		disconnect(ui.lineEditSizeX, SIGNAL(textChanged(QString)), 
-			selectedObj, SLOT(setLenX(QString)));
-		disconnect(ui.lineEditSizeY, SIGNAL(textChanged(QString)), 
-			selectedObj, SLOT(setLenY(QString)));
-		disconnect(ui.lineEditSizeZ, SIGNAL(textChanged(QString)), 
-			selectedObj, SLOT(setLenZ(QString)));
+        disconnect(ui.doubleSpinBoxRadius, SIGNAL(valueChanged(double)), 
+			selectedObj, SLOT(setRadius(double)));
+        disconnect(ui.doubleSpinBoxSizeX, SIGNAL(valueChanged(double)), 
+			selectedObj, SLOT(setLenX(double)));
+        disconnect(ui.doubleSpinBoxSizeY, SIGNAL(valueChanged(double)), 
+			selectedObj, SLOT(setLenY(double)));
+        disconnect(ui.doubleSpinBoxSizeZ, SIGNAL(valueChanged(double)), 
+			selectedObj, SLOT(setLenZ(double)));
 	}
 
 	selectedObj = scene->getPrimitive(id);
@@ -230,9 +234,10 @@ void SceneDesignWidget::propertyOperated()
     if (selectedObj != NULL)
 	{
 		qglviewer::Vec center = selectedObj->getCenter();
-		ui.lineEditPosX->setText(QString::number(center[0]));
-		ui.lineEditPosY->setText(QString::number(center[1]));
-		ui.lineEditPosZ->setText(QString::number(center[2]));
+        ui.doubleSpinBoxPosX->setValue(center[0]);
+        ui.doubleSpinBoxPosY->setValue(center[1]);
+        ui.doubleSpinBoxPosZ->setValue(center[2]);
+		ui.doubleSpinBoxScalar->setValue(selectedObj->getScalar());
 	}
 }
 
@@ -241,27 +246,30 @@ void SceneDesignWidget::changePropertyWidget()
 	if (selectedObj != NULL)
 	{
 		ui.lineEditObjName->setEnabled(true);
-		ui.lineEditPosX->setEnabled(true);
-		ui.lineEditPosY->setEnabled(true);
-		ui.lineEditPosZ->setEnabled(true);
+        ui.doubleSpinBoxPosX->setEnabled(true);
+        ui.doubleSpinBoxPosY->setEnabled(true);
+        ui.doubleSpinBoxPosZ->setEnabled(true);
+		ui.doubleSpinBoxScalar->setEnabled(true);
 		ui.checkBoxFill->setEnabled(true);
 		ui.pushButtonColor->setEnabled(true);
 
 		connect(ui.lineEditObjName, SIGNAL(textChanged(QString)), selectedObj, SLOT(setName(QString)));
-		connect(ui.lineEditPosX, SIGNAL(textChanged(QString)), selectedObj, SLOT(setCenterX(QString)));
-		connect(ui.lineEditPosY, SIGNAL(textChanged(QString)), selectedObj, SLOT(setCenterY(QString)));
-		connect(ui.lineEditPosZ, SIGNAL(textChanged(QString)), selectedObj, SLOT(setCenterZ(QString)));
+        connect(ui.doubleSpinBoxPosX, SIGNAL(valueChanged(double)), selectedObj, SLOT(setCenterX(double)));
+        connect(ui.doubleSpinBoxPosY, SIGNAL(valueChanged(double)), selectedObj, SLOT(setCenterY(double)));
+        connect(ui.doubleSpinBoxPosZ, SIGNAL(valueChanged(double)), selectedObj, SLOT(setCenterZ(double)));
+		connect(ui.doubleSpinBoxScalar, SIGNAL(valueChanged(double)), selectedObj, SLOT(setScalar(double)));
 		connect(ui.checkBoxFill, SIGNAL(toggled(bool)), selectedObj, SLOT(setFill(bool)));
-		connect(ui.lineEditRadius, SIGNAL(textChanged(QString)), selectedObj, SLOT(setRadius(QString)));
-		connect(ui.lineEditSizeX, SIGNAL(textChanged(QString)), selectedObj, SLOT(setLenX(QString)));
-		connect(ui.lineEditSizeY, SIGNAL(textChanged(QString)), selectedObj, SLOT(setLenY(QString)));
-		connect(ui.lineEditSizeZ, SIGNAL(textChanged(QString)), selectedObj, SLOT(setLenZ(QString)));
+        connect(ui.doubleSpinBoxRadius, SIGNAL(valueChanged(double)), selectedObj, SLOT(setRadius(double)));
+        connect(ui.doubleSpinBoxSizeX, SIGNAL(valueChanged(double)), selectedObj, SLOT(setLenX(double)));
+        connect(ui.doubleSpinBoxSizeY, SIGNAL(valueChanged(double)), selectedObj, SLOT(setLenY(double)));
+        connect(ui.doubleSpinBoxSizeZ, SIGNAL(valueChanged(double)), selectedObj, SLOT(setLenZ(double)));
 
 		qglviewer::Vec center = selectedObj->getCenter();
 
-		ui.lineEditPosX->setText(QString::number(center[0]));
-		ui.lineEditPosY->setText(QString::number(center[1]));
-		ui.lineEditPosZ->setText(QString::number(center[2]));
+        ui.doubleSpinBoxPosX->setValue(center[0]);
+        ui.doubleSpinBoxPosY->setValue(center[1]);
+        ui.doubleSpinBoxPosZ->setValue(center[2]);
+		ui.doubleSpinBoxScalar->setValue(selectedObj->getScalar());
 
 		ui.lineEditObjName->setText(selectedObj->getName());
 		ui.checkBoxFill->setChecked(selectedObj->isFilled());
@@ -275,99 +283,101 @@ void SceneDesignWidget::changePropertyWidget()
 			selectedObj->getType() == SceneUnit::Primitive::T_Rect)
 		{
 			ui.labelPosZ->setVisible(false);
-			ui.lineEditPosZ->setVisible(false);
+            ui.doubleSpinBoxPosZ->setVisible(false);
 		}
 		else
 		{
 			ui.labelPosZ->setVisible(true);
-			ui.lineEditPosZ->setVisible(true);
+            ui.doubleSpinBoxPosZ->setVisible(true);
 		}
 		
 		if (selectedObj->getType() == SceneUnit::Primitive::T_Object)
 		{
 			ui.labelRadius->setVisible(false);
-			ui.lineEditRadius->setVisible(false);
+            ui.doubleSpinBoxRadius->setVisible(false);
 			ui.labelSize->setVisible(false);
 			ui.labelSizeX->setVisible(false);
-			ui.lineEditSizeX->setVisible(false);
+            ui.doubleSpinBoxSizeX->setVisible(false);
 			ui.labelSizeY->setVisible(false);
-			ui.lineEditSizeY->setVisible(false);
+            ui.doubleSpinBoxSizeY->setVisible(false);
 			ui.labelSizeZ->setVisible(false);
-			ui.lineEditSizeZ->setVisible(false);
+            ui.doubleSpinBoxSizeZ->setVisible(false);
 		}
 		else if (selectedObj->getType() == SceneUnit::Primitive::T_Circle ||
 			selectedObj->getType() == SceneUnit::Primitive::T_Sphere)
 		{
 			SceneUnit::Circle *c = (SceneUnit::Circle *)selectedObj;
 			ui.labelRadius->setVisible(true);
-			ui.lineEditRadius->setVisible(true);
-			ui.lineEditRadius->setText(QString::number(c->getRadius()));
+            ui.doubleSpinBoxRadius->setVisible(true);
+            ui.doubleSpinBoxRadius->setValue(c->getRadius());
 
 			ui.labelSize->setVisible(false);
 			ui.labelSizeX->setVisible(false);
-			ui.lineEditSizeX->setVisible(false);
+            ui.doubleSpinBoxSizeX->setVisible(false);
 			ui.labelSizeY->setVisible(false);
-			ui.lineEditSizeY->setVisible(false);
+            ui.doubleSpinBoxSizeY->setVisible(false);
 			ui.labelSizeZ->setVisible(false);
-			ui.lineEditSizeZ->setVisible(false);
+            ui.doubleSpinBoxSizeZ->setVisible(false);
 		}
 		else
 		{
 			ui.labelRadius->setVisible(false);
-			ui.lineEditRadius->setVisible(false);
+            ui.doubleSpinBoxRadius->setVisible(false);
 
 			ui.labelSize->setVisible(true);
 			ui.labelSizeX->setVisible(true);
-			ui.lineEditSizeX->setVisible(true);
+            ui.doubleSpinBoxSizeX->setVisible(true);
 			ui.labelSizeY->setVisible(true);
-			ui.lineEditSizeY->setVisible(true);
+            ui.doubleSpinBoxSizeY->setVisible(true);
 
 			SceneUnit::Rectangle *r = (SceneUnit::Rectangle *)selectedObj;
-			ui.lineEditSizeX->setText(QString::number(r->getLenX()));
-			ui.lineEditSizeY->setText(QString::number(r->getLenY()));
+            ui.doubleSpinBoxSizeX->setValue(r->getLenX());
+            ui.doubleSpinBoxSizeY->setValue(r->getLenY());
 
 			if (selectedObj->getType() == SceneUnit::Primitive::T_Rect)
 			{
 				ui.labelSizeZ->setVisible(false);
-				ui.lineEditSizeZ->setVisible(false);
+                ui.doubleSpinBoxSizeZ->setVisible(false);
 			}
 			else
 			{
 				ui.labelSizeZ->setVisible(true);
-				ui.lineEditSizeZ->setVisible(true);
+                ui.doubleSpinBoxSizeZ->setVisible(true);
 
 				SceneUnit::Box *b = (SceneUnit::Box *)selectedObj;
-				ui.lineEditSizeZ->setText(QString::number(b->getLenX()));
+                ui.doubleSpinBoxSizeZ->setValue(b->getLenX());
 			}
 		}
 	}
 	else
 	{
 		ui.lineEditObjName->setEnabled(false);
-		ui.lineEditPosX->setEnabled(false);
-		ui.lineEditPosY->setEnabled(false);
-		ui.lineEditPosZ->setEnabled(false);
+        ui.doubleSpinBoxPosX->setEnabled(false);
+        ui.doubleSpinBoxPosY->setEnabled(false);
+        ui.doubleSpinBoxPosZ->setEnabled(false);
+		ui.doubleSpinBoxScalar->setEnabled(false);
 		ui.checkBoxFill->setEnabled(false);
 		ui.pushButtonColor->setEnabled(false);
 
 		ui.labelSize->setVisible(false);
 		ui.labelRadius->setVisible(false);
-		ui.lineEditRadius->setVisible(false);
+        ui.doubleSpinBoxRadius->setVisible(false);
 		ui.labelSizeX->setVisible(false);
-		ui.lineEditSizeX->setVisible(false);
+        ui.doubleSpinBoxSizeX->setVisible(false);
 		ui.labelSizeY->setVisible(false);
-		ui.lineEditSizeY->setVisible(false);
+        ui.doubleSpinBoxSizeY->setVisible(false);
 		ui.labelSizeZ->setVisible(false);
-		ui.lineEditSizeZ->setVisible(false);
+        ui.doubleSpinBoxSizeZ->setVisible(false);
 
 		ui.lineEditObjName->setText("");
-		ui.lineEditPosX->setText("");
-		ui.lineEditPosY->setText("");
-		ui.lineEditPosZ->setText("");
-		ui.lineEditRadius->setText("");
-		ui.lineEditSizeX->setText("");
-		ui.lineEditSizeY->setText("");
-		ui.lineEditSizeZ->setText("");
+        ui.doubleSpinBoxPosX->setValue(0.0);
+        ui.doubleSpinBoxPosY->setValue(0.0);
+        ui.doubleSpinBoxPosZ->setValue(0.0);
+		ui.doubleSpinBoxScalar->setValue(1.0);
+        ui.doubleSpinBoxRadius->setValue(0.1);
+        ui.doubleSpinBoxSizeX->setValue(0.2);
+        ui.doubleSpinBoxSizeY->setValue(0.2);
+        ui.doubleSpinBoxSizeZ->setValue(0.2);
     }
 }
 

@@ -15,6 +15,7 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDockWidget>
+#include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -38,30 +39,32 @@ public:
     QDockWidget *dockWidgetProperty;
     QWidget *dockWidgetContents;
     QGridLayout *gridLayout;
+    QDoubleSpinBox *doubleSpinBoxRadius;
     QLabel *labelPosX;
     QLineEdit *lineEditObjName;
     QLabel *labelPos;
     QLabel *labelObjName;
     QSpacerItem *verticalSpacer;
     QLabel *labelColor;
-    QLineEdit *lineEditPosX;
-    QLineEdit *lineEditPosZ;
     QLabel *labelPosY;
-    QLineEdit *lineEditPosY;
     QLabel *labelPosZ;
     QCheckBox *checkBoxFill;
     QHBoxLayout *horizontalLayout;
     QPushButton *pushButtonColor;
     QSpacerItem *horizontalSpacer;
-    QLineEdit *lineEditRadius;
     QLabel *labelRadius;
     QLabel *labelSizeX;
     QLabel *labelSizeY;
     QLabel *labelSizeZ;
     QLabel *labelSize;
-    QLineEdit *lineEditSizeX;
-    QLineEdit *lineEditSizeY;
-    QLineEdit *lineEditSizeZ;
+    QLabel *labelScalar;
+    QDoubleSpinBox *doubleSpinBoxScalar;
+    QDoubleSpinBox *doubleSpinBoxSizeY;
+    QDoubleSpinBox *doubleSpinBoxSizeX;
+    QDoubleSpinBox *doubleSpinBoxSizeZ;
+    QDoubleSpinBox *doubleSpinBoxPosX;
+    QDoubleSpinBox *doubleSpinBoxPosY;
+    QDoubleSpinBox *doubleSpinBoxPosZ;
 
     void setupUi(QMainWindow *SceneDesignWidget)
     {
@@ -114,23 +117,13 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(dockWidgetProperty->sizePolicy().hasHeightForWidth());
         dockWidgetProperty->setSizePolicy(sizePolicy);
-        dockWidgetProperty->setMinimumSize(QSize(200, 295));
+        dockWidgetProperty->setMinimumSize(QSize(200, 321));
         dockWidgetProperty->setMaximumSize(QSize(200, 10000));
         dockWidgetProperty->setStyleSheet(QLatin1String("*\n"
 "{\n"
 "	color: white;\n"
 "	border-color: rgb(100, 100, 100);\n"
 "	background-color: rgb(100, 100, 100);\n"
-"}\n"
-"QLineEdit\n"
-"{\n"
-"	border-color: transparent;\n"
-"	background-color: white;\n"
-"	color: black;\n"
-"}\n"
-"QLineEdit:!enabled\n"
-"{\n"
-"	background-color: rgb(200, 200, 200);\n"
 "}\n"
 "QPushButton\n"
 "{\n"
@@ -147,6 +140,16 @@ public:
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        doubleSpinBoxRadius = new QDoubleSpinBox(dockWidgetContents);
+        doubleSpinBoxRadius->setObjectName(QStringLiteral("doubleSpinBoxRadius"));
+        doubleSpinBoxRadius->setDecimals(3);
+        doubleSpinBoxRadius->setMinimum(0.001);
+        doubleSpinBoxRadius->setMaximum(10);
+        doubleSpinBoxRadius->setSingleStep(0.001);
+        doubleSpinBoxRadius->setValue(0.01);
+
+        gridLayout->addWidget(doubleSpinBoxRadius, 7, 2, 1, 1);
+
         labelPosX = new QLabel(dockWidgetContents);
         labelPosX->setObjectName(QStringLiteral("labelPosX"));
         labelPosX->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
@@ -173,37 +176,19 @@ public:
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout->addItem(verticalSpacer, 10, 0, 1, 3);
+        gridLayout->addItem(verticalSpacer, 11, 0, 1, 3);
 
         labelColor = new QLabel(dockWidgetContents);
         labelColor->setObjectName(QStringLiteral("labelColor"));
         labelColor->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(labelColor, 5, 0, 1, 1);
-
-        lineEditPosX = new QLineEdit(dockWidgetContents);
-        lineEditPosX->setObjectName(QStringLiteral("lineEditPosX"));
-        lineEditPosX->setContextMenuPolicy(Qt::NoContextMenu);
-
-        gridLayout->addWidget(lineEditPosX, 1, 2, 1, 1);
-
-        lineEditPosZ = new QLineEdit(dockWidgetContents);
-        lineEditPosZ->setObjectName(QStringLiteral("lineEditPosZ"));
-        lineEditPosZ->setContextMenuPolicy(Qt::NoContextMenu);
-
-        gridLayout->addWidget(lineEditPosZ, 3, 2, 1, 1);
+        gridLayout->addWidget(labelColor, 6, 0, 1, 1);
 
         labelPosY = new QLabel(dockWidgetContents);
         labelPosY->setObjectName(QStringLiteral("labelPosY"));
         labelPosY->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         gridLayout->addWidget(labelPosY, 2, 1, 1, 1);
-
-        lineEditPosY = new QLineEdit(dockWidgetContents);
-        lineEditPosY->setObjectName(QStringLiteral("lineEditPosY"));
-        lineEditPosY->setContextMenuPolicy(Qt::NoContextMenu);
-
-        gridLayout->addWidget(lineEditPosY, 2, 2, 1, 1);
 
         labelPosZ = new QLabel(dockWidgetContents);
         labelPosZ->setObjectName(QStringLiteral("labelPosZ"));
@@ -214,7 +199,7 @@ public:
         checkBoxFill = new QCheckBox(dockWidgetContents);
         checkBoxFill->setObjectName(QStringLiteral("checkBoxFill"));
 
-        gridLayout->addWidget(checkBoxFill, 4, 0, 1, 1);
+        gridLayout->addWidget(checkBoxFill, 5, 0, 1, 1);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
@@ -233,64 +218,121 @@ public:
         horizontalLayout->addItem(horizontalSpacer);
 
 
-        gridLayout->addLayout(horizontalLayout, 5, 2, 1, 1);
-
-        lineEditRadius = new QLineEdit(dockWidgetContents);
-        lineEditRadius->setObjectName(QStringLiteral("lineEditRadius"));
-        lineEditRadius->setContextMenuPolicy(Qt::NoContextMenu);
-
-        gridLayout->addWidget(lineEditRadius, 6, 2, 1, 1);
+        gridLayout->addLayout(horizontalLayout, 6, 2, 1, 1);
 
         labelRadius = new QLabel(dockWidgetContents);
         labelRadius->setObjectName(QStringLiteral("labelRadius"));
         labelRadius->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(labelRadius, 6, 0, 1, 1);
+        gridLayout->addWidget(labelRadius, 7, 0, 1, 1);
 
         labelSizeX = new QLabel(dockWidgetContents);
         labelSizeX->setObjectName(QStringLiteral("labelSizeX"));
 
-        gridLayout->addWidget(labelSizeX, 7, 1, 1, 1);
+        gridLayout->addWidget(labelSizeX, 8, 1, 1, 1);
 
         labelSizeY = new QLabel(dockWidgetContents);
         labelSizeY->setObjectName(QStringLiteral("labelSizeY"));
 
-        gridLayout->addWidget(labelSizeY, 8, 1, 1, 1);
+        gridLayout->addWidget(labelSizeY, 9, 1, 1, 1);
 
         labelSizeZ = new QLabel(dockWidgetContents);
         labelSizeZ->setObjectName(QStringLiteral("labelSizeZ"));
 
-        gridLayout->addWidget(labelSizeZ, 9, 1, 1, 1);
+        gridLayout->addWidget(labelSizeZ, 10, 1, 1, 1);
 
         labelSize = new QLabel(dockWidgetContents);
         labelSize->setObjectName(QStringLiteral("labelSize"));
         labelSize->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(labelSize, 7, 0, 3, 1);
+        gridLayout->addWidget(labelSize, 8, 0, 3, 1);
 
-        lineEditSizeX = new QLineEdit(dockWidgetContents);
-        lineEditSizeX->setObjectName(QStringLiteral("lineEditSizeX"));
-        lineEditSizeX->setContextMenuPolicy(Qt::NoContextMenu);
+        labelScalar = new QLabel(dockWidgetContents);
+        labelScalar->setObjectName(QStringLiteral("labelScalar"));
+        labelScalar->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(lineEditSizeX, 7, 2, 1, 1);
+        gridLayout->addWidget(labelScalar, 4, 0, 1, 1);
 
-        lineEditSizeY = new QLineEdit(dockWidgetContents);
-        lineEditSizeY->setObjectName(QStringLiteral("lineEditSizeY"));
-        lineEditSizeY->setContextMenuPolicy(Qt::NoContextMenu);
+        doubleSpinBoxScalar = new QDoubleSpinBox(dockWidgetContents);
+        doubleSpinBoxScalar->setObjectName(QStringLiteral("doubleSpinBoxScalar"));
+        doubleSpinBoxScalar->setDecimals(3);
+        doubleSpinBoxScalar->setMinimum(0.01);
+        doubleSpinBoxScalar->setMaximum(5);
+        doubleSpinBoxScalar->setSingleStep(0.001);
+        doubleSpinBoxScalar->setValue(1);
 
-        gridLayout->addWidget(lineEditSizeY, 8, 2, 1, 1);
+        gridLayout->addWidget(doubleSpinBoxScalar, 4, 2, 1, 1);
 
-        lineEditSizeZ = new QLineEdit(dockWidgetContents);
-        lineEditSizeZ->setObjectName(QStringLiteral("lineEditSizeZ"));
-        lineEditSizeZ->setContextMenuPolicy(Qt::NoContextMenu);
+        doubleSpinBoxSizeY = new QDoubleSpinBox(dockWidgetContents);
+        doubleSpinBoxSizeY->setObjectName(QStringLiteral("doubleSpinBoxSizeY"));
+        doubleSpinBoxSizeY->setDecimals(3);
+        doubleSpinBoxSizeY->setMinimum(0.001);
+        doubleSpinBoxSizeY->setMaximum(10);
+        doubleSpinBoxSizeY->setSingleStep(0.001);
+        doubleSpinBoxSizeY->setValue(0.2);
 
-        gridLayout->addWidget(lineEditSizeZ, 9, 2, 1, 1);
+        gridLayout->addWidget(doubleSpinBoxSizeY, 9, 2, 1, 1);
+
+        doubleSpinBoxSizeX = new QDoubleSpinBox(dockWidgetContents);
+        doubleSpinBoxSizeX->setObjectName(QStringLiteral("doubleSpinBoxSizeX"));
+        doubleSpinBoxSizeX->setDecimals(3);
+        doubleSpinBoxSizeX->setMinimum(0.001);
+        doubleSpinBoxSizeX->setMaximum(10);
+        doubleSpinBoxSizeX->setSingleStep(0.001);
+        doubleSpinBoxSizeX->setValue(0.2);
+
+        gridLayout->addWidget(doubleSpinBoxSizeX, 8, 2, 1, 1);
+
+        doubleSpinBoxSizeZ = new QDoubleSpinBox(dockWidgetContents);
+        doubleSpinBoxSizeZ->setObjectName(QStringLiteral("doubleSpinBoxSizeZ"));
+        doubleSpinBoxSizeZ->setDecimals(3);
+        doubleSpinBoxSizeZ->setMinimum(0.001);
+        doubleSpinBoxSizeZ->setMaximum(10);
+        doubleSpinBoxSizeZ->setSingleStep(0.001);
+        doubleSpinBoxSizeZ->setValue(0.2);
+
+        gridLayout->addWidget(doubleSpinBoxSizeZ, 10, 2, 1, 1);
+
+        doubleSpinBoxPosX = new QDoubleSpinBox(dockWidgetContents);
+        doubleSpinBoxPosX->setObjectName(QStringLiteral("doubleSpinBoxPosX"));
+        doubleSpinBoxPosX->setDecimals(6);
+        doubleSpinBoxPosX->setMinimum(-10);
+        doubleSpinBoxPosX->setMaximum(10);
+        doubleSpinBoxPosX->setSingleStep(0.001);
+        doubleSpinBoxPosX->setValue(0);
+
+        gridLayout->addWidget(doubleSpinBoxPosX, 1, 2, 1, 1);
+
+        doubleSpinBoxPosY = new QDoubleSpinBox(dockWidgetContents);
+        doubleSpinBoxPosY->setObjectName(QStringLiteral("doubleSpinBoxPosY"));
+        doubleSpinBoxPosY->setDecimals(6);
+        doubleSpinBoxPosY->setMinimum(-10);
+        doubleSpinBoxPosY->setMaximum(10);
+        doubleSpinBoxPosY->setSingleStep(0.001);
+
+        gridLayout->addWidget(doubleSpinBoxPosY, 2, 2, 1, 1);
+
+        doubleSpinBoxPosZ = new QDoubleSpinBox(dockWidgetContents);
+        doubleSpinBoxPosZ->setObjectName(QStringLiteral("doubleSpinBoxPosZ"));
+        doubleSpinBoxPosZ->setDecimals(6);
+        doubleSpinBoxPosZ->setMinimum(-10);
+        doubleSpinBoxPosZ->setMaximum(10);
+        doubleSpinBoxPosZ->setSingleStep(0.001);
+
+        gridLayout->addWidget(doubleSpinBoxPosZ, 3, 2, 1, 1);
 
         dockWidgetProperty->setWidget(dockWidgetContents);
         SceneDesignWidget->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockWidgetProperty);
-        QWidget::setTabOrder(lineEditObjName, lineEditPosX);
-        QWidget::setTabOrder(lineEditPosX, lineEditPosY);
-        QWidget::setTabOrder(lineEditPosY, lineEditPosZ);
+        QWidget::setTabOrder(lineEditObjName, doubleSpinBoxPosX);
+        QWidget::setTabOrder(doubleSpinBoxPosX, doubleSpinBoxPosY);
+        QWidget::setTabOrder(doubleSpinBoxPosY, doubleSpinBoxPosZ);
+        QWidget::setTabOrder(doubleSpinBoxPosZ, doubleSpinBoxScalar);
+        QWidget::setTabOrder(doubleSpinBoxScalar, checkBoxFill);
+        QWidget::setTabOrder(checkBoxFill, pushButtonColor);
+        QWidget::setTabOrder(pushButtonColor, doubleSpinBoxRadius);
+        QWidget::setTabOrder(doubleSpinBoxRadius, doubleSpinBoxSizeX);
+        QWidget::setTabOrder(doubleSpinBoxSizeX, doubleSpinBoxSizeY);
+        QWidget::setTabOrder(doubleSpinBoxSizeY, doubleSpinBoxSizeZ);
 
         retranslateUi(SceneDesignWidget);
 
@@ -318,6 +360,7 @@ public:
         labelSizeY->setText(QApplication::translate("SceneDesignWidget", "y", 0));
         labelSizeZ->setText(QApplication::translate("SceneDesignWidget", "z", 0));
         labelSize->setText(QApplication::translate("SceneDesignWidget", "size", 0));
+        labelScalar->setText(QApplication::translate("SceneDesignWidget", "Scalar", 0));
     } // retranslateUi
 
 };

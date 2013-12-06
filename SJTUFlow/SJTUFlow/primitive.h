@@ -41,10 +41,13 @@ namespace SceneUnit
 
 		qglviewer::Vec getCenter(){ return center; }
 		void setCenter(qglviewer::Vec center);
+		void getBoundingBox(qglviewer::Vec &bmin_, qglviewer::Vec &bmax_){ bmin_ = scalar * bmin; bmax_ = scalar * bmax; }
 		QColor getColor();
 		bool isFilled(){ return fill; }
+		double getScalar(){ return scalar; }
 
 		void translate(qglviewer::Vec t, int axis);
+		void rotate(double angle, qglviewer::Vec axis);
 
 	signals:
 		void propertyChanged();
@@ -54,22 +57,25 @@ namespace SceneUnit
 		void setName(QString name){ this->name = name; }
 		void setFill(bool fill){ this->fill = fill; emit propertyChanged(); }
 		void setColor(QColor color);
-		void setCenterX(QString str){ center[0] = str.toDouble(); frame->setPosition(center); emit propertyChanged(); }
-		void setCenterY(QString str){ center[1] = str.toDouble(); frame->setPosition(center); emit propertyChanged(); }
-		void setCenterZ(QString str){ center[2] = str.toDouble(); frame->setPosition(center); emit propertyChanged(); }
-		virtual void setRadius(QString){};
-		virtual void setLenX(QString){};
-		virtual void setLenY(QString){};
-		virtual void setLenZ(QString){};
+        void setCenterX(double val){ center[0] = val; frame->setPosition(center); emit propertyChanged(); }
+        void setCenterY(double val){ center[1] = val; frame->setPosition(center); emit propertyChanged(); }
+        void setCenterZ(double val){ center[2] = val; frame->setPosition(center); emit propertyChanged(); }
+        void setScalar(double val){ scalar = val; emit propertyChanged(); emit operated(); }
+        virtual void setRadius(double){}
+        virtual void setLenX(double){}
+        virtual void setLenY(double){}
+        virtual void setLenZ(double){}
 
 	protected:
 		Type type;
 		GLuint id;
 		QString name;
 
-		qglviewer::Vec center;
-		GLubyte color[3];
-		bool fill;
+		qglviewer::Vec center;			// barycenter
+		qglviewer::Vec bmin, bmax;		// bounding box for scale
+		GLubyte color[3];				// color
+		bool fill;						// wire or face
+		double scalar;
 
 		qglviewer::Frame *frame;
 	};
@@ -85,10 +91,9 @@ namespace SceneUnit
 
 		virtual void draw(bool selected);
 		GLdouble getRadius(){ return radius; }
-		void setRadius(GLdouble radius){ this->radius = radius; emit propertyChanged(); }
 
 	public slots:
-		void setRadius(QString str){ setRadius(str.toDouble()); }
+        virtual void setRadius(GLdouble radius);
 
 	protected:
 		GLdouble radius;
@@ -101,9 +106,12 @@ namespace SceneUnit
 	public:
         Sphere(GLUquadric *quadric);
 		Sphere(qglviewer::Vec center, QColor color, 
-			GLdouble radius, GLUquadric *quadric);
+			GLdouble radius, GLUquadric *quadric, bool fill = true);
 
 		void draw(bool selected);
+
+    public slots:
+		void setRadius(GLdouble radius);
 
 	private:
 		GLUquadric *quadric;
@@ -122,13 +130,11 @@ namespace SceneUnit
 
 		virtual void draw(bool selected);
 		GLdouble getLenX(){ return lenx; }
-		void setLenX(GLdouble lenx){ this->lenx = lenx; emit propertyChanged(); }
 		GLdouble getLenY(){ return leny; }
-		void setLenY(GLdouble leny){ this->leny = leny; emit propertyChanged(); }
 
 	public slots:
-		void setLenX(QString str){ setLenX(str.toDouble()); }
-		void setLenY(QString str){ setLenY(str.toDouble()); }
+        void setLenX(GLdouble lenx){ this->lenx = lenx; bmin[0] = -lenx / 2; bmax[0] = -bmin[0]; emit propertyChanged(); }
+        void setLenY(GLdouble leny){ this->leny = leny; bmin[1] = -leny / 2; bmax[1] = -bmin[0]; emit propertyChanged(); }
 
 	protected:
 		GLdouble lenx;
@@ -142,15 +148,14 @@ namespace SceneUnit
 	public:
         Box();
 		Box(qglviewer::Vec center, QColor color, 
-			GLdouble lenx, GLdouble leny, GLdouble lenz);
-		Box(qglviewer::Vec center, QColor color, GLdouble len);
+			GLdouble lenx, GLdouble leny, GLdouble lenz, bool fill = true);
+		Box(qglviewer::Vec center, QColor color, GLdouble len, bool fill = true);
 
 		void draw(bool selected);
 		GLdouble getLenZ(){ return lenz; }
-		void setLenZ(GLdouble lenz){ this->lenz = lenz; emit propertyChanged(); }
 
 	public slots:
-		void setLenZ(QString str){ setLenZ(str.toDouble()); }
+        void setLenZ(GLdouble lenz){ this->lenz = lenz; bmin[2] = -lenz / 2; bmax[2] = -bmin[2]; emit propertyChanged(); }
 
 	private:
 		GLdouble lenz;

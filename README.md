@@ -29,3 +29,13 @@ Project for Advanced Software Engineering and SJTU Digital Arts Lab
 ========
 
 陆昊天 刘海波 杨洋 张帅 吴子奇
+
+TODO:
+========
+SceneDesign:
+1. open scene file
+2. save scene file
+3. undo and redo
+4. reset the object to initialization
+5. relate the move steps to the zoom rate
+6. add a progress dialog or progress bar when importing object

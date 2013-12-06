@@ -102,7 +102,7 @@ QToolBar
    <property name="minimumSize">
     <size>
      <width>200</width>
-     <height>295</height>
+     <height>321</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -117,16 +117,6 @@ QToolBar
 	color: white;
 	border-color: rgb(100, 100, 100);
 	background-color: rgb(100, 100, 100);
-}
-QLineEdit
-{
-	border-color: transparent;
-	background-color: white;
-	color: black;
-}
-QLineEdit:!enabled
-{
-	background-color: rgb(200, 200, 200);
 }
 QPushButton
 {
@@ -152,6 +142,25 @@ QPushButton
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QGridLayout" name="gridLayout">
+     <item row="7" column="2">
+      <widget class="QDoubleSpinBox" name="doubleSpinBoxRadius">
+       <property name="decimals">
+        <number>3</number>
+       </property>
+       <property name="minimum">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.010000000000000</double>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1">
       <widget class="QLabel" name="labelPosX">
        <property name="text">
@@ -192,7 +201,7 @@ QPushButton
        </property>
       </widget>
      </item>
-     <item row="10" column="0" colspan="3">
+     <item row="11" column="0" colspan="3">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -205,27 +214,13 @@ QPushButton
        </property>
       </spacer>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="labelColor">
        <property name="text">
         <string>color</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLineEdit" name="lineEditPosX">
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLineEdit" name="lineEditPosZ">
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
        </property>
       </widget>
      </item>
@@ -239,13 +234,6 @@ QPushButton
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QLineEdit" name="lineEditPosY">
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="1">
       <widget class="QLabel" name="labelPosZ">
        <property name="text">
@@ -256,14 +244,14 @@ QPushButton
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QCheckBox" name="checkBoxFill">
        <property name="text">
         <string>fill</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="2">
+     <item row="6" column="2">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QPushButton" name="pushButtonColor">
@@ -308,14 +296,7 @@ QPushButton
        </item>
       </layout>
      </item>
-     <item row="6" column="2">
-      <widget class="QLineEdit" name="lineEditRadius">
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
+     <item row="7" column="0">
       <widget class="QLabel" name="labelRadius">
        <property name="text">
         <string>radius</string>
@@ -325,28 +306,28 @@ QPushButton
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
+     <item row="8" column="1">
       <widget class="QLabel" name="labelSizeX">
        <property name="text">
         <string>x</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item row="9" column="1">
       <widget class="QLabel" name="labelSizeY">
        <property name="text">
         <string>y</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
+     <item row="10" column="1">
       <widget class="QLabel" name="labelSizeZ">
        <property name="text">
         <string>z</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="0" rowspan="3">
+     <item row="8" column="0" rowspan="3">
       <widget class="QLabel" name="labelSize">
        <property name="text">
         <string>size</string>
@@ -356,24 +337,140 @@ QPushButton
        </property>
       </widget>
      </item>
-     <item row="7" column="2">
-      <widget class="QLineEdit" name="lineEditSizeX">
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
+     <item row="4" column="0">
+      <widget class="QLabel" name="labelScalar">
+       <property name="text">
+        <string>Scalar</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="8" column="2">
-      <widget class="QLineEdit" name="lineEditSizeY">
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
+     <item row="4" column="2">
+      <widget class="QDoubleSpinBox" name="doubleSpinBoxScalar">
+       <property name="decimals">
+        <number>3</number>
+       </property>
+       <property name="minimum">
+        <double>0.010000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>5.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
      <item row="9" column="2">
-      <widget class="QLineEdit" name="lineEditSizeZ">
-       <property name="contextMenuPolicy">
-        <enum>Qt::NoContextMenu</enum>
+      <widget class="QDoubleSpinBox" name="doubleSpinBoxSizeY">
+       <property name="decimals">
+        <number>3</number>
+       </property>
+       <property name="minimum">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.200000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QDoubleSpinBox" name="doubleSpinBoxSizeX">
+       <property name="decimals">
+        <number>3</number>
+       </property>
+       <property name="minimum">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.200000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="QDoubleSpinBox" name="doubleSpinBoxSizeZ">
+       <property name="decimals">
+        <number>3</number>
+       </property>
+       <property name="minimum">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.200000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QDoubleSpinBox" name="doubleSpinBoxPosX">
+       <property name="decimals">
+        <number>6</number>
+       </property>
+       <property name="minimum">
+        <double>-10.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QDoubleSpinBox" name="doubleSpinBoxPosY">
+       <property name="decimals">
+        <number>6</number>
+       </property>
+       <property name="minimum">
+        <double>-10.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.001000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QDoubleSpinBox" name="doubleSpinBoxPosZ">
+       <property name="decimals">
+        <number>6</number>
+       </property>
+       <property name="minimum">
+        <double>-10.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>10.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.001000000000000</double>
        </property>
       </widget>
      </item>
@@ -384,9 +481,16 @@ QPushButton
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>lineEditObjName</tabstop>
-  <tabstop>lineEditPosX</tabstop>
-  <tabstop>lineEditPosY</tabstop>
-  <tabstop>lineEditPosZ</tabstop>
+  <tabstop>doubleSpinBoxPosX</tabstop>
+  <tabstop>doubleSpinBoxPosY</tabstop>
+  <tabstop>doubleSpinBoxPosZ</tabstop>
+  <tabstop>doubleSpinBoxScalar</tabstop>
+  <tabstop>checkBoxFill</tabstop>
+  <tabstop>pushButtonColor</tabstop>
+  <tabstop>doubleSpinBoxRadius</tabstop>
+  <tabstop>doubleSpinBoxSizeX</tabstop>
+  <tabstop>doubleSpinBoxSizeY</tabstop>
+  <tabstop>doubleSpinBoxSizeZ</tabstop>
  </tabstops>
  <resources/>
  <connections/>
