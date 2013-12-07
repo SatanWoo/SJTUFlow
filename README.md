@@ -33,9 +33,13 @@ Project for Advanced Software Engineering and SJTU Digital Arts Lab
 TODO:
 ========
 SceneDesign:
-1. open scene file
-2. save scene file
-3. undo and redo
-4. reset the object to initialization
-5. relate the move steps to the zoom rate
-6. add a progress dialog or progress bar when importing object
+1. undo and redo
+
+2. save model imported
+
+3. reset the object to initialization
+
+4. relate the move steps to the zoom rate
+
+5. add a progress dialog or progress bar when importing object
+

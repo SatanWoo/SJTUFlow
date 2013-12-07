@@ -20,6 +20,10 @@ public:
 
     // check if the actions' state is right
     void checkState();
+	QString filePath(){ return sceneFilePath; }
+
+signals:
+	void filePathChanged(QString);
 
 public slots:
 /************************************************************************/
@@ -27,6 +31,11 @@ public slots:
 /************************************************************************/
 	void new2DScene();
 	void new3DScene();
+
+	void openScene();
+	void saveScene();
+	void saveAs();
+
 	void deleteObject();
 
     void move();
@@ -43,6 +52,7 @@ public slots:
 	void selectedObjChanged(int id);
 	void colorChanged(QColor color);
 	void propertyOperated();
+	void sceneChanged();
 
 private:
 	Ui::SceneDesignWidget ui;
@@ -53,8 +63,13 @@ private:
 	Scene *scene;
 	SceneUnit::Primitive *selectedObj;
 
+ 	bool isSaved;
+ 	QString sceneFilePath;
+
 	void changePropertyWidget();
     void parseMenuActions(QMenuBar *menubar);
+	void openScene(QString fileName);
+	void saveScene(QString fileName);
 };
 
 #endif // SCENEDESIGNWIDGET_H

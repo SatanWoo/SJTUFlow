@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Setting</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="sjtuflow.qrc">
+    <normaloff>:/SJTUFlow/Resources/SJTU-Icon.png</normaloff>:/SJTUFlow/Resources/SJTU-Icon.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
    <property name="leftMargin">
     <number>5</number>

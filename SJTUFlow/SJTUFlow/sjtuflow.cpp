@@ -47,6 +47,14 @@ SJTUFlow::SJTUFlow(QWidget *parent)
     connect(ui.actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 
     connect(ui.actionSetting, SIGNAL(triggered()), setting, SLOT(show()));
+
+	connect(ui.action2DScene, SIGNAL(triggered()), sceneDesignWidget, SLOT(new2DScene()));
+	connect(ui.action3DScene, SIGNAL(triggered()), sceneDesignWidget, SLOT(new3DScene()));
+
+	connect(ui.actionProperty, SIGNAL(triggered()), sceneDesignWidget, SLOT(showProperty()));
+
+	connect(sceneDesignWidget, SIGNAL(filePathChanged(QString)), ui.titleBar, SLOT(setFilePath(QString)));
+	connect(codingWidget, SIGNAL(filePathChanged(QString)), ui.titleBar, SLOT(setFilePath(QString)));
 }
 
 SJTUFlow::~SJTUFlow()
@@ -80,6 +88,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionPaste->setVisible(false);
         ui.actionSelectAll->setVisible(false);
         sceneDesignWidget->checkState();
+		ui.titleBar->setFilePath(sceneDesignWidget->filePath());
         break;
     case 1:
         ui.menuFile->setEnabled(true);
@@ -97,12 +106,14 @@ void SJTUFlow::tabChanged(int index)
         ui.actionPaste->setVisible(true);
         ui.actionSelectAll->setVisible(true);
         codingWidget->checkState(0);
+		ui.titleBar->setFilePath(codingWidget->filePath());
         break;
     case 2:
         ui.menuFile->setEnabled(false);
         ui.menuEdit->setEnabled(false);
         ui.menuPrimitive->setEnabled(false);
         ui.actionRun->setEnabled(false);
+		ui.titleBar->setFilePath(QString());
     default:
         break;
     }
@@ -112,7 +123,7 @@ void SJTUFlow::sharedOpen()
 {
     if (ui.tabWidget->currentIndex() == 0)
     {
-
+		sceneDesignWidget->openScene();
     }
     else if (ui.tabWidget->currentIndex() == 1)
     {
@@ -124,7 +135,7 @@ void SJTUFlow::sharedSave()
 {
     if (ui.tabWidget->currentIndex() == 0)
     {
-
+		sceneDesignWidget->saveScene();
     }
     else if (ui.tabWidget->currentIndex() == 1)
     {
@@ -136,7 +147,7 @@ void SJTUFlow::sharedSaveAs()
 {
     if (ui.tabWidget->currentIndex() == 0)
     {
-
+		sceneDesignWidget->saveAs();
     }
     else if (ui.tabWidget->currentIndex() == 1)
     {

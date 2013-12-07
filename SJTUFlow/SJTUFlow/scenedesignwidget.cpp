@@ -3,6 +3,7 @@
 #include "primitive.h"
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTextStream>
 
 SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 	: QMainWindow(parent)
@@ -12,6 +13,8 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
     parseMenuActions(menubar);
 
 	selectedObj = NULL;
+	isSaved = true;
+	actions["save"]->setEnabled(false);
 
 	scene = new Scene;
 	scene->setMouseTracking(true);
@@ -19,14 +22,12 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 
 	connect(scene, SIGNAL(selectedObjChanged(int)), 
 		this, SLOT(selectedObjChanged(int)));
+	connect(scene, SIGNAL(sceneChanged()), this, SLOT(sceneChanged()));
 
 /************************************************************************/
 /*                              menu                                    */
 /************************************************************************/
     actions["delete"]->setEnabled(false);
-
-    connect(actions["2DScene"], SIGNAL(triggered()), this, SLOT(new2DScene()));
-    connect(actions["3DScene"], SIGNAL(triggered()), this, SLOT(new3DScene()));
 
     connect(actions["circle"], SIGNAL(triggered()), scene, SLOT(newCircle()));
     connect(actions["rectangle"], SIGNAL(triggered()), scene, SLOT(newRectangle()));
@@ -38,8 +39,6 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
     connect(actions["scale"], SIGNAL(triggered()), this, SLOT(scale()));
 
 	connect(actions["import"], SIGNAL(triggered()), this, SLOT(import()));
-
-    connect(actions["property"], SIGNAL(triggered()), this, SLOT(showProperty()));
 
 /************************************************************************/
 /*                             toolbar                                  */
@@ -79,14 +78,8 @@ SceneDesignWidget::~SceneDesignWidget()
 
 void SceneDesignWidget::checkState()
 {
-    if (selectedObj == NULL)
-    {
-        actions["delete"]->setEnabled(false);
-    }
-    else
-    {
-        actions["delete"]->setEnabled(true);
-    }
+    actions["delete"]->setEnabled(selectedObj != NULL);
+	actions["save"]->setEnabled(!isSaved);
 }
 
 void SceneDesignWidget::new2DScene()
@@ -102,6 +95,13 @@ void SceneDesignWidget::new2DScene()
     actions["box"]->setVisible(false);
 	actions["import"]->setEnabled(false);
 	actions["move"]->trigger();
+
+	selectedObj = NULL;
+	isSaved = true;
+	actions["save"]->setEnabled(false);
+
+	sceneFilePath = QString();
+	emit filePathChanged(QString());
 }
 
 void SceneDesignWidget::new3DScene()
@@ -116,7 +116,55 @@ void SceneDesignWidget::new3DScene()
     actions["sphere"]->setVisible(true);
     actions["box"]->setVisible(true);
 	actions["import"]->setEnabled(true);
-	actions["move"]->trigger();
+    actions["move"]->trigger();
+
+	selectedObj = NULL;
+	isSaved = true;
+	actions["save"]->setEnabled(false);
+
+	sceneFilePath = QString();
+	emit filePathChanged(QString());
+}
+
+void SceneDesignWidget::openScene()
+{
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open"),
+		QDir::homePath(), tr("Scene File(*.scn)"));
+	if(!fileName.isEmpty())
+	{
+		openScene(fileName);
+		sceneFilePath = fileName;
+		emit filePathChanged(sceneFilePath);
+	}
+}
+
+void SceneDesignWidget::saveScene()
+{
+	if (sceneFilePath.isEmpty())
+	{
+		saveAs();
+	}
+	else
+	{
+		saveScene(sceneFilePath);
+		isSaved = true;
+		actions["save"]->setEnabled(false);
+		emit filePathChanged(sceneFilePath);
+	}
+}
+
+void SceneDesignWidget::saveAs()
+{
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Save as "), 
+		QDir::homePath(), tr("Scene File(*.scn)"));
+	if(!fileName.isEmpty())
+	{
+		saveScene(fileName);
+		isSaved = true;
+		actions["save"]->setEnabled(false);
+		sceneFilePath = fileName;
+		emit filePathChanged(sceneFilePath);
+	}
 }
 
 void SceneDesignWidget::deleteObject()
@@ -165,9 +213,12 @@ void SceneDesignWidget::import()
 	{
 		if (!scene->importObject(fileName))
 		{
-			QMessageBox::warning(this, tr("Warning"), 
+			QMessageBox::warning(this, tr("Import Model Error"), 
 				tr("Can't open file %1").arg(fileName), QMessageBox::Ok);
 		}
+		isSaved = false;
+		actions["save"]->setEnabled(true);
+		emit filePathChanged(tr("%1*").arg(sceneFilePath));
 	}
 }
 
@@ -177,7 +228,7 @@ void SceneDesignWidget::showProperty()
 	ui.dockWidgetProperty->show();
 }
 
-void SceneDesignWidget::selectedObjChanged( int id )
+void SceneDesignWidget::selectedObjChanged(int id)
 {
 	if (selectedObj != NULL)
 	{
@@ -217,7 +268,7 @@ void SceneDesignWidget::selectedObjChanged( int id )
 	changePropertyWidget();
 }
 
-void SceneDesignWidget::colorChanged( QColor color )
+void SceneDesignWidget::colorChanged(QColor color)
 {
 	if (selectedObj != NULL)
 	{
@@ -227,6 +278,10 @@ void SceneDesignWidget::colorChanged( QColor color )
 
 		selectedObj->setColor(color);
     }
+
+	isSaved = false;
+	actions["save"]->setEnabled(true);
+	emit filePathChanged(tr("%1*").arg(sceneFilePath));
 }
 
 void SceneDesignWidget::propertyOperated()
@@ -239,6 +294,17 @@ void SceneDesignWidget::propertyOperated()
         ui.doubleSpinBoxPosZ->setValue(center[2]);
 		ui.doubleSpinBoxScalar->setValue(selectedObj->getScalar());
 	}
+
+	isSaved = false;
+	actions["save"]->setEnabled(true);
+	emit filePathChanged(tr("%1*").arg(sceneFilePath));
+}
+
+void SceneDesignWidget::sceneChanged()
+{
+	isSaved = false;
+	actions["save"]->setEnabled(true);
+	emit filePathChanged(tr("%1*").arg(sceneFilePath));
 }
 
 void SceneDesignWidget::changePropertyWidget()
@@ -384,30 +450,13 @@ void SceneDesignWidget::changePropertyWidget()
 void SceneDesignWidget::parseMenuActions(QMenuBar *menubar)
 {
     QMenu *menu = menubar->findChild<QMenu *>(tr("menuFile"));
-    menu = menu->findChild<QMenu *>(tr("menuNewScene"));
     QList<QAction *> actionsList = menu->actions();
-    for (int i = 0; i < actionsList.count(); i++)
-    {
-        QAction *action = actionsList.at(i);
-        if (tr("action2DScene") == action->objectName())
-        {
-            actions["2DScene"] = action;
-        }
-        else if (tr("action3DScene") == action->objectName())
-        {
-            actions["3DScene"] = action;
-        }
-        else if (tr("actionOpen") == action->objectName())
-        {
-            actions["open"] = action;
-        }
-        else if (tr("actionSave") == action->objectName())
+	for (int i = 0; i < actionsList.count(); i++)
+	{
+		QAction *action = actionsList.at(i);
+		if (tr("actionSave") == action->objectName())
         {
             actions["save"] = action;
-        }
-        else if (tr("actionSaveAs") == action->objectName())
-        {
-            actions["saveAs"] = action;
         }
     }
     menu = menubar->findChild<QMenu *>(tr("menuEdit"));
@@ -465,9 +514,91 @@ void SceneDesignWidget::parseMenuActions(QMenuBar *menubar)
         {
             actions["import"] = action;
         }
-        else if (tr("actionProperty") == action->objectName())
-        {
-            actions["property"] = action;
-        }
     }
+}
+
+void SceneDesignWidget::openScene( QString fileName )
+{
+	QFile file(fileName);
+	if (!file.open(QFile::ReadOnly | QFile::Text))
+	{
+		QMessageBox::warning(this, tr("Open File Error"),
+			tr("Can not open file %1:\n %2.")
+			.arg(fileName).arg(file.errorString()));
+		return;
+	}
+
+	QDomDocument doc;
+	QString errStr;
+	int errLine, errCol;
+	if (!doc.setContent(&file, false, &errStr, &errLine, &errCol))
+	{
+		QMessageBox::warning(this, tr("Parse File Error"),
+			tr("The file may be in wrong format:\n\t%1 in %2 line %3 column.")
+			.arg(errStr).arg(errLine).arg(errCol));
+		file.close();
+		return;
+	}
+	file.close();
+
+	QDomElement root = doc.documentElement();
+	if (root.nodeName() != tr("SJTUFlow"))
+	{
+		QMessageBox::warning(this, tr("Parse File Error"),
+			tr("The file may be in wrong format:\n\tNo <SJTUFlow> Node.\n"));
+		return;
+	}
+	QDomElement node = root.firstChildElement(tr("Scene"));
+	if (node.isNull())
+	{
+		QMessageBox::warning(this, tr("Parse File Error"),
+			tr("The file may be in wrong format:\n\tNo <Scene> Node.\n"));
+		return;
+	}
+	int scnMode = DomUtils::intFromDom(node, tr("mode"), -1);
+	if (scnMode < 0 || scnMode > 1)
+	{
+		QMessageBox::warning(this, tr("Parse File Error"),
+			tr("The file may be in wrong format:\n\tScene Mode Is Wrong.\n"));
+		return;
+	}
+	if (scnMode == 0)
+	{
+		new2DScene();
+	}
+	else
+	{
+		new3DScene();
+	}
+	if (!scene->initFromDomElement(node))
+	{
+		QMessageBox::warning(this, tr("Parse File Error"),
+			tr("The file may be in wrong format:\n\tSome Primitives Don't Match the Scene Mode.\n"));
+		return;
+	}
+}
+
+void SceneDesignWidget::saveScene(QString fileName)
+{
+	QDomDocument doc;
+	QDomProcessingInstruction instruction = 
+		doc.createProcessingInstruction(tr("xml"), 
+		tr("version=\"1.0\" encoding=\"UTF-8\""));
+	doc.appendChild(instruction);
+	QDomElement root = doc.createElement(tr("SJTUFlow"));
+	doc.appendChild(root);
+	root.appendChild(scene->domElement(doc));
+
+	QFile file(fileName);
+	if (!file.open(QFile::WriteOnly | QFile::Text))
+	{
+		QMessageBox::warning(this, tr("Save File Error"), 
+			tr("Can not save file %1:\n %2")
+			.arg(fileName).arg(file.errorString()));
+		return;
+	}
+
+	QTextStream out(&file);  
+	doc.save(out, 4);
+	file.close();
 }

@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include <QGLWidget>
+#include <QDomDocument>
 
 #include "primitive.h"
 
@@ -27,8 +28,12 @@ public:
 	bool importObject(QString filename);
 	void setOperator(Operator op){ curOp = op; updateGL(); }
 
+	QDomElement domElement(QDomDocument &doc);
+	bool initFromDomElement(const QDomElement &node);
+
 signals:
 	void selectedObjChanged(int);
+	void sceneChanged();
 
 public slots:
 	void newCircle();

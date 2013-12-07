@@ -22,6 +22,10 @@
   <property name="windowTitle">
    <string>SJTUFlow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="sjtuflow.qrc">
+    <normaloff>:/SJTUFlow/Resources/SJTU-Icon.png</normaloff>:/SJTUFlow/Resources/SJTU-Icon.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">*
 {

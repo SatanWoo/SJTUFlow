@@ -15,33 +15,36 @@
 #include <QVector>
 #include <QVector2D>
 #include <QVector3D>
+#include <QDomDocument>
 
 #include <qglviewer.h>
+#include <domUtils.h>
 
 namespace SceneUnit
 {
-#define QVec3DToVec(v) qglviewer::Vec(v.x(), v.y(), v.z())
-
 	class Primitive : public QObject
 	{
 		Q_OBJECT
 
 	public:
-		Primitive(void);
-		~Primitive(void);
+		Primitive();
+		~Primitive(){}
 
-		enum Type{T_Rect, T_Circle, T_Box, T_Sphere, T_Object};
+		enum Type{T_Rect = 0, T_Circle, T_Box, T_Sphere, T_Object};
 
 		virtual void draw(bool selected);
+		
+		virtual QDomElement domElement(QDomDocument &doc);
+		virtual void initFromDomElement(const QDomElement &node);
 
 		Type getType(){ return type; }
 		GLuint getId(){ return id; }
-		void setId(int id){ this->id = id; }
+		void setId(int id_);
 		QString getName(){ return name; }
 
 		qglviewer::Vec getCenter(){ return center; }
-		void setCenter(qglviewer::Vec center);
-		void getBoundingBox(qglviewer::Vec &bmin_, qglviewer::Vec &bmax_){ bmin_ = scalar * bmin; bmax_ = scalar * bmax; }
+		void setCenter(qglviewer::Vec center_);
+		void getBoundingBox(qglviewer::Vec &bmin_, qglviewer::Vec &bmax_);
 		QColor getColor();
 		bool isFilled(){ return fill; }
 		double getScalar(){ return scalar; }
@@ -54,13 +57,13 @@ namespace SceneUnit
 		void operated();
 
 	public slots:
-		void setName(QString name){ this->name = name; }
-		void setFill(bool fill){ this->fill = fill; emit propertyChanged(); }
-		void setColor(QColor color);
-        void setCenterX(double val){ center[0] = val; frame->setPosition(center); emit propertyChanged(); }
-        void setCenterY(double val){ center[1] = val; frame->setPosition(center); emit propertyChanged(); }
-        void setCenterZ(double val){ center[2] = val; frame->setPosition(center); emit propertyChanged(); }
-        void setScalar(double val){ scalar = val; emit propertyChanged(); emit operated(); }
+		void setName(QString name_);
+		void setFill(bool fill_);
+		void setColor(QColor color_);
+        void setCenterX(double val);
+        void setCenterY(double val);
+        void setCenterZ(double val);
+        void setScalar(double val);
         virtual void setRadius(double){}
         virtual void setLenX(double){}
         virtual void setLenY(double){}
@@ -90,10 +93,12 @@ namespace SceneUnit
 			GLdouble radius, bool fill = true);
 
 		virtual void draw(bool selected);
+		virtual QDomElement domElement(QDomDocument &doc);
+		virtual void initFromDomElement(const QDomElement &node);
 		GLdouble getRadius(){ return radius; }
 
 	public slots:
-        virtual void setRadius(GLdouble radius);
+        virtual void setRadius(GLdouble radius_);
 
 	protected:
 		GLdouble radius;
@@ -104,14 +109,15 @@ namespace SceneUnit
 		Q_OBJECT
 
 	public:
-        Sphere(GLUquadric *quadric);
+        Sphere(GLUquadric *quadric_);
 		Sphere(qglviewer::Vec center, QColor color, 
-			GLdouble radius, GLUquadric *quadric, bool fill = true);
+			GLdouble radius, GLUquadric *quadric_, bool fill = true);
 
 		void draw(bool selected);
+		QDomElement domElement(QDomDocument &doc);
 
     public slots:
-		void setRadius(GLdouble radius);
+		void setRadius(GLdouble radius_);
 
 	private:
 		GLUquadric *quadric;
@@ -122,19 +128,21 @@ namespace SceneUnit
 		Q_OBJECT
 
 	public:
-        Rectangle();
+		Rectangle();
 		Rectangle(qglviewer::Vec center, QColor color, 
 			GLdouble lenx, GLdouble leny, bool fill = true);
 		Rectangle(qglviewer::Vec center, QColor color, 
 			GLdouble lenx, bool fill = true);
 
 		virtual void draw(bool selected);
+		virtual QDomElement domElement(QDomDocument &doc);
+		virtual void initFromDomElement(const QDomElement &node);
 		GLdouble getLenX(){ return lenx; }
 		GLdouble getLenY(){ return leny; }
 
 	public slots:
-        void setLenX(GLdouble lenx){ this->lenx = lenx; bmin[0] = -lenx / 2; bmax[0] = -bmin[0]; emit propertyChanged(); }
-        void setLenY(GLdouble leny){ this->leny = leny; bmin[1] = -leny / 2; bmax[1] = -bmin[0]; emit propertyChanged(); }
+        void setLenX(GLdouble lenx_);
+        void setLenY(GLdouble leny_);
 
 	protected:
 		GLdouble lenx;
@@ -147,15 +155,18 @@ namespace SceneUnit
 
 	public:
         Box();
+		Box(qglviewer::Vec center, QColor color, GLdouble lenx, 
+			GLdouble leny, GLdouble lenz, bool fill = true);
 		Box(qglviewer::Vec center, QColor color, 
-			GLdouble lenx, GLdouble leny, GLdouble lenz, bool fill = true);
-		Box(qglviewer::Vec center, QColor color, GLdouble len, bool fill = true);
+			GLdouble len, bool fill = true);
 
 		void draw(bool selected);
+		QDomElement domElement(QDomDocument &doc);
+		void initFromDomElement(const QDomElement &node);
 		GLdouble getLenZ(){ return lenz; }
 
 	public slots:
-        void setLenZ(GLdouble lenz){ this->lenz = lenz; bmin[2] = -lenz / 2; bmax[2] = -bmin[2]; emit propertyChanged(); }
+        void setLenZ(GLdouble lenz_);
 
 	private:
 		GLdouble lenz;
@@ -180,9 +191,11 @@ namespace SceneUnit
 			QVector<GLuint> tIndices;
 		};
 
-		Object() : Primitive(){ type = T_Object; }
+		Object();
 
 		void draw(bool selected);
+		QDomElement domElement(QDomDocument &doc);
+		void initFromDomElement(const QDomElement &node);
 		void adjust();	// adjust the coordinate to the relative coordinate to center
 
 		QString pathName(){ return pathname; }

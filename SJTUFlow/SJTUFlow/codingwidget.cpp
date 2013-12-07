@@ -67,7 +67,7 @@ void CodingWidget::loadFile( const QString &fileName )
 	QFile file(fileName);
 	if (!file.open(QFile::ReadOnly | QFile::Text))
 	{
-		QMessageBox::warning(this, tr("Open file"),
+		QMessageBox::warning(this, tr("Open File Error"),
 			tr("Can not open file %1:\n %2.")
 			.arg(fileName).arg(file.errorString()));
 		return;
@@ -81,6 +81,9 @@ void CodingWidget::loadFile( const QString &fileName )
 	codeEdit->setSaved();
 	ui.tabWidget->setTabText(ui.tabWidget->currentIndex(), 
 		QFileInfo(fileName).fileName());
+
+	curFilePath = fileName;
+	emit filePathChanged(curFilePath);
 }
 
 int CodingWidget::saveOrNot( int index )
@@ -112,7 +115,7 @@ void CodingWidget::saveFile(const QString &fileName)
 
 	if (!file.open(QFile::WriteOnly | QFile::Text))
 	{
-		QMessageBox::warning(this, tr("Save file"), 
+		QMessageBox::warning(this, tr("Save File Error"), 
 			tr("Can not save file %1:\n %2")
 			.arg(fileName).arg(file.errorString()));
 		return;
@@ -121,6 +124,9 @@ void CodingWidget::saveFile(const QString &fileName)
 	QTextStream out(&file);
 	QTextEdit *textEdit = (QTextEdit *)ui.tabWidget->currentWidget();
     out << textEdit->toPlainText();
+
+	curFilePath = fileName;
+	emit filePathChanged(curFilePath);
 }
 
 void CodingWidget::parseMenuActions(QMenuBar *menubar)
@@ -213,6 +219,9 @@ void CodingWidget::newFile()
 	ui.tabWidget->addTab(textEdit, savedIcon, QString("New %1").arg(++codingTabNum));
 	ui.tabWidget->setCurrentIndex(ui.tabWidget->count() - 1);
 	textEdit->setFocus();
+
+	curFilePath = QString();
+	emit filePathChanged(curFilePath);
 }
 
 void CodingWidget::openFile()
@@ -255,6 +264,7 @@ void CodingWidget::saveAs()
 		ui.tabWidget->setTabText(ui.tabWidget->currentIndex(), fileInfo.fileName());
 		saveFile(fileName);
 		codeEdit->setSaved();
+		ui.tabWidget->setTabIcon(ui.tabWidget->currentIndex(), savedIcon);
 	}
 }
 
@@ -263,6 +273,9 @@ void CodingWidget::closeFile()
 	int currentIndex = ui.tabWidget->currentIndex();
 	closeTab(currentIndex);
 	ui.tabWidget->currentWidget()->setFocus();
+	CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+	curFilePath = codeEdit->getFileName();
+	emit filePathChanged(curFilePath);
 }
 
 void CodingWidget::closeAll()
@@ -278,6 +291,9 @@ void CodingWidget::closeAll()
 		count--;
 	}
     ui.tabWidget->currentWidget()->setFocus();
+	CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+	curFilePath = codeEdit->getFileName();
+	emit filePathChanged(curFilePath);
 }
 
 void CodingWidget::undo()
@@ -353,6 +369,9 @@ void CodingWidget::checkState(int)
         actions["save"]->setEnabled(codeEdit->changed());
         actions["undo"]->setEnabled(codeEdit->canUndo());
         actions["redo"]->setEnabled(codeEdit->canRedo());
+
+		curFilePath = codeEdit->getFileName();
+		emit filePathChanged(curFilePath);
     }
 }
 
@@ -386,6 +405,7 @@ void CodingWidget::textChanged(bool changed)
 		ui.tabWidget->setTabIcon(ui.tabWidget->currentIndex(), savedIcon);
 	}
     actions["save"]->setEnabled(changed);
+
 }
 
 void CodingWidget::copyAvailable( bool yes )

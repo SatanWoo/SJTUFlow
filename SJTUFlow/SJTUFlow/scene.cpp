@@ -28,12 +28,11 @@ double Scene::axisRot[3][4] =
 		{0.0, 0.0, 0.0, 0.1}
 	};
 
-Scene::Scene( QWidget *parent ) : QGLViewer(parent)
+Scene::Scene(QWidget *parent) : QGLViewer(parent)
 {
 	srand(time(NULL));
 
 	mousePressed = false;
-
 	dx = 0.01;
 
 	setAnimate(false);
@@ -41,7 +40,7 @@ Scene::Scene( QWidget *parent ) : QGLViewer(parent)
 	clear(SCENE_2D);
 }
 
-SceneUnit::Primitive *Scene::getPrimitive( int id )
+SceneUnit::Primitive *Scene::getPrimitive(int id)
 {
 	int i = getPrimitiveIndex(id);
 	if (i < 0)
@@ -70,9 +69,87 @@ bool Scene::importObject(QString filename)
 	return false;
 }
 
+QDomElement Scene::domElement(QDomDocument &doc)
+{
+	QDomElement node = doc.createElement(tr("Scene"));
+	node.setAttribute(tr("mode"), sceneMode);
+	node.setAttribute(tr("ids"), id);
+	foreach (SceneUnit::Primitive *p, primitives)
+	{
+		node.appendChild(p->domElement(doc));
+	}
+	return node;
+}
+
+bool Scene::initFromDomElement(const QDomElement &node)
+{
+	bool ret = true;
+	id = DomUtils::intFromDom(node, tr("ids"), 0);
+	QDomNodeList children = node.childNodes();
+	for (int i = 0; i < children.count(); i++)
+	{
+		QDomElement child = children.at(i).toElement();
+		if (child.tagName() == tr("Primitive"))
+		{
+			SceneUnit::Primitive *p;
+			int t = DomUtils::intFromDom(child, tr("type"), -1);
+
+			if (sceneMode == SCENE_2D)
+			{
+				switch (t)
+				{
+				case SceneUnit::Primitive::T_Rect:
+					p = new SceneUnit::Rectangle;
+					p->initFromDomElement(child);
+					id = id > p->getId() ?  id : (p->getId() + 1);
+					primitives.append(p);
+					break;
+				case SceneUnit::Primitive::T_Circle:
+					p = new SceneUnit::Circle;
+					p->initFromDomElement(child);
+					id = id > p->getId() ?  id : (p->getId() + 1);
+					primitives.append(p);
+					break;
+				default:
+					ret = false;
+					break;
+				}
+			}
+			else
+			{
+				switch (t)
+				{
+				case SceneUnit::Primitive::T_Box:
+					p = new SceneUnit::Box;
+					p->initFromDomElement(child);
+					id = id > p->getId() ?  id : (p->getId() + 1);
+					primitives.append(p);
+					break;
+				case SceneUnit::Primitive::T_Sphere:
+					p = new SceneUnit::Sphere(quadric);
+					p->initFromDomElement(child);
+					id = id > p->getId() ?  id : (p->getId() + 1);
+					primitives.append(p);
+					break;
+				case SceneUnit::Primitive::T_Object:
+					p = new SceneUnit::Object;
+					p->initFromDomElement(child);
+					id = id > p->getId() ?  id : (p->getId() + 1);
+					primitives.append(p);
+					break;
+				default:
+					ret = false;
+					break;
+				}
+			}
+		}
+	}
+	return ret;
+}
+
 void Scene::newCircle()
 {
-	SceneUnit::Primitive *p = new SceneUnit::Circle();
+	SceneUnit::Primitive *p = new SceneUnit::Circle;
 	p->setColor(RAND_COLOR);
 	p->setName(QString("circle_%1").arg(++circleNum));
 	p->setId(id++);
@@ -80,11 +157,12 @@ void Scene::newCircle()
 	updateGL();
 
 	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
+	emit sceneChanged();
 }
 
 void Scene::newRectangle()
 {
-	SceneUnit::Primitive *p = new SceneUnit::Rectangle();
+	SceneUnit::Primitive *p = new SceneUnit::Rectangle;
 	p->setColor(RAND_COLOR);
 	p->setName(QString("rect_%1").arg(++rectangleNum));
 	p->setId(id++);
@@ -92,11 +170,12 @@ void Scene::newRectangle()
 	updateGL();
 
 	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
+	emit sceneChanged();
 }
 
 void Scene::newBox()
 {
-	SceneUnit::Primitive *p = new SceneUnit::Box();
+	SceneUnit::Primitive *p = new SceneUnit::Box;
 	p->setColor(RAND_COLOR);
 	p->setName(QString("box_%1").arg(++boxNum));
 	p->setId(id++);
@@ -104,6 +183,7 @@ void Scene::newBox()
 	updateGL();
 
 	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
+	emit sceneChanged();
 }
 
 void Scene::newSphere()
@@ -116,9 +196,10 @@ void Scene::newSphere()
 	updateGL();
 
 	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
+	emit sceneChanged();
 }
 
-void Scene::deleteObject( int id )
+void Scene::deleteObject(int id)
 {
 	int i = getPrimitiveIndex(id);
 	if (i >= 0)
@@ -129,6 +210,7 @@ void Scene::deleteObject( int id )
 	}
 
 	updateGL();
+	emit sceneChanged();
 }
 
 void Scene::clear(Mode m)
@@ -147,7 +229,7 @@ void Scene::clear(Mode m)
 
 	primitives.clear();
 
-    setSceneMode();
+	setSceneMode();
 
 	updateGL();
 
@@ -391,7 +473,7 @@ void Scene::timerEvent(QTimerEvent *e)
 	//updateGL();
 }
 
-int Scene::getPrimitiveIndex( int id )
+int Scene::getPrimitiveIndex(int id)
 {
 	if (id < 0 || id >= this->id)
 	{
@@ -551,7 +633,7 @@ void Scene::drawOperator(Vec center, Vec bmin, Vec bmax, bool withName)
 	glPopMatrix();
 }
 
-void Scene::drawMoveAxis( double length, Axis axis, bool withName )
+void Scene::drawMoveAxis(double length, Axis axis, bool withName)
 {
 	int which = axis - AXIS_X;
 	Vec axisVec = length * axisDirs[which];
@@ -609,7 +691,7 @@ void Scene::drawMoveAxis( double length, Axis axis, bool withName )
 	glEnable(GL_LIGHTING);
 }
 
-void Scene::drawRotateRing( double radius, Axis axis, bool withName )
+void Scene::drawRotateRing(double radius, Axis axis, bool withName)
 {
 	int which = axis - AXIS_X;
 
@@ -647,7 +729,7 @@ void Scene::drawRotateRing( double radius, Axis axis, bool withName )
 	glEnable(GL_LIGHTING);
 }
 
-void Scene::drawScaleBox( qglviewer::Vec bmin, qglviewer::Vec bmax, bool withName )
+void Scene::drawScaleBox(Vec bmin, Vec bmax, bool withName)
 {
 	glDisable(GL_LIGHTING);
 
@@ -719,7 +801,7 @@ void Scene::drawScaleBox( qglviewer::Vec bmin, qglviewer::Vec bmax, bool withNam
 	glEnable(GL_LIGHTING);
 }
 
-void Scene::drawSubScaleBox( double len, double x, double y, double z, bool s3d)
+void Scene::drawSubScaleBox(double len, double x, double y, double z, bool s3d)
 {
 	QColor c = Qt::red;
 	if (selectedAxis == AXIS_SCALE)

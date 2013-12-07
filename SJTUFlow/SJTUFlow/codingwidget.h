@@ -16,6 +16,11 @@ public:
     CodingWidget(QMenuBar *menubar, QWidget *parent = 0);
 	~CodingWidget();
 
+	QString filePath(){ return curFilePath; }
+
+signals:
+	void filePathChanged(QString);
+
 protected:
 
 private:
@@ -26,6 +31,8 @@ private:
 	int codingTabNum; // record how many tabs have been added
 	QIcon savedIcon;
 	QIcon unsavedIcon;
+
+	QString curFilePath;
 
 	void loadFile(const QString &fileName);
 	int saveOrNot(int index);

@@ -13,8 +13,9 @@ TitleBar::TitleBar(QWidget *parent)
 
 	pressed = false;
 
-	ui.labelTitle->setText("SJTU Flow");
-	parent->setWindowTitle("SJTU Flow");
+	title = tr("SJTU Flow");
+	ui.labelTitle->setText(title);
+	parent->setWindowTitle(title);
 
 	connect(ui.toolButtonClose, SIGNAL(clicked()), parent->parent(), SLOT(close()));
 	connect(ui.toolButtonMin, SIGNAL(clicked()), parent->parent(), SLOT(showMinimized()));
@@ -23,6 +24,19 @@ TitleBar::TitleBar(QWidget *parent)
 TitleBar::~TitleBar()
 {
 
+}
+
+void TitleBar::setFilePath(QString path)
+{
+	if (path.isEmpty())
+	{
+		ui.labelTitle->setText(title);
+	}
+	else
+	{
+		QString text = tr("%1 - %2").arg(title).arg(path);
+		ui.labelTitle->setText(text);
+	}
 }
 
 void TitleBar::mousePressEvent( QMouseEvent *me )

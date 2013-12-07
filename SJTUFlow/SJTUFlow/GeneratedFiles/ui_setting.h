@@ -89,6 +89,9 @@ public:
             Setting->setObjectName(QStringLiteral("Setting"));
         Setting->resize(420, 300);
         Setting->setMinimumSize(QSize(420, 300));
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/SJTUFlow/Resources/SJTU-Icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        Setting->setWindowIcon(icon);
         gridLayout = new QGridLayout(Setting);
         gridLayout->setSpacing(0);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
@@ -292,18 +295,18 @@ public:
         gridLayout->addLayout(horizontalLayout, 1, 0, 1, 2);
 
         listWidget = new QListWidget(Setting);
-        QIcon icon;
-        icon.addFile(QStringLiteral(":/Icons/Resources/Icons/Run.png"), QSize(), QIcon::Normal, QIcon::Off);
-        QListWidgetItem *__qlistwidgetitem = new QListWidgetItem(listWidget);
-        __qlistwidgetitem->setIcon(icon);
         QIcon icon1;
-        icon1.addFile(QStringLiteral(":/Icons/Resources/Icons/Render.png"), QSize(), QIcon::Normal, QIcon::Off);
-        QListWidgetItem *__qlistwidgetitem1 = new QListWidgetItem(listWidget);
-        __qlistwidgetitem1->setIcon(icon1);
+        icon1.addFile(QStringLiteral(":/Icons/Resources/Icons/Run.png"), QSize(), QIcon::Normal, QIcon::Off);
+        QListWidgetItem *__qlistwidgetitem = new QListWidgetItem(listWidget);
+        __qlistwidgetitem->setIcon(icon1);
         QIcon icon2;
-        icon2.addFile(QStringLiteral(":/Icons/Resources/Icons/Libraries.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QStringLiteral(":/Icons/Resources/Icons/Render.png"), QSize(), QIcon::Normal, QIcon::Off);
+        QListWidgetItem *__qlistwidgetitem1 = new QListWidgetItem(listWidget);
+        __qlistwidgetitem1->setIcon(icon2);
+        QIcon icon3;
+        icon3.addFile(QStringLiteral(":/Icons/Resources/Icons/Libraries.png"), QSize(), QIcon::Normal, QIcon::Off);
         QListWidgetItem *__qlistwidgetitem2 = new QListWidgetItem(listWidget);
-        __qlistwidgetitem2->setIcon(icon2);
+        __qlistwidgetitem2->setIcon(icon3);
         listWidget->setObjectName(QStringLiteral("listWidget"));
         listWidget->setMaximumSize(QSize(76, 16777215));
         listWidget->setSelectionBehavior(QAbstractItemView::SelectItems);

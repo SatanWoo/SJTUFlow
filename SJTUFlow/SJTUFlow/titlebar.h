@@ -12,6 +12,9 @@ public:
 	TitleBar(QWidget *parent = 0);
 	~TitleBar();
 
+public slots:
+	void setFilePath(QString path);
+
 protected:
 	void mousePressEvent(QMouseEvent *);
 	void mouseMoveEvent(QMouseEvent *);
@@ -22,6 +25,7 @@ private:
 
 	bool pressed;
 	QPoint clickPos;
+	QString title;
 };
 
 #endif // TITLEBAR_H

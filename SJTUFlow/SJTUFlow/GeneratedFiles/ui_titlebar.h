@@ -25,6 +25,7 @@ class Ui_TitleBar
 {
 public:
     QHBoxLayout *horizontalLayout;
+    QLabel *label;
     QLabel *labelTitle;
     QToolButton *toolButtonMin;
     QToolButton *toolButtonClose;
@@ -33,7 +34,7 @@ public:
     {
         if (TitleBar->objectName().isEmpty())
             TitleBar->setObjectName(QStringLiteral("TitleBar"));
-        TitleBar->resize(720, 24);
+        TitleBar->resize(720, 29);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -69,6 +70,14 @@ public:
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        label = new QLabel(TitleBar);
+        label->setObjectName(QStringLiteral("label"));
+        label->setMaximumSize(QSize(29, 29));
+        label->setPixmap(QPixmap(QString::fromUtf8(":/SJTUFlow/Resources/SJTU-Icon.png")));
+        label->setScaledContents(true);
+
+        horizontalLayout->addWidget(label);
+
         labelTitle = new QLabel(TitleBar);
         labelTitle->setObjectName(QStringLiteral("labelTitle"));
         QFont font;
@@ -99,7 +108,7 @@ public:
 
         horizontalLayout->addWidget(toolButtonClose);
 
-        horizontalLayout->setStretch(0, 500);
+        horizontalLayout->setStretch(1, 500);
 
         retranslateUi(TitleBar);
 
@@ -109,6 +118,7 @@ public:
     void retranslateUi(QWidget *TitleBar)
     {
         TitleBar->setWindowTitle(QApplication::translate("TitleBar", "TitleBar", 0));
+        label->setText(QString());
         labelTitle->setText(QApplication::translate("TitleBar", "SJTU Flow", 0));
 #ifndef QT_NO_TOOLTIP
         toolButtonMin->setToolTip(QApplication::translate("TitleBar", "Minimize", 0));

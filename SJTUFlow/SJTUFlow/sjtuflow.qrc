@@ -4,6 +4,7 @@
         <file>Resources/TitleClose.png</file>
         <file>Resources/TitleMin.png</file>
         <file>Resources/RotateCursor.png</file>
+        <file>Resources/SJTU-Icon.png</file>
     </qresource>
     <qresource prefix="/Icons">
         <file>Resources/Icons/SceneDesign.png</file>

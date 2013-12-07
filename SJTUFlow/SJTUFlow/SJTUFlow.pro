@@ -4,8 +4,8 @@
 
 TEMPLATE = app
 TARGET = SJTUFlow
-QT += core opengl widgets gui
-DEFINES += QT_DLL QT_OPENGL_LIB QT_WIDGETS_LIB
+QT += core opengl widgets gui xml
+DEFINES += QT_DLL QT_OPENGL_LIB QT_WIDGETS_LIB QT_XML_LIB
 INCLUDEPATH += . \
     ../include
 win32{

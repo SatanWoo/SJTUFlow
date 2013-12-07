@@ -3,8 +3,10 @@
 
 using namespace SceneUnit;
 
-Primitive::Primitive(void)
+Primitive::Primitive()
 {
+	name = "";
+	id = -1;
 	center = qglviewer::Vec(0, 0, 0);
 	bmin = qglviewer::Vec(0, 0, 0);
 	bmax = qglviewer::Vec(0, 0, 0);
@@ -15,10 +17,6 @@ Primitive::Primitive(void)
 	scalar = 1.0;
 
 	frame = new qglviewer::Frame(center, qglviewer::Quaternion());
-}
-
-Primitive::~Primitive(void)
-{
 }
 
 void Primitive::draw(bool selected)
@@ -44,11 +42,56 @@ void Primitive::draw(bool selected)
 	}
 }
 
-void Primitive::setCenter( qglviewer::Vec center )
+QDomElement Primitive::domElement(QDomDocument &doc)
 {
-	this->center = center;
+	QDomElement node = doc.createElement(tr("Primitive"));
+	node.setAttribute(tr("name"), name);
+	node.setAttribute(tr("id"), id);
+	node.setAttribute(tr("color"), 
+		QColor(color[0], color[1], color[2]).name());
+	node.setAttribute(tr("fill"), fill ? tr("true") : tr("false"));
+	node.setAttribute(tr("scalar"), scalar);
+	node.appendChild(bmin.domElement(tr("bmin"), doc));
+	node.appendChild(bmax.domElement(tr("bmax"), doc));
+	node.appendChild(frame->domElement(tr("frame"), doc));
+
+	return node;
+}
+
+void Primitive::initFromDomElement(const QDomElement &node)
+{
+	name = node.attribute(tr("name"));
+	id = DomUtils::intFromDom(node, tr("id"), -1);
+	QColor c = QColor(node.attribute(tr("color"), tr("#ffffff")));
+	color[0] = c.red();
+	color[1] = c.green();
+	color[2] = c.blue();
+	fill = DomUtils::boolFromDom(node, tr("fill"), true);
+	scalar = DomUtils::doubleFromDom(node, tr("scalar"), 1.0);
+	bmin.initFromDOMElement(node.firstChildElement(tr("bmin")));
+	bmax.initFromDOMElement(node.firstChildElement(tr("bmax")));
+	frame->initFromDOMElement(node.firstChildElement(tr("frame")));
+	center = frame->position();
+	type = Type(DomUtils::intFromDom(node, tr("type"), -1));
+}
+
+void Primitive::setId(int id_)
+{
+	id = id_;
+}
+
+void Primitive::setCenter(qglviewer::Vec center_)
+{
+	center = center_;
+	frame->setPosition(center);
 
 	emit propertyChanged();
+}
+
+void Primitive::getBoundingBox(qglviewer::Vec &bmin_, qglviewer::Vec &bmax_)
+{
+	bmin_ = scalar * bmin; 
+	bmax_ = scalar * bmax;
 }
 
 QColor Primitive::getColor()
@@ -74,13 +117,55 @@ void Primitive::rotate(double angle, qglviewer::Vec axis)
 	emit operated();
 }
 
-void Primitive::setColor( QColor color )
+void Primitive::setName(QString name_)
 {
-	this->color[0] = color.red();
-	this->color[1] = color.green();
-	this->color[2] = color.blue();
+	name = name_;
+}
+
+void Primitive::setFill(bool fill_)
+{
+	fill = fill_; 
+	emit propertyChanged();
+}
+
+void Primitive::setColor(QColor color_)
+{
+	color[0] = color_.red();
+	color[1] = color_.green();
+	color[2] = color_.blue();
 
 	emit propertyChanged();
+}
+
+void Primitive::setCenterX(double val)
+{ 
+	center[0] = val; 
+	frame->setPosition(center); 
+
+	emit propertyChanged(); 
+}
+
+void Primitive::setCenterY(double val)
+{ 
+	center[1] = val; 
+	frame->setPosition(center); 
+
+	emit propertyChanged(); 
+}
+
+void Primitive::setCenterZ(double val)
+{ 
+	center[2] = val; 
+	frame->setPosition(center);
+
+	emit propertyChanged(); 
+}
+
+void Primitive::setScalar(double val)
+{ 
+	scalar = val; 
+	emit propertyChanged(); 
+	emit operated(); 
 }
 
 Circle::Circle() : Primitive()
@@ -89,8 +174,8 @@ Circle::Circle() : Primitive()
     type = T_Circle;
 }
 
-Circle::Circle( qglviewer::Vec center, QColor color,
-	GLdouble radius, bool fill )
+Circle::Circle(qglviewer::Vec center, QColor color, 
+	GLdouble radius, bool fill) : Primitive()
 {
 	center[2] = 0.0;
 	setCenter(center);
@@ -130,29 +215,44 @@ void Circle::draw(bool selected)
 	glEnable(GL_LIGHTING);
 }
 
-void Circle::setRadius( GLdouble radius )
+QDomElement Circle::domElement(QDomDocument &doc)
 {
-	this->radius = radius; 
+	QDomElement node = Primitive::domElement(doc);
+	node.setAttribute(tr("type"), type);
+	node.setAttribute(tr("radius"), radius);
+	return node;
+}
+
+void Circle::initFromDomElement(const QDomElement &node)
+{
+	Primitive::initFromDomElement(node);
+	radius = DomUtils::doubleFromDom(node, tr("radius"), 0.1);
+}
+
+void Circle::setRadius(GLdouble radius_)
+{
+	radius = radius_; 
 	bmax = radius * qglviewer::Vec(1.0, 1.0, 0.0);
 	bmin = -bmax;
+
 	emit propertyChanged();
 }
 
-Sphere::Sphere(GLUquadric *quadric) : Circle()
+Sphere::Sphere(GLUquadric *quadric_) : Circle()
 {
 	setRadius(radius);
     type = T_Sphere;
-    this->quadric = quadric;
+    quadric = quadric_;
 }
 
-Sphere::Sphere( qglviewer::Vec center, QColor color,
-	GLdouble radius, GLUquadric *quadric, bool fill )
+Sphere::Sphere(qglviewer::Vec center, QColor color,
+	GLdouble radius, GLUquadric *quadric_, bool fill) : Circle()
 {
 	setCenter(center);
 	setColor(color);
 	setRadius(radius);
 	setFill(fill);
-	this->quadric = quadric;
+	quadric = quadric_;
 	type = T_Sphere;
 }
 
@@ -170,11 +270,19 @@ void Sphere::draw(bool selected)
 	}
 }
 
-void Sphere::setRadius( GLdouble radius )
+QDomElement Sphere::domElement(QDomDocument &doc)
 {
-	this->radius = radius; 
+	QDomElement node = Circle::domElement(doc);
+	node.setAttribute(tr("type"), type);
+	return node;
+}
+
+void Sphere::setRadius(GLdouble radius_)
+{
+	radius = radius_; 
 	bmax = radius * qglviewer::Vec(1.0, 1.0, 1.0);
 	bmin = -bmax;
+
 	emit propertyChanged();
 }
 
@@ -185,8 +293,8 @@ Rectangle::Rectangle() : Primitive()
     type = T_Rect;
 }
 
-Rectangle::Rectangle( qglviewer::Vec center, QColor color,
-	GLdouble lenx, GLdouble leny, bool fill )
+Rectangle::Rectangle(qglviewer::Vec center, QColor color, 
+	GLdouble lenx, GLdouble leny, bool fill ) : Primitive()
 {
 	center[2] = 0.0;
 	setCenter(center);
@@ -197,8 +305,8 @@ Rectangle::Rectangle( qglviewer::Vec center, QColor color,
 	type = T_Rect;
 }
 
-Rectangle::Rectangle( qglviewer::Vec center, QColor color, 
-	GLdouble lenx, bool fill )
+Rectangle::Rectangle(qglviewer::Vec center, QColor color, 
+	GLdouble lenx, bool fill ) : Primitive()
 {
 	center[2] = 0.0;
 	setCenter(center);
@@ -230,14 +338,51 @@ void Rectangle::draw(bool selected)
 	glEnable(GL_LIGHTING);
 }
 
+QDomElement Rectangle::domElement(QDomDocument &doc)
+{
+	QDomElement node = Primitive::domElement(doc);
+	node.setAttribute(tr("type"), type);
+	QDomElement subNode = doc.createElement(tr("size"));
+	subNode.setAttribute(tr("x"), lenx);
+	subNode.setAttribute(tr("y"), leny);
+	node.appendChild(subNode);
+	return node;
+}
+
+void Rectangle::initFromDomElement(const QDomElement &node)
+{
+	Primitive::initFromDomElement(node);
+	QDomElement s = node.firstChildElement(tr("size"));
+	lenx = DomUtils::doubleFromDom(s, tr("x"), 0.2);
+	leny = DomUtils::doubleFromDom(s, tr("y"), 0.2);
+}
+
+void Rectangle::setLenX(GLdouble lenx_)
+{ 
+	lenx = lenx_; 
+	bmin[0] = -lenx / 2; 
+	bmax[0] = -bmin[0]; 
+
+	emit propertyChanged(); 
+}
+
+void Rectangle::setLenY(GLdouble leny_)
+{ 
+	leny = leny_; 
+	bmin[1] = -leny / 2; 
+	bmax[1] = -bmin[1];
+	
+	emit propertyChanged(); 
+}
+
 Box::Box() : Rectangle()
 {
     setLenZ(0.2);
     type = T_Box;
 }
 
-Box::Box( qglviewer::Vec center, QColor color,
-	GLdouble lenx, GLdouble leny, GLdouble lenz, bool fill )
+Box::Box(qglviewer::Vec center, QColor color, GLdouble lenx, 
+	GLdouble leny, GLdouble lenz, bool fill) : Rectangle()
 {
 	setCenter(center);
 	setColor(color);
@@ -248,7 +393,8 @@ Box::Box( qglviewer::Vec center, QColor color,
 	type = T_Box;
 }
 
-Box::Box( qglviewer::Vec center, QColor color, GLdouble len, bool fill )
+Box::Box(qglviewer::Vec center, QColor color, 
+	GLdouble len, bool fill ) : Rectangle()
 {
 	setCenter(center);
 	setColor(color);
@@ -257,6 +403,15 @@ Box::Box( qglviewer::Vec center, QColor color, GLdouble len, bool fill )
 	setLenZ(len);
 	setFill(fill);
 	type = T_Box;
+}
+
+void Box::setLenZ(GLdouble lenz_)
+{
+	lenz = lenz_; 
+	bmin[2] = -lenz / 2; 
+	bmax[2] = -bmin[2]; 
+
+	emit propertyChanged();
 }
 
 void Box::draw(bool selected)
@@ -307,7 +462,31 @@ void Box::draw(bool selected)
 	}
 }
 
-void Object::draw( bool selected )
+QDomElement Box::domElement(QDomDocument &doc)
+{
+	QDomElement node = Rectangle::domElement(doc);
+	node.setAttribute(tr("type"), type);
+	QDomElement sizeNode = node.firstChildElement(tr("size"));
+	sizeNode.setAttribute(tr("z"), lenz);
+	node.replaceChild(sizeNode, node.firstChildElement(tr("size")));
+	return node;
+}
+
+void Box::initFromDomElement(const QDomElement &node)
+{
+	Primitive::initFromDomElement(node);
+	QDomElement s = node.firstChildElement(tr("size"));
+	lenx = DomUtils::doubleFromDom(s, tr("x"), 0.2);
+	leny = DomUtils::doubleFromDom(s, tr("y"), 0.2);
+	lenz = DomUtils::doubleFromDom(s, tr("z"), 0.2);
+}
+
+Object::Object() : Primitive()
+{
+	type = T_Object;
+}
+
+void Object::draw(bool selected)
 {
 	Primitive::draw(selected);
 
@@ -335,6 +514,18 @@ void Object::draw( bool selected )
 	glEnable(GL_LIGHTING);
 }
 
+QDomElement Object::domElement(QDomDocument &doc)
+{
+	QDomElement node = Primitive::domElement(doc);
+	node.setAttribute(tr("type"), type);
+	return node;
+}
+
+void Object::initFromDomElement(const QDomElement &node)
+{
+	Primitive::initFromDomElement(node);
+}
+
 void Object::adjust()
 {
 	for (int i = 0; i < vertexs.count(); i++)
@@ -344,7 +535,7 @@ void Object::adjust()
 	center = qglviewer::Vec(0, 0, 0);
 }
 
-void Object::addVertex( qglviewer::Vec v )
+void Object::addVertex(qglviewer::Vec v)
 {
 	center *= vertexs.count();
 
@@ -361,7 +552,7 @@ void Object::addVertex( qglviewer::Vec v )
 	bmax[2] = bmax[2] < v[2] ? v[2] : bmax[2];
 }
 
-Object::Group *Object::addGroup( Object::Group g )
+Object::Group *Object::addGroup(Object::Group g)
 {
 	groups.append(g);
 	return &groups[groups.count() - 1];
