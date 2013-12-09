@@ -51,6 +51,8 @@ namespace SceneUnit
 
 		void translate(qglviewer::Vec t, int axis);
 		void rotate(double angle, qglviewer::Vec axis);
+		qglviewer::Quaternion orientation(){ return frame->orientation(); }
+		void setOrientation(qglviewer::Quaternion q){ frame->setOrientation(q); }
 
 	signals:
 		void propertyChanged();

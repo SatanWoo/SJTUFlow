@@ -9,6 +9,7 @@
 #include "codingwidget.h"
 #include "displaywidget.h"
 #include "setting.h"
+#include "aboutdialog.h"
 
 class SJTUFlow : public QMainWindow
 {
@@ -20,6 +21,7 @@ public:
 
 protected:
 	void paintEvent(QPaintEvent *);
+	void closeEvent(QCloseEvent *);
 
 private:
 	Ui::SJTUFlowClass ui;
@@ -31,6 +33,7 @@ private:
 	CodingWidget *codingWidget;
 	DisplayWidget *displayWidget;
     Setting *setting;
+	AboutDialog *aboutDialog;
 
 private slots:
     void tabChanged(int index);
@@ -41,6 +44,8 @@ private slots:
     void sharedUndo();
     void sharedRedo();
     void sharedDelete();
+
+
 };
 
 #endif // SJTUFLOW_H

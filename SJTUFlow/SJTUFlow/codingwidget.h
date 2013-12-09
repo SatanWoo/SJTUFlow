@@ -48,7 +48,7 @@ public slots:
 	void saveFile();
 	void saveAs();
 	void closeFile();
-	void closeAll();
+	bool closeAll();
 
     void undo();
     void redo();

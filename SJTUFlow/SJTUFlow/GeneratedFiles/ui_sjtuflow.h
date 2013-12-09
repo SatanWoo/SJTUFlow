@@ -407,7 +407,7 @@ public:
         actionRun->setToolTip(QApplication::translate("SJTUFlowClass", "Run module", 0));
 #endif // QT_NO_TOOLTIP
         actionRun->setShortcut(QApplication::translate("SJTUFlowClass", "F5", 0));
-        actionAbout->setText(QApplication::translate("SJTUFlowClass", "&About", 0));
+        actionAbout->setText(QApplication::translate("SJTUFlowClass", "&About SJTU Flow", 0));
         actionNewFile->setText(QApplication::translate("SJTUFlowClass", "New File", 0));
         actionNewFile->setShortcut(QApplication::translate("SJTUFlowClass", "Ctrl+N", 0));
         action2DScene->setText(QApplication::translate("SJTUFlowClass", "2D Scene", 0));

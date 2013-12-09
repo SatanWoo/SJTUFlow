@@ -62,7 +62,7 @@ CodingWidget::~CodingWidget()
 
 }
 
-void CodingWidget::loadFile( const QString &fileName )
+void CodingWidget::loadFile(const QString &fileName)
 {
 	QFile file(fileName);
 	if (!file.open(QFile::ReadOnly | QFile::Text))
@@ -86,7 +86,7 @@ void CodingWidget::loadFile( const QString &fileName )
 	emit filePathChanged(curFilePath);
 }
 
-int CodingWidget::saveOrNot( int index )
+int CodingWidget::saveOrNot(int index)
 {
 	QTextEdit *textEdit = (QTextEdit *)ui.tabWidget->widget(index);
 	if (textEdit->document()->isModified())
@@ -278,14 +278,16 @@ void CodingWidget::closeFile()
 	emit filePathChanged(curFilePath);
 }
 
-void CodingWidget::closeAll()
+bool CodingWidget::closeAll()
 {
 	int count = ui.tabWidget->count();
+	bool flag = true;
 	while (count > 0)
 	{
 		ui.tabWidget->setCurrentIndex(0);
 		if (!closeTab(0))
 		{
+			flag = false;
 			break;
 		}
 		count--;
@@ -294,6 +296,7 @@ void CodingWidget::closeAll()
 	CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
 	curFilePath = codeEdit->getFileName();
 	emit filePathChanged(curFilePath);
+	return flag;
 }
 
 void CodingWidget::undo()
@@ -375,7 +378,7 @@ void CodingWidget::checkState(int)
     }
 }
 
-bool CodingWidget::closeTab( int index )
+bool CodingWidget::closeTab(int index)
 {
 	int ret = saveOrNot(index);
 

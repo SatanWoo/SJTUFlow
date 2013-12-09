@@ -518,6 +518,7 @@ QDomElement Object::domElement(QDomDocument &doc)
 {
 	QDomElement node = Primitive::domElement(doc);
 	node.setAttribute(tr("type"), type);
+	node.setAttribute(tr("path"), pathname);
 	return node;
 }
 

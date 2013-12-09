@@ -8,6 +8,7 @@
 #include <QMap>
 #include <QMenuBar>
 
+
 #include "scene.h"
 
 class SceneDesignWidget : public QMainWindow
@@ -21,6 +22,7 @@ public:
     // check if the actions' state is right
     void checkState();
 	QString filePath(){ return sceneFilePath; }
+	bool saved(){ return isSaved; }
 
 signals:
 	void filePathChanged(QString);
@@ -35,6 +37,14 @@ public slots:
 	void openScene();
 	void saveScene();
 	void saveAs();
+
+	void newCircle();
+	void newRectangle();
+	void newSphere();
+	void newBox();
+
+	void undo();
+	void redo();
 
 	void deleteObject();
 
@@ -54,10 +64,16 @@ public slots:
 	void propertyOperated();
 	void sceneChanged();
 
+	void operateStart();
+	void operateDone();
+
 private:
 	Ui::SceneDesignWidget ui;
 
     QMap<QString, QAction *> actions;
+
+	QUndoStack *undoStack;
+	QDomElement oldNode;
 
 	QColorDialog *colorDialog;
 	Scene *scene;

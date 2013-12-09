@@ -3,6 +3,7 @@
 
 #include <QGLWidget>
 #include <QDomDocument>
+#include <QUndoStack>
 
 #include "primitive.h"
 
@@ -10,6 +11,8 @@
 
 #define RAND_255 rand() % 255
 #define RAND_COLOR QColor(RAND_255, RAND_255, RAND_255)
+
+class PrimitiveOperateCommand;
 
 class Scene : public QGLViewer
 {
@@ -19,31 +22,40 @@ public:
 	enum Mode{SCENE_2D = 0, SCENE_3D};
 	enum Operator{OP_MOVE = 0, OP_ROTATE, OP_SCALE};
 	enum Axis{AXIS_X = 0xfffff0, AXIS_Y, AXIS_Z, AXIS_SCALE};
+	enum Error{OK = 0, NOTMATCH, PATHERR};
 
 	Scene(QWidget *parent = 0);
 
 	// get the id-specific primitive
 	SceneUnit::Primitive *getPrimitive(int id);
 	void setAnimate(bool animate = true) { ifAnimate = animate; }
-	bool importObject(QString filename);
 	void setOperator(Operator op){ curOp = op; updateGL(); }
+	void setUndoStack(QUndoStack *undoStack_){ undoStack = undoStack_;}
 
-	QDomElement domElement(QDomDocument &doc);
-	bool initFromDomElement(const QDomElement &node);
+	QDomElement domElement(QDomDocument &doc, bool withCamera = false);
+	Error initFromDomElement(const QDomElement &node, bool withCamera = false);
 
 signals:
 	void selectedObjChanged(int);
 	void sceneChanged();
 
-public slots:
-	void newCircle();
-	void newRectangle();
-	void newBox();
-	void newSphere();
-	void deleteObject(int id);
+public:
+	bool importObject(QString filename);
+	void newPrimitive(SceneUnit::Primitive::Type type);
+	QString defaultName(SceneUnit::Primitive::Type type);
+	static GLUquadric *getQuadric(){ return quadric; }
+
+	void deletePrimitive(int id);
+	void appendPrimitive(SceneUnit::Primitive *p);
 
 	// clear the scene and set to the specific mode
 	void clear(Mode m);
+
+	int getAnID(){ return id; }
+	void increaseID(){ id++; }
+	void decreaseID(){ id--; }
+	void increaseNum(SceneUnit::Primitive::Type t);
+	void decreaseNum(SceneUnit::Primitive::Type t);
 
 protected:
 	void init();
@@ -68,6 +80,9 @@ private:
 	bool mousePressed;
 	qglviewer::Vec mousePos;
 	QPoint mousePosInWin;
+
+	QUndoStack *undoStack;
+	PrimitiveOperateCommand *poCmd;
 
     Mode sceneMode;
 	Operator curOp;

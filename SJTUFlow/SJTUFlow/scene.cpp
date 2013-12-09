@@ -11,6 +11,7 @@
 #include <QDebug>
 
 #include "objloader.h"
+#include "scenecommand.h"
 
 using namespace qglviewer;
 
@@ -34,7 +35,9 @@ Scene::Scene(QWidget *parent) : QGLViewer(parent)
 
 	mousePressed = false;
 	dx = 0.01;
+	undoStack = NULL;
 
+	setMouseTracking(true);
 	setAnimate(false);
 
 	clear(SCENE_2D);
@@ -50,26 +53,7 @@ SceneUnit::Primitive *Scene::getPrimitive(int id)
     return primitives.at(i);
 }
 
-bool Scene::importObject(QString filename)
-{
-	SceneUnit::Primitive *p = new SceneUnit::Object;
-	SceneUnit::Object *o = (SceneUnit::Object *)p;
-	if (ObjLoader::load(filename, o))
-	{
-		p->setColor(RAND_COLOR);
-		p->setName(QString("object_%1").arg(++objectNum));
-		p->setId(id++);
-		primitives.append(p);
-		connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
-
-		updateGL();
-
-		return true;
-	}
-	return false;
-}
-
-QDomElement Scene::domElement(QDomDocument &doc)
+QDomElement Scene::domElement(QDomDocument &doc, bool withCamera)
 {
 	QDomElement node = doc.createElement(tr("Scene"));
 	node.setAttribute(tr("mode"), sceneMode);
@@ -78,12 +62,20 @@ QDomElement Scene::domElement(QDomDocument &doc)
 	{
 		node.appendChild(p->domElement(doc));
 	}
+	if (withCamera)
+	{
+		node.appendChild(camera()->domElement(tr("Camera"), doc));
+	}
 	return node;
 }
 
-bool Scene::initFromDomElement(const QDomElement &node)
+Scene::Error Scene::initFromDomElement(
+	const QDomElement &node, bool withCamera)
 {
-	bool ret = true;
+	int scnMode = DomUtils::intFromDom(node, tr("mode"), -1);
+	sceneMode = scnMode == 0 ? SCENE_2D : SCENE_3D;
+	clear(sceneMode);
+	Error ret = OK;
 	id = DomUtils::intFromDom(node, tr("ids"), 0);
 	QDomNodeList children = node.childNodes();
 	for (int i = 0; i < children.count(); i++)
@@ -101,17 +93,19 @@ bool Scene::initFromDomElement(const QDomElement &node)
 				case SceneUnit::Primitive::T_Rect:
 					p = new SceneUnit::Rectangle;
 					p->initFromDomElement(child);
-					id = id > p->getId() ?  id : (p->getId() + 1);
+					id = id > p->getId() ? id : (p->getId() + 1);
 					primitives.append(p);
+					connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 					break;
 				case SceneUnit::Primitive::T_Circle:
 					p = new SceneUnit::Circle;
 					p->initFromDomElement(child);
-					id = id > p->getId() ?  id : (p->getId() + 1);
+					id = id > p->getId() ? id : (p->getId() + 1);
 					primitives.append(p);
+					connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 					break;
 				default:
-					ret = false;
+					ret = NOTMATCH;
 					break;
 				}
 			}
@@ -122,95 +116,185 @@ bool Scene::initFromDomElement(const QDomElement &node)
 				case SceneUnit::Primitive::T_Box:
 					p = new SceneUnit::Box;
 					p->initFromDomElement(child);
-					id = id > p->getId() ?  id : (p->getId() + 1);
+					id = id > p->getId() ? id : (p->getId() + 1);
 					primitives.append(p);
+					connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 					break;
 				case SceneUnit::Primitive::T_Sphere:
 					p = new SceneUnit::Sphere(quadric);
 					p->initFromDomElement(child);
-					id = id > p->getId() ?  id : (p->getId() + 1);
+					id = id > p->getId() ? id : (p->getId() + 1);
 					primitives.append(p);
+					connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 					break;
 				case SceneUnit::Primitive::T_Object:
-					p = new SceneUnit::Object;
-					p->initFromDomElement(child);
-					id = id > p->getId() ?  id : (p->getId() + 1);
-					primitives.append(p);
+					{
+						p = new SceneUnit::Object;
+						QString pathname = child.attribute(tr("path"));
+						bool r = ObjLoader::load(pathname, (SceneUnit::Object *)p);
+						if (r)
+						{
+							p->initFromDomElement(child);
+							id = id > p->getId() ? id : (p->getId() + 1);
+							primitives.append(p);
+							connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
+						}
+						else
+						{
+							ret = PATHERR;
+						}
+					}
 					break;
 				default:
-					ret = false;
+					ret = NOTMATCH;
 					break;
 				}
 			}
 		}
 	}
+	if (withCamera)
+	{
+		QDomElement child = node.firstChildElement(tr("Camera"));
+		camera()->initFromDOMElement(child);
+	}
+	updateGL();
 	return ret;
 }
 
-void Scene::newCircle()
+bool Scene::importObject(QString filename)
 {
-	SceneUnit::Primitive *p = new SceneUnit::Circle;
-	p->setColor(RAND_COLOR);
-	p->setName(QString("circle_%1").arg(++circleNum));
-	p->setId(id++);
-	primitives.append(p);
-	updateGL();
+	if (undoStack != NULL)
+	{
+		SceneImportCommand *command = new SceneImportCommand(this);
+		if (command->import(filename))
+		{
+			undoStack->push(command);
+			return true;
+		}
+		return false;
+	}
+	else
+	{
+		SceneUnit::Primitive *p = new SceneUnit::Object;
+		SceneUnit::Object *o = (SceneUnit::Object *)p;
+		if (ObjLoader::load(filename, o))
+		{
+			o->adjust();
+			p->setColor(RAND_COLOR);
+			p->setName(QString("object_%1").arg(++objectNum));
+			p->setId(id++);
+			primitives.append(p);
+			connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 
-	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
-	emit sceneChanged();
+			updateGL();
+
+			return true;
+		}
+		return false;
+	}
 }
 
-void Scene::newRectangle()
+void Scene::newPrimitive(SceneUnit::Primitive::Type type)
 {
-	SceneUnit::Primitive *p = new SceneUnit::Rectangle;
-	p->setColor(RAND_COLOR);
-	p->setName(QString("rect_%1").arg(++rectangleNum));
-	p->setId(id++);
-	primitives.append(p);
-	updateGL();
+	if (undoStack != NULL)
+	{
+		undoStack->push(new SceneNewCommand(type, this));
+	}
+	else
+	{
+		SceneUnit::Primitive *p;
+		QString name;
+		switch (type)
+		{
+		case SceneUnit::Primitive::T_Circle:
+			p = new SceneUnit::Circle;
+			name = QString("circle_%1").arg(++circleNum);
+			break;
+		case SceneUnit::Primitive::T_Rect:
+			p = new SceneUnit::Rectangle;
+			name = QString("rectangle_%1").arg(++rectangleNum);
+			break;
+		case SceneUnit::Primitive::T_Sphere:
+			p = new SceneUnit::Sphere(quadric);
+			name = QString("sphere_%1").arg(++sphereNum);
+			break;
+		case SceneUnit::Primitive::T_Box:
+			p = new SceneUnit::Box;
+			name = QString("box_%1").arg(++boxNum);
+			break;
+		default:
+			p = NULL;
+			break;
+		}
+		Q_ASSERT(p != NULL);
+		p->setColor(RAND_COLOR);
+		p->setName(name);
+		p->setId(id++);
 
-	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
-	emit sceneChanged();
+		primitives.append(p);
+		connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
+
+		updateGL();
+		emit sceneChanged();
+	}
 }
 
-void Scene::newBox()
+QString Scene::defaultName(SceneUnit::Primitive::Type type)
 {
-	SceneUnit::Primitive *p = new SceneUnit::Box;
-	p->setColor(RAND_COLOR);
-	p->setName(QString("box_%1").arg(++boxNum));
-	p->setId(id++);
-	primitives.append(p);
-	updateGL();
-
-	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
-	emit sceneChanged();
+	QString ret;
+	switch (type)
+	{
+	case SceneUnit::Primitive::T_Circle:
+		ret = QString("circle_%1").arg(circleNum + 1);
+		break;
+	case SceneUnit::Primitive::T_Rect:
+		ret = QString("rectangle_%1").arg(rectangleNum + 1);
+		break;
+	case SceneUnit::Primitive::T_Sphere:
+		ret = QString("sphere_%1").arg(sphereNum + 1);
+		break;
+	case SceneUnit::Primitive::T_Box:
+		ret = QString("box_%1").arg(boxNum + 1);
+		break;
+	case SceneUnit::Primitive::T_Object:
+		ret = QString("object_%1").arg(objectNum + 1);
+		break;
+	default:
+		break;
+	}
+	return ret;
 }
 
-void Scene::newSphere()
-{
-	SceneUnit::Primitive *p = new SceneUnit::Sphere(quadric);
-	p->setColor(RAND_COLOR);
-	p->setName(QString("sphere_%1").arg(++sphereNum));
-	p->setId(id++);
-	primitives.append(p);
-	updateGL();
-
-	connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
-	emit sceneChanged();
-}
-
-void Scene::deleteObject(int id)
+void Scene::deletePrimitive(int id)
 {
 	int i = getPrimitiveIndex(id);
 	if (i >= 0)
 	{
-		SceneUnit::Primitive *p = primitives.at(i);
+		SceneUnit::Primitive *p = getPrimitive(id);
+		disconnect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
 		primitives.removeAt(i);
-		delete p;
-	}
 
-	updateGL();
-	emit sceneChanged();
+		selectedId = -1;
+		emit selectedObjChanged(selectedId);
+
+		updateGL();
+		emit sceneChanged();
+	}
+}
+
+void Scene::appendPrimitive(Primitive *p)
+{
+	if (p != NULL)
+	{
+		primitives.append(p);
+		connect(p, SIGNAL(propertyChanged()), this, SLOT(updateGL()));
+
+		selectedId = -1;
+		emit selectedObjChanged(selectedId);
+
+		updateGL();
+		emit sceneChanged();
+	}
 }
 
 void Scene::clear(Mode m)
@@ -234,6 +318,54 @@ void Scene::clear(Mode m)
 	updateGL();
 
 	emit selectedObjChanged(selectedId);
+}
+
+void Scene::increaseNum(SceneUnit::Primitive::Type t)
+{
+	switch(t)
+	{
+	case SceneUnit::Primitive::T_Circle:
+		circleNum++;
+		break;
+	case SceneUnit::Primitive::T_Rect:
+		rectangleNum++;
+		break;
+	case SceneUnit::Primitive::T_Sphere:
+		sphereNum++;
+		break;
+	case SceneUnit::Primitive::T_Box:
+		boxNum++;
+		break;
+	case SceneUnit::Primitive::T_Object:
+		objectNum++;
+		break;
+	default:
+		break;
+	}
+}
+
+void Scene::decreaseNum(SceneUnit::Primitive::Type t)
+{
+	switch(t)
+	{
+	case SceneUnit::Primitive::T_Circle:
+		circleNum--;
+		break;
+	case SceneUnit::Primitive::T_Rect:
+		rectangleNum--;
+		break;
+	case SceneUnit::Primitive::T_Sphere:
+		sphereNum--;
+		break;
+	case SceneUnit::Primitive::T_Box:
+		boxNum--;
+		break;
+	case SceneUnit::Primitive::T_Object:
+		objectNum--;
+		break;
+	default:
+		break;
+	}
 }
 
 void Scene::init()
@@ -382,6 +514,13 @@ void Scene::mousePressEvent(QMouseEvent *event)
 	{
 		select(event->pos());
 		updateGL();
+
+		SceneUnit::Primitive *p = getPrimitive(selectedId);
+		if (p != NULL && selectedAxis >= AXIS_X && 
+			selectedAxis <= AXIS_SCALE)
+		{
+			poCmd = new PrimitiveOperateCommand(p);
+		}
 	}
 
 }
@@ -435,17 +574,9 @@ void Scene::mouseMoveEvent(QMouseEvent *event)
 				double scalar = p->getScalar();
 				Vec center = p->getCenter();
 				Vec d0, d1;
-				if (sceneMode == SCENE_3D)
-				{
-					d0 = mousePos - center;
-					d1 = pos - center;
-				}
-				else
-				{
-					Vec c = camera()->projectedCoordinatesOf(center);
-					d0 = Vec(mousePosInWin.x(), mousePosInWin.y(), c[2]) - c;
-					d1 = Vec(event->pos().x(), event->pos().y(), c[2]) - c;
-				}
+				Vec c = camera()->projectedCoordinatesOf(center);
+				d0 = Vec(mousePosInWin.x(), mousePosInWin.y(), c[2]) - c;
+				d1 = Vec(event->pos().x(), event->pos().y(), c[2]) - c;
 				scalar *= d1.norm() / d0.norm();
 				p->setScalar(scalar);
 			}
@@ -464,6 +595,16 @@ void Scene::mouseMoveEvent(QMouseEvent *event)
 void Scene::mouseReleaseEvent(QMouseEvent *event)
 {
 	mousePressed = false;
+	Qt::KeyboardModifiers kms = event->modifiers();
+	if ((kms & Qt::ControlModifier) != Qt::ControlModifier &&
+		selectedAxis >= AXIS_X && selectedAxis <= AXIS_SCALE)
+	{
+		if (poCmd != NULL)
+		{
+			poCmd->setNewData();
+			undoStack->push(poCmd);
+		}
+	}
 	QGLViewer::mouseReleaseEvent(event);
 }
 
@@ -558,6 +699,7 @@ void Scene::setSceneMode()
     switch (sceneMode)
 	{
 	case SCENE_2D:
+		camera()->frame()->stopSpinning();
  		camera()->setPosition(Vec(0.0, 0.0, 1.0));
  		camera()->setOrientation(0.0, 0.0);
  		camera()->lookAt(sceneCenter());
@@ -783,14 +925,14 @@ void Scene::drawScaleBox(Vec bmin, Vec bmax, bool withName)
 		{
 			glPushName(AXIS_SCALE);
 		}
-		drawSubScaleBox(minlen, bmin[0], bmin[1], bmin[2]);
-		drawSubScaleBox(minlen, bmin[0], bmax[1], bmin[2]);
-		drawSubScaleBox(minlen, bmax[0], bmin[1], bmin[2]);
-		drawSubScaleBox(minlen, bmax[0], bmax[1], bmin[2]);
-		drawSubScaleBox(minlen, bmin[0], bmin[1], bmax[2]);
-		drawSubScaleBox(minlen, bmin[0], bmax[1], bmax[2]);
-		drawSubScaleBox(minlen, bmax[0], bmin[1], bmax[2]);
-		drawSubScaleBox(minlen, bmax[0], bmax[1], bmax[2]);
+		drawSubScaleBox(minlen, -len[0] / 2, -len[1] / 2, -len[2] / 2);
+		drawSubScaleBox(minlen, -len[0] / 2, len[1] / 2, -len[2] / 2);
+		drawSubScaleBox(minlen, len[0] / 2, -len[1] / 2, -len[2] / 2);
+		drawSubScaleBox(minlen, len[0] / 2, len[1] / 2, -len[2] / 2);
+		drawSubScaleBox(minlen, -len[0] / 2, -len[1] / 2, len[2] / 2);
+		drawSubScaleBox(minlen, -len[0] / 2, len[1] / 2, len[2] / 2);
+		drawSubScaleBox(minlen, len[0] / 2, -len[1] / 2, len[2] / 2);
+		drawSubScaleBox(minlen, len[0] / 2, len[1] / 2, len[2] / 2);
 		if (withName)
 		{
 			glPopName();

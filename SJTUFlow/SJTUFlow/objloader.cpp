@@ -22,6 +22,7 @@ bool ObjLoader::load( const QString filename, Object *object )
 	{
 		return false;
 	}
+	object->setPathName(filename);
 	QTextStream in(&file);
 
 	QString line;
@@ -138,7 +139,6 @@ bool ObjLoader::load( const QString filename, Object *object )
 
 		}*/
 	}
-	object->adjust();
 
 	file.close();
 

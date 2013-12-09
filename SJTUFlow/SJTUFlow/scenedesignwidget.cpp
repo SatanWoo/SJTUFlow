@@ -5,6 +5,8 @@
 #include <QMessageBox>
 #include <QTextStream>
 
+#include "scenecommand.h"
+
 SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -12,12 +14,14 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 
     parseMenuActions(menubar);
 
+	undoStack = new QUndoStack(this);
+
 	selectedObj = NULL;
 	isSaved = true;
 	actions["save"]->setEnabled(false);
 
 	scene = new Scene;
-	scene->setMouseTracking(true);
+	scene->setUndoStack(undoStack);
 	setCentralWidget(scene);
 
 	connect(scene, SIGNAL(selectedObjChanged(int)), 
@@ -29,16 +33,19 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 /************************************************************************/
     actions["delete"]->setEnabled(false);
 
-    connect(actions["circle"], SIGNAL(triggered()), scene, SLOT(newCircle()));
-    connect(actions["rectangle"], SIGNAL(triggered()), scene, SLOT(newRectangle()));
-    connect(actions["sphere"], SIGNAL(triggered()), scene, SLOT(newSphere()));
-    connect(actions["box"], SIGNAL(triggered()), scene, SLOT(newBox()));
+    connect(actions["circle"], SIGNAL(triggered()), this, SLOT(newCircle()));
+    connect(actions["rectangle"], SIGNAL(triggered()), this, SLOT(newRectangle()));
+    connect(actions["sphere"], SIGNAL(triggered()), this, SLOT(newSphere()));
+    connect(actions["box"], SIGNAL(triggered()), this, SLOT(newBox()));
 
     connect(actions["move"], SIGNAL(triggered()), this, SLOT(move()));
     connect(actions["rotate"], SIGNAL(triggered()), this, SLOT(rotate()));
     connect(actions["scale"], SIGNAL(triggered()), this, SLOT(scale()));
 
 	connect(actions["import"], SIGNAL(triggered()), this, SLOT(import()));
+
+	connect(undoStack, SIGNAL(canUndoChanged(bool)), actions["undo"], SLOT(setEnabled(bool)));
+	connect(undoStack, SIGNAL(canRedoChanged(bool)), actions["redo"], SLOT(setEnabled(bool)));
 
 /************************************************************************/
 /*                             toolbar                                  */
@@ -80,6 +87,8 @@ void SceneDesignWidget::checkState()
 {
     actions["delete"]->setEnabled(selectedObj != NULL);
 	actions["save"]->setEnabled(!isSaved);
+	actions["undo"]->setEnabled(undoStack->canUndo());
+	actions["redo"]->setEnabled(undoStack->canRedo());
 }
 
 void SceneDesignWidget::new2DScene()
@@ -99,6 +108,8 @@ void SceneDesignWidget::new2DScene()
 	selectedObj = NULL;
 	isSaved = true;
 	actions["save"]->setEnabled(false);
+
+	undoStack->clear();
 
 	sceneFilePath = QString();
 	emit filePathChanged(QString());
@@ -121,6 +132,8 @@ void SceneDesignWidget::new3DScene()
 	selectedObj = NULL;
 	isSaved = true;
 	actions["save"]->setEnabled(false);
+
+	undoStack->clear();
 
 	sceneFilePath = QString();
 	emit filePathChanged(QString());
@@ -167,13 +180,45 @@ void SceneDesignWidget::saveAs()
 	}
 }
 
+void SceneDesignWidget::newCircle()
+{
+	scene->newPrimitive(SceneUnit::Primitive::T_Circle);
+}
+
+void SceneDesignWidget::newRectangle()
+{
+	scene->newPrimitive(SceneUnit::Primitive::T_Rect);
+}
+
+void SceneDesignWidget::newSphere()
+{
+	scene->newPrimitive(SceneUnit::Primitive::T_Sphere);
+}
+
+void SceneDesignWidget::newBox()
+{
+	scene->newPrimitive(SceneUnit::Primitive::T_Box);
+}
+
+void SceneDesignWidget::undo()
+{
+	undoStack->undo();
+}
+
+void SceneDesignWidget::redo()
+{
+	undoStack->redo();
+
+}
+
 void SceneDesignWidget::deleteObject()
 {
 	if (selectedObj != NULL)
 	{
-		scene->deleteObject(selectedObj->getId());
+		undoStack->push(new SceneDeleteCommand(selectedObj->getId(), scene));
+
 		selectedObj = NULL;
-        actions["delete"]->setEnabled(false);
+		actions["delete"]->setEnabled(false);
 		changePropertyWidget();
     }
 }
@@ -216,9 +261,6 @@ void SceneDesignWidget::import()
 			QMessageBox::warning(this, tr("Import Model Error"), 
 				tr("Can't open file %1").arg(fileName), QMessageBox::Ok);
 		}
-		isSaved = false;
-		actions["save"]->setEnabled(true);
-		emit filePathChanged(tr("%1*").arg(sceneFilePath));
 	}
 }
 
@@ -305,6 +347,17 @@ void SceneDesignWidget::sceneChanged()
 	isSaved = false;
 	actions["save"]->setEnabled(true);
 	emit filePathChanged(tr("%1*").arg(sceneFilePath));
+}
+
+void SceneDesignWidget::operateStart()
+{
+	QDomDocument doc;
+	oldNode = scene->domElement(doc, true);
+}
+
+void SceneDesignWidget::operateDone()
+{
+	//undoStack->push(new SceneCommand(scene, oldNode));
 }
 
 void SceneDesignWidget::changePropertyWidget()
@@ -570,10 +623,17 @@ void SceneDesignWidget::openScene( QString fileName )
 	{
 		new3DScene();
 	}
-	if (!scene->initFromDomElement(node))
+	Scene::Error ret = scene->initFromDomElement(node);
+	if (ret == Scene::NOTMATCH)
 	{
 		QMessageBox::warning(this, tr("Parse File Error"),
 			tr("The file may be in wrong format:\n\tSome Primitives Don't Match the Scene Mode.\n"));
+		return;
+	}
+	else if (ret == Scene::PATHERR)
+	{
+		QMessageBox::warning(this, tr("Object Path Error"),
+			tr("Can't find the object file.\n"));
 		return;
 	}
 }

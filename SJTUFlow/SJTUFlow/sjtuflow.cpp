@@ -1,5 +1,7 @@
 #include "sjtuflow.h"
 
+#include <QMessageBox>
+
 SJTUFlow::SJTUFlow(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -13,6 +15,7 @@ SJTUFlow::SJTUFlow(QWidget *parent)
     ui.verticalLayout->insertWidget(1, ui.menuBar);
 
     setting = new Setting;
+	aboutDialog = new AboutDialog;
 
 /************************************************************************/
 /*                             tab widget                               */
@@ -48,6 +51,8 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 
     connect(ui.actionSetting, SIGNAL(triggered()), setting, SLOT(show()));
 
+	connect(ui.actionAbout, SIGNAL(triggered()), aboutDialog, SLOT(show()));
+
 	connect(ui.action2DScene, SIGNAL(triggered()), sceneDesignWidget, SLOT(new2DScene()));
 	connect(ui.action3DScene, SIGNAL(triggered()), sceneDesignWidget, SLOT(new3DScene()));
 
@@ -66,6 +71,36 @@ void SJTUFlow::paintEvent( QPaintEvent *)
 {
 	QPainter painter(this);
     painter.drawPixmap(rect(), bgImage);
+}
+
+void SJTUFlow::closeEvent(QCloseEvent *e)
+{
+	ui.tabWidget->setCurrentIndex(0);
+	if (!sceneDesignWidget->saved())
+	{
+		QMessageBox box;
+		box.setWindowTitle(tr("Save"));
+		box.setIcon(QMessageBox::Question);
+		box.setText(tr("Save scene file "));
+		box.setStandardButtons(QMessageBox::Yes | 
+			QMessageBox::No | QMessageBox::Cancel);
+
+		int ret = box.exec();
+		if(ret == QMessageBox::Yes)
+		{
+			sceneDesignWidget->saveScene();
+		}
+		else if (ret == QMessageBox::Cancel)
+		{
+			e->ignore();
+			return;
+		}
+	}
+	ui.tabWidget->setCurrentIndex(1);
+	if (!codingWidget->closeAll())
+	{
+		e->ignore();
+	}
 }
 
 void SJTUFlow::tabChanged(int index)
@@ -159,7 +194,7 @@ void SJTUFlow::sharedUndo()
 {
     if (ui.tabWidget->currentIndex() == 0)
     {
-
+		sceneDesignWidget->undo();
     }
     else if (ui.tabWidget->currentIndex() == 1)
     {
@@ -171,7 +206,7 @@ void SJTUFlow::sharedRedo()
 {
     if (ui.tabWidget->currentIndex() == 0)
     {
-
+		sceneDesignWidget->redo();
     }
     else if (ui.tabWidget->currentIndex() == 1)
     {

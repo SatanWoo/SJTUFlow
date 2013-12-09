@@ -462,7 +462,7 @@ QTabBar::tab:selected
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>&amp;About</string>
+    <string>&amp;About SJTU Flow</string>
    </property>
   </action>
   <action name="actionNewFile">
