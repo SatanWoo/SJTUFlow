@@ -14,11 +14,22 @@ public:
     explicit Setting(QWidget *parent = 0);
     ~Setting();
 
-public slots:
+private slots:
     void changePage(QListWidgetItem *current, QListWidgetItem *previous);
+
+	void insertRow();
+	void removeRow();
+
+	void enterEdit(QListWidgetItem *item);
+
+	void saveSetting();
 
 private:
     Ui::Setting ui;
+	
+	bool isEdit;
+
+	void loadSetting();
 };
 
 #endif // SETTING_H

@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QGridLayout>
@@ -21,7 +22,6 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QListView>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
@@ -55,6 +55,7 @@ public:
     QWidget *pageRender;
     QVBoxLayout *verticalLayout_2;
     QSpacerItem *verticalSpacer_3;
+    QCheckBox *checkBoxRender;
     QGroupBox *groupBoxRenderOutput;
     QGridLayout *gridLayout_3;
     QLabel *labelRenderSize;
@@ -72,7 +73,7 @@ public:
     QSpacerItem *horizontalSpacer_3;
     QPushButton *pushButtonNew;
     QPushButton *pushButtonDelete;
-    QListView *listView;
+    QListWidget *listWidgetDll;
     QLabel *labelSysLib;
     QPlainTextEdit *plainTextEditSysLib;
     QSpacerItem *verticalSpacer_6;
@@ -89,6 +90,7 @@ public:
             Setting->setObjectName(QStringLiteral("Setting"));
         Setting->resize(420, 300);
         Setting->setMinimumSize(QSize(420, 300));
+        Setting->setContextMenuPolicy(Qt::NoContextMenu);
         QIcon icon;
         icon.addFile(QStringLiteral(":/SJTUFlow/Resources/SJTU-Icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         Setting->setWindowIcon(icon);
@@ -168,8 +170,14 @@ public:
 
         verticalLayout_2->addItem(verticalSpacer_3);
 
+        checkBoxRender = new QCheckBox(pageRender);
+        checkBoxRender->setObjectName(QStringLiteral("checkBoxRender"));
+
+        verticalLayout_2->addWidget(checkBoxRender);
+
         groupBoxRenderOutput = new QGroupBox(pageRender);
         groupBoxRenderOutput->setObjectName(QStringLiteral("groupBoxRenderOutput"));
+        groupBoxRenderOutput->setEnabled(false);
         gridLayout_3 = new QGridLayout(groupBoxRenderOutput);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
         labelRenderSize = new QLabel(groupBoxRenderOutput);
@@ -231,22 +239,35 @@ public:
         pushButtonNew = new QPushButton(pageDllManager);
         pushButtonNew->setObjectName(QStringLiteral("pushButtonNew"));
         pushButtonNew->setMaximumSize(QSize(50, 16777215));
+        pushButtonNew->setContextMenuPolicy(Qt::NoContextMenu);
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/Icons/Resources/Icons/DllNew.bmp"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButtonNew->setIcon(icon1);
+        pushButtonNew->setAutoDefault(false);
 
         horizontalLayout_3->addWidget(pushButtonNew);
 
         pushButtonDelete = new QPushButton(pageDllManager);
         pushButtonDelete->setObjectName(QStringLiteral("pushButtonDelete"));
         pushButtonDelete->setMaximumSize(QSize(50, 16777215));
+        pushButtonDelete->setContextMenuPolicy(Qt::NoContextMenu);
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/Icons/Resources/Icons/DllDelete.bmp"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButtonDelete->setIcon(icon2);
+        pushButtonDelete->setAutoDefault(false);
 
         horizontalLayout_3->addWidget(pushButtonDelete);
 
 
         verticalLayout_3->addLayout(horizontalLayout_3);
 
-        listView = new QListView(pageDllManager);
-        listView->setObjectName(QStringLiteral("listView"));
+        listWidgetDll = new QListWidget(pageDllManager);
+        listWidgetDll->setObjectName(QStringLiteral("listWidgetDll"));
+        listWidgetDll->setContextMenuPolicy(Qt::NoContextMenu);
+        listWidgetDll->setEditTriggers(QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed);
+        listWidgetDll->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-        verticalLayout_3->addWidget(listView);
+        verticalLayout_3->addWidget(listWidgetDll);
 
         labelSysLib = new QLabel(pageDllManager);
         labelSysLib->setObjectName(QStringLiteral("labelSysLib"));
@@ -255,6 +276,7 @@ public:
 
         plainTextEditSysLib = new QPlainTextEdit(pageDllManager);
         plainTextEditSysLib->setObjectName(QStringLiteral("plainTextEditSysLib"));
+        plainTextEditSysLib->setContextMenuPolicy(Qt::NoContextMenu);
         plainTextEditSysLib->setReadOnly(true);
 
         verticalLayout_3->addWidget(plainTextEditSysLib);
@@ -276,18 +298,21 @@ public:
         pushButtonOK = new QPushButton(Setting);
         pushButtonOK->setObjectName(QStringLiteral("pushButtonOK"));
         pushButtonOK->setMaximumSize(QSize(60, 16777215));
+        pushButtonOK->setAutoDefault(false);
 
         horizontalLayout->addWidget(pushButtonOK);
 
         pushButtonCancel = new QPushButton(Setting);
         pushButtonCancel->setObjectName(QStringLiteral("pushButtonCancel"));
         pushButtonCancel->setMaximumSize(QSize(60, 16777215));
+        pushButtonCancel->setAutoDefault(false);
 
         horizontalLayout->addWidget(pushButtonCancel);
 
         pushButtonApply = new QPushButton(Setting);
         pushButtonApply->setObjectName(QStringLiteral("pushButtonApply"));
         pushButtonApply->setMaximumSize(QSize(60, 16777215));
+        pushButtonApply->setAutoDefault(false);
 
         horizontalLayout->addWidget(pushButtonApply);
 
@@ -295,18 +320,18 @@ public:
         gridLayout->addLayout(horizontalLayout, 1, 0, 1, 2);
 
         listWidget = new QListWidget(Setting);
-        QIcon icon1;
-        icon1.addFile(QStringLiteral(":/Icons/Resources/Icons/Run.png"), QSize(), QIcon::Normal, QIcon::Off);
-        QListWidgetItem *__qlistwidgetitem = new QListWidgetItem(listWidget);
-        __qlistwidgetitem->setIcon(icon1);
-        QIcon icon2;
-        icon2.addFile(QStringLiteral(":/Icons/Resources/Icons/Render.png"), QSize(), QIcon::Normal, QIcon::Off);
-        QListWidgetItem *__qlistwidgetitem1 = new QListWidgetItem(listWidget);
-        __qlistwidgetitem1->setIcon(icon2);
         QIcon icon3;
-        icon3.addFile(QStringLiteral(":/Icons/Resources/Icons/Libraries.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QStringLiteral(":/Icons/Resources/Icons/Run.png"), QSize(), QIcon::Normal, QIcon::Off);
+        QListWidgetItem *__qlistwidgetitem = new QListWidgetItem(listWidget);
+        __qlistwidgetitem->setIcon(icon3);
+        QIcon icon4;
+        icon4.addFile(QStringLiteral(":/Icons/Resources/Icons/Render.png"), QSize(), QIcon::Normal, QIcon::Off);
+        QListWidgetItem *__qlistwidgetitem1 = new QListWidgetItem(listWidget);
+        __qlistwidgetitem1->setIcon(icon4);
+        QIcon icon5;
+        icon5.addFile(QStringLiteral(":/Icons/Resources/Icons/Libraries.png"), QSize(), QIcon::Normal, QIcon::Off);
         QListWidgetItem *__qlistwidgetitem2 = new QListWidgetItem(listWidget);
-        __qlistwidgetitem2->setIcon(icon3);
+        __qlistwidgetitem2->setIcon(icon5);
         listWidget->setObjectName(QStringLiteral("listWidget"));
         listWidget->setMaximumSize(QSize(76, 16777215));
         listWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
@@ -327,15 +352,14 @@ public:
         QWidget::setTabOrder(lineEditRenderName, comboBoxSize);
         QWidget::setTabOrder(comboBoxSize, pushButtonNew);
         QWidget::setTabOrder(pushButtonNew, pushButtonDelete);
-        QWidget::setTabOrder(pushButtonDelete, listView);
-        QWidget::setTabOrder(listView, plainTextEditSysLib);
+        QWidget::setTabOrder(pushButtonDelete, plainTextEditSysLib);
         QWidget::setTabOrder(plainTextEditSysLib, pushButtonOK);
         QWidget::setTabOrder(pushButtonOK, pushButtonCancel);
         QWidget::setTabOrder(pushButtonCancel, pushButtonApply);
 
         retranslateUi(Setting);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(Setting);
@@ -350,6 +374,7 @@ public:
         labelRunPath->setText(QApplication::translate("Setting", "Path", 0));
         labelRunName->setText(QApplication::translate("Setting", "Name", 0));
         labelPromote->setText(QApplication::translate("Setting", "TextLabel", 0));
+        checkBoxRender->setText(QApplication::translate("Setting", "Render the results using renderer", 0));
         groupBoxRenderOutput->setTitle(QApplication::translate("Setting", "Output", 0));
         labelRenderSize->setText(QApplication::translate("Setting", "Size", 0));
         comboBoxSize->clear();
@@ -359,8 +384,26 @@ public:
         );
         labelRenderName->setText(QApplication::translate("Setting", "Name", 0));
         labelRenderPath->setText(QApplication::translate("Setting", "Path", 0));
-        pushButtonNew->setText(QApplication::translate("Setting", "New", 0));
-        pushButtonDelete->setText(QApplication::translate("Setting", "Delete", 0));
+#ifndef QT_NO_TOOLTIP
+        pushButtonNew->setToolTip(QApplication::translate("Setting", "New Dll", 0));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_STATUSTIP
+        pushButtonNew->setStatusTip(QApplication::translate("Setting", "New Dll", 0));
+#endif // QT_NO_STATUSTIP
+#ifndef QT_NO_WHATSTHIS
+        pushButtonNew->setWhatsThis(QApplication::translate("Setting", "New Dll", 0));
+#endif // QT_NO_WHATSTHIS
+        pushButtonNew->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        pushButtonDelete->setToolTip(QApplication::translate("Setting", "Delete selected row", 0));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_STATUSTIP
+        pushButtonDelete->setStatusTip(QApplication::translate("Setting", "Delete selected row", 0));
+#endif // QT_NO_STATUSTIP
+#ifndef QT_NO_WHATSTHIS
+        pushButtonDelete->setWhatsThis(QApplication::translate("Setting", "Delete selected row", 0));
+#endif // QT_NO_WHATSTHIS
+        pushButtonDelete->setText(QString());
         labelSysLib->setText(QApplication::translate("Setting", "System Libraries", 0));
         plainTextEditSysLib->setPlainText(QApplication::translate("Setting", "*.dll", 0));
         pushButtonOK->setText(QApplication::translate("Setting", "OK", 0));

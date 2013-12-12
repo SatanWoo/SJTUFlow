@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>324</height>
+    <height>345</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -81,14 +81,14 @@
         </font>
        </property>
        <property name="text">
-        <string>SJTU Flow v0.1</string>
+        <string>SJTU Flow v0.6</string>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QTextBrowser" name="textBrowser_2">
+    <widget class="QTextBrowser" name="textBrowserAuthor">
      <property name="maximumSize">
       <size>
        <width>16777215</width>
@@ -114,7 +114,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item>
-    <widget class="QTextBrowser" name="textBrowser">
+    <widget class="QTextBrowser" name="textBrowserDALAB">
      <property name="maximumSize">
       <size>
        <width>16777215</width>
@@ -144,7 +144,7 @@ p, li { white-space: pre-wrap; }
       <bool>true</bool>
      </property>
      <property name="openLinks">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
    </item>

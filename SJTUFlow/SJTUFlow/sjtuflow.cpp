@@ -149,6 +149,7 @@ void SJTUFlow::tabChanged(int index)
         ui.menuPrimitive->setEnabled(false);
         ui.actionRun->setEnabled(false);
 		ui.titleBar->setFilePath(QString());
+		displayWidget->cloneScene(sceneDesignWidget->getScene());
     default:
         break;
     }

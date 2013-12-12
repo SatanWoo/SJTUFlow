@@ -33,6 +33,7 @@ Scene::Scene(QWidget *parent) : QGLViewer(parent)
 {
 	srand(time(NULL));
 
+	allowSelect = true;
 	mousePressed = false;
 	dx = 0.01;
 	undoStack = NULL;
@@ -159,6 +160,16 @@ Scene::Error Scene::initFromDomElement(
 	}
 	updateGL();
 	return ret;
+}
+
+void Scene::clone(Scene *scene)
+{
+	clear(scene->sceneMode);
+	for (int i = 0; i < scene->primitives.count(); i++)
+	{
+		Primitive *p = scene->primitives[i];
+		appendPrimitive(p);
+	}
 }
 
 bool Scene::importObject(QString filename)
@@ -499,6 +510,11 @@ void Scene::animate()
 
 void Scene::mousePressEvent(QMouseEvent *event)
 {
+	if (!allowSelect)
+	{
+		QGLViewer::mousePressEvent(event);
+		return;
+	}
 	mousePressed = true;
 	bool found;
 	mousePos = camera()->pointUnderPixel(event->pos(), found);
@@ -527,6 +543,11 @@ void Scene::mousePressEvent(QMouseEvent *event)
 
 void Scene::mouseMoveEvent(QMouseEvent *event)
 {
+	if (!allowSelect)
+	{
+		QGLViewer::mouseMoveEvent(event);
+		return;
+	}
 	if (!mousePressed)
 	{
 		select(event->pos());
@@ -594,6 +615,11 @@ void Scene::mouseMoveEvent(QMouseEvent *event)
 
 void Scene::mouseReleaseEvent(QMouseEvent *event)
 {
+	if (!allowSelect)
+	{
+		QGLViewer::mouseReleaseEvent(event);
+		return;
+	}
 	mousePressed = false;
 	Qt::KeyboardModifiers kms = event->modifiers();
 	if ((kms & Qt::ControlModifier) != Qt::ControlModifier &&

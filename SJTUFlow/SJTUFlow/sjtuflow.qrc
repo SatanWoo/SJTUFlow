@@ -13,6 +13,8 @@
         <file>Resources/Icons/Libraries.png</file>
         <file>Resources/Icons/Render.png</file>
         <file>Resources/Icons/Run.png</file>
+        <file>Resources/Icons/DllDelete.bmp</file>
+        <file>Resources/Icons/DllNew.bmp</file>
     </qresource>
     <qresource prefix="/Coding">
         <file>Resources/Icons/CodingCloseAll.png</file>

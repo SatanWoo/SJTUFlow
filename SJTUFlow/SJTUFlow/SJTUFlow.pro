@@ -51,7 +51,10 @@ HEADERS += ./qhorizontaltabbar.h \
     ./primitive.h \
     ./scenedesignwidget.h \
     ./setting.h \
-    ./objloader.h
+    ./objloader.h \
+    ./aboutdialog.h \
+    ./scenecommand.h \
+    ./dllitemdelegate.h
 SOURCES += ./codeedit.cpp \
     ./codingwidget.cpp \
     ./displaywidget.cpp \
@@ -65,11 +68,15 @@ SOURCES += ./codeedit.cpp \
     ./sjtuflow.cpp \
     ./titlebar.cpp \
     ./setting.cpp \
-    ./objloader.cpp
+    ./objloader.cpp \
+    ./aboutdialog.cpp \
+    ./scenecommand.cpp \
+    ./dllitemdelegate.cpp
 FORMS += ./sjtuflow.ui \
     ./scenedesignwidget.ui \
     ./codingwidget.ui \
     ./displaywidget.ui \
     ./titlebar.ui \
-    ./setting.ui
+    ./setting.ui \
+    ./aboutdialog.ui
 RESOURCES += sjtuflow.qrc

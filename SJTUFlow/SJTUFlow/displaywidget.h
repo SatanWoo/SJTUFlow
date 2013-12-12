@@ -14,6 +14,8 @@ public:
 	DisplayWidget(QWidget *parent = 0);
 	~DisplayWidget();
 
+	void cloneScene(Scene *scene_);
+
 private:
 	Ui::DisplayWidget ui;
 

@@ -31,8 +31,8 @@ public:
     QHBoxLayout *horizontalLayout;
     QLabel *labelIcon;
     QLabel *labelName;
-    QTextBrowser *textBrowser_2;
-    QTextBrowser *textBrowser;
+    QTextBrowser *textBrowserAuthor;
+    QTextBrowser *textBrowserDALAB;
     QGroupBox *groupBox;
     QVBoxLayout *verticalLayout_2;
     QPlainTextEdit *plainTextEdit;
@@ -41,7 +41,7 @@ public:
     {
         if (AboutDialog->objectName().isEmpty())
             AboutDialog->setObjectName(QStringLiteral("AboutDialog"));
-        AboutDialog->resize(400, 324);
+        AboutDialog->resize(400, 345);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -82,26 +82,26 @@ public:
 
         verticalLayout->addLayout(horizontalLayout);
 
-        textBrowser_2 = new QTextBrowser(AboutDialog);
-        textBrowser_2->setObjectName(QStringLiteral("textBrowser_2"));
-        textBrowser_2->setMaximumSize(QSize(16777215, 30));
-        textBrowser_2->setStyleSheet(QStringLiteral("background-color:transparent;"));
-        textBrowser_2->setFrameShape(QFrame::NoFrame);
-        textBrowser_2->setFrameShadow(QFrame::Plain);
+        textBrowserAuthor = new QTextBrowser(AboutDialog);
+        textBrowserAuthor->setObjectName(QStringLiteral("textBrowserAuthor"));
+        textBrowserAuthor->setMaximumSize(QSize(16777215, 30));
+        textBrowserAuthor->setStyleSheet(QStringLiteral("background-color:transparent;"));
+        textBrowserAuthor->setFrameShape(QFrame::NoFrame);
+        textBrowserAuthor->setFrameShadow(QFrame::Plain);
 
-        verticalLayout->addWidget(textBrowser_2);
+        verticalLayout->addWidget(textBrowserAuthor);
 
-        textBrowser = new QTextBrowser(AboutDialog);
-        textBrowser->setObjectName(QStringLiteral("textBrowser"));
-        textBrowser->setMaximumSize(QSize(16777215, 30));
-        textBrowser->setContextMenuPolicy(Qt::NoContextMenu);
-        textBrowser->setStyleSheet(QStringLiteral("background-color:transparent;"));
-        textBrowser->setFrameShape(QFrame::NoFrame);
-        textBrowser->setFrameShadow(QFrame::Plain);
-        textBrowser->setOpenExternalLinks(true);
-        textBrowser->setOpenLinks(false);
+        textBrowserDALAB = new QTextBrowser(AboutDialog);
+        textBrowserDALAB->setObjectName(QStringLiteral("textBrowserDALAB"));
+        textBrowserDALAB->setMaximumSize(QSize(16777215, 30));
+        textBrowserDALAB->setContextMenuPolicy(Qt::NoContextMenu);
+        textBrowserDALAB->setStyleSheet(QStringLiteral("background-color:transparent;"));
+        textBrowserDALAB->setFrameShape(QFrame::NoFrame);
+        textBrowserDALAB->setFrameShadow(QFrame::Plain);
+        textBrowserDALAB->setOpenExternalLinks(true);
+        textBrowserDALAB->setOpenLinks(true);
 
-        verticalLayout->addWidget(textBrowser);
+        verticalLayout->addWidget(textBrowserDALAB);
 
         groupBox = new QGroupBox(AboutDialog);
         groupBox->setObjectName(QStringLiteral("groupBox"));
@@ -136,13 +136,13 @@ public:
     {
         AboutDialog->setWindowTitle(QApplication::translate("AboutDialog", "About SJTU Flow", 0));
         labelIcon->setText(QString());
-        labelName->setText(QApplication::translate("AboutDialog", "SJTU Flow v0.1", 0));
-        textBrowser_2->setHtml(QApplication::translate("AboutDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        labelName->setText(QApplication::translate("AboutDialog", "SJTU Flow v0.6", 0));
+        textBrowserAuthor->setHtml(QApplication::translate("AboutDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'High Tower Text'; font-size:12pt; font-style:italic;\">  Author:                          SJTU DALAB Team</span></p></body></html>", 0));
-        textBrowser->setHtml(QApplication::translate("AboutDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        textBrowserDALAB->setHtml(QApplication::translate("AboutDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;\">\n"

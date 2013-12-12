@@ -16,6 +16,9 @@
     <height>300</height>
    </size>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Setting</string>
   </property>
@@ -42,7 +45,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="pageRun">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -145,7 +148,17 @@
         </spacer>
        </item>
        <item>
+        <widget class="QCheckBox" name="checkBoxRender">
+         <property name="text">
+          <string>Render the results using renderer</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBoxRenderOutput">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="title">
           <string>Output</string>
          </property>
@@ -260,8 +273,27 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="toolTip">
+            <string>New Dll</string>
+           </property>
+           <property name="statusTip">
+            <string>New Dll</string>
+           </property>
+           <property name="whatsThis">
+            <string>New Dll</string>
+           </property>
            <property name="text">
-            <string>New</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="sjtuflow.qrc">
+             <normaloff>:/Icons/Resources/Icons/DllNew.bmp</normaloff>:/Icons/Resources/Icons/DllNew.bmp</iconset>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -273,15 +305,44 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="toolTip">
+            <string>Delete selected row</string>
+           </property>
+           <property name="statusTip">
+            <string>Delete selected row</string>
+           </property>
+           <property name="whatsThis">
+            <string>Delete selected row</string>
+           </property>
            <property name="text">
-            <string>Delete</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="sjtuflow.qrc">
+             <normaloff>:/Icons/Resources/Icons/DllDelete.bmp</normaloff>:/Icons/Resources/Icons/DllDelete.bmp</iconset>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QListView" name="listView"/>
+        <widget class="QListWidget" name="listWidgetDll">
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="labelSysLib">
@@ -292,6 +353,9 @@
        </item>
        <item>
         <widget class="QPlainTextEdit" name="plainTextEditSysLib">
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -343,6 +407,9 @@
        <property name="text">
         <string>OK</string>
        </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -356,6 +423,9 @@
        <property name="text">
         <string>Cancel</string>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -368,6 +438,9 @@
        </property>
        <property name="text">
         <string>Apply</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -445,7 +518,6 @@
   <tabstop>comboBoxSize</tabstop>
   <tabstop>pushButtonNew</tabstop>
   <tabstop>pushButtonDelete</tabstop>
-  <tabstop>listView</tabstop>
   <tabstop>plainTextEditSysLib</tabstop>
   <tabstop>pushButtonOK</tabstop>
   <tabstop>pushButtonCancel</tabstop>

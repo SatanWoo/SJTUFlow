@@ -28,12 +28,15 @@ public:
 
 	// get the id-specific primitive
 	SceneUnit::Primitive *getPrimitive(int id);
-	void setAnimate(bool animate = true) { ifAnimate = animate; }
+	void setAnimate(bool animate = true){ ifAnimate = animate; }
+	void setAllowSelect(bool allow = false){ allowSelect = allow; }
 	void setOperator(Operator op){ curOp = op; updateGL(); }
 	void setUndoStack(QUndoStack *undoStack_){ undoStack = undoStack_;}
 
 	QDomElement domElement(QDomDocument &doc, bool withCamera = false);
 	Error initFromDomElement(const QDomElement &node, bool withCamera = false);
+
+	void clone(Scene *scene);
 
 signals:
 	void selectedObjChanged(int);
@@ -88,6 +91,7 @@ private:
 	Operator curOp;
 
 	bool ifAnimate;
+	bool allowSelect;
 
 	int circleNum;
 	int rectangleNum;

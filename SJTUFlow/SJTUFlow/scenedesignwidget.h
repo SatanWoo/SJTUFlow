@@ -24,6 +24,8 @@ public:
 	QString filePath(){ return sceneFilePath; }
 	bool saved(){ return isSaved; }
 
+	Scene* getScene(){ return scene; }
+
 signals:
 	void filePathChanged(QString);
 

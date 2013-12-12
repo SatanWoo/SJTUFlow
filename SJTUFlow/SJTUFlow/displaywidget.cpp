@@ -10,10 +10,11 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 	setCentralWidget(scene);
 
 	//example
-	scene->clear(Scene::SCENE_3D);
-	scene->newPrimitive(SceneUnit::Primitive::T_Sphere);
+// 	scene->clear(Scene::SCENE_3D);
+// 	scene->newPrimitive(SceneUnit::Primitive::T_Sphere);
     //SceneUnit::Primitive *p = scene->getPrimitive(0);
 	scene->setAnimate();
+	scene->setAllowSelect();
 
 	scene->startAnimation();
 }
@@ -21,4 +22,9 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 DisplayWidget::~DisplayWidget()
 {
 
+}
+
+void DisplayWidget::cloneScene( Scene *scene_ )
+{
+	scene->clone(scene_);
 }

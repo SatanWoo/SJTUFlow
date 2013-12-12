@@ -273,7 +273,10 @@ public:
         titleBar->raise();
         menuBar = new QMenuBar(SJTUFlowClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1024, 23));
+        menuBar->setGeometry(QRect(0, 0, 1024, 25));
+        QFont font;
+        font.setPointSize(10);
+        menuBar->setFont(font);
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuNewScene = new QMenu(menuFile);
