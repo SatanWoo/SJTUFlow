@@ -298,7 +298,7 @@ public:
         pushButtonOK = new QPushButton(Setting);
         pushButtonOK->setObjectName(QStringLiteral("pushButtonOK"));
         pushButtonOK->setMaximumSize(QSize(60, 16777215));
-        pushButtonOK->setAutoDefault(false);
+        pushButtonOK->setAutoDefault(true);
 
         horizontalLayout->addWidget(pushButtonOK);
 

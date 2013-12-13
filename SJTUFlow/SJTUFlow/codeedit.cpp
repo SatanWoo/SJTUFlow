@@ -8,7 +8,6 @@ CodeEdit::CodeEdit(QWidget *parent)
 	highlighter = new PySyntaxHighlighter(document());
 	lineNumberArea = new LineNumberArea(this);
     stateSaved = false;
-    stateChanged = false;
     stateCanUndo = false;
     stateCanRedo = false;
 	tabWidth = 4;
@@ -23,7 +22,6 @@ CodeEdit::CodeEdit(QWidget *parent)
 
 	connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
 	connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
-	connect(this, SIGNAL(modificationChanged(bool)), this, SLOT(contentChanged(bool)));
     connect(this, SIGNAL(undoAvailable(bool)), this, SLOT(changeUndoState(bool)));
     connect(this, SIGNAL(redoAvailable(bool)), this, SLOT(changeRedoState(bool)));
 
@@ -114,11 +112,6 @@ void CodeEdit::updateLineNumberArea( const QRect &rect, int dy )
 	{
 		updateLineNumberAreaWidth(0);
 	}
-}
-
-void CodeEdit::contentChanged( bool changed )
-{
-    stateChanged = changed;
 }
 
 void CodeEdit::changeUndoState(bool canUndo)

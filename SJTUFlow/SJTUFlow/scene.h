@@ -12,6 +12,18 @@
 #define RAND_255 rand() % 255
 #define RAND_COLOR QColor(RAND_255, RAND_255, RAND_255)
 
+// Test
+struct MyVec3d
+{
+	MyVec3d(){ x = 0; y = 0; z = 0; }
+	double x, y, z;
+};
+struct SocketPackage
+{
+	MyVec3d particle0Loc, particle1Loc;
+};
+//
+
 class PrimitiveOperateCommand;
 
 class Scene : public QGLViewer
@@ -28,7 +40,7 @@ public:
 
 	// get the id-specific primitive
 	SceneUnit::Primitive *getPrimitive(int id);
-	void setAnimate(bool animate = true){ ifAnimate = animate; }
+	void setAnimate(bool animate = true){ ifAnimate = animate; camera()->setPosition(qglviewer::Vec(0.0, 0.0, 2.0)); }
 	void setAllowSelect(bool allow = false){ allowSelect = allow; }
 	void setOperator(Operator op){ curOp = op; updateGL(); }
 	void setUndoStack(QUndoStack *undoStack_){ undoStack = undoStack_;}
@@ -37,6 +49,17 @@ public:
 	Error initFromDomElement(const QDomElement &node, bool withCamera = false);
 
 	void clone(Scene *scene);
+
+	// Test
+	void addParticle(SocketPackage sp)
+	{
+		//particle0.append(sp.particle0Loc);
+		//particle1.append(sp.particle1Loc);
+		pt0 = sp.particle0Loc;
+		pt1 = sp.particle1Loc;
+		updateGL();
+	}
+	//
 
 signals:
 	void selectedObjChanged(int);
@@ -79,6 +102,11 @@ private:
 	static GLUquadric *quadric;
 	static qglviewer::Vec axisDirs[3];
 	static double axisRot[3][4];
+
+	// Test
+	QVector<MyVec3d> particle0, particle1;
+	MyVec3d pt0, pt1;
+	//
 
 	bool mousePressed;
 	qglviewer::Vec mousePos;

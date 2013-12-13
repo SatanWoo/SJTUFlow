@@ -1,11 +1,13 @@
 #include "codingwidget.h"
 
-#include <QtWidgets/QMessageBox>
-#include <QtWidgets/QFileDialog>
+#include <QMessageBox>
+#include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
-#include <QPainter>
 #include <QProcess>
+#include <QLocalSocket>
+
+#include <QDebug>
 
 #include "codeedit.h"
 
@@ -88,8 +90,8 @@ void CodingWidget::loadFile(const QString &fileName)
 
 int CodingWidget::saveOrNot(int index)
 {
-	QTextEdit *textEdit = (QTextEdit *)ui.tabWidget->widget(index);
-	if (textEdit->document()->isModified())
+	CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->widget(index);
+	if (codeEdit->document()->isModified())
 	{
 		QMessageBox box;
 		box.setWindowTitle(tr("Save"));
@@ -122,8 +124,8 @@ void CodingWidget::saveFile(const QString &fileName)
 	}
 
 	QTextStream out(&file);
-	QTextEdit *textEdit = (QTextEdit *)ui.tabWidget->currentWidget();
-    out << textEdit->toPlainText();
+	CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
+    out << codeEdit->toPlainText();
 
 	curFilePath = fileName;
 	emit filePathChanged(curFilePath);
@@ -237,7 +239,7 @@ void CodingWidget::openFile()
 void CodingWidget::saveFile()
 {
 	CodeEdit *codeEdit = (CodeEdit *)ui.tabWidget->currentWidget();
-    if (!codeEdit->changed())
+    if (!codeEdit->document()->isModified())
 	{
 		return;
 	}
@@ -249,6 +251,7 @@ void CodingWidget::saveFile()
 	{
 		saveAs();
 	}
+	codeEdit->document()->setModified(false);
 	ui.tabWidget->setTabIcon(ui.tabWidget->currentIndex(), savedIcon);
 }
 
@@ -347,7 +350,7 @@ void CodingWidget::runModule()
 	saveFile();
 	if (!codeEdit->getFileName().isEmpty())
 	{
-		QProcess process;
+//		QProcess process;
 
 // 		int r = process.execute(tr("E:/Python27/python.exe %1 > %2")
 // 			.arg(codeEdit->getFileName()).arg(TEMP_FILE_NAME));
@@ -355,7 +358,14 @@ void CodingWidget::runModule()
 // 		{
 // 			QString output = QString(process.readAll());
 // 			QMessageBox::information(this, tr("Output"), output, QMessageBox::Ok);
-//		}	
+//		}
+		QLocalSocket *socket = new QLocalSocket(this);
+		socket->connectToServer(QApplication::applicationName(), QIODevice::WriteOnly);
+		qDebug() << "socket connect to " << QApplication::applicationName();
+		QDataStream ds(socket);
+		ds << codeEdit->toPlainText();
+		socket->flush();
+		qDebug() << "send text";
 	}	
 }
 
@@ -369,7 +379,7 @@ void CodingWidget::checkState(int)
         actions["cut"]->setEnabled(flag);
         actions["delete"]->setEnabled(flag);
         actions["paste"]->setEnabled(codeEdit->canPaste());
-        actions["save"]->setEnabled(codeEdit->changed());
+        actions["save"]->setEnabled(codeEdit->document()->isModified());
         actions["undo"]->setEnabled(codeEdit->canUndo());
         actions["redo"]->setEnabled(codeEdit->canRedo());
 

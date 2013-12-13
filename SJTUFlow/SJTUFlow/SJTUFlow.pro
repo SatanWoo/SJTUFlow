@@ -4,8 +4,9 @@
 
 TEMPLATE = app
 TARGET = SJTUFlow
-QT += core opengl widgets gui xml
-DEFINES += QT_DLL QT_OPENGL_LIB QT_WIDGETS_LIB QT_XML_LIB
+QT += core opengl widgets gui xml network
+DEFINES += QT_DLL QT_OPENGL_LIB QT_WIDGETS_LIB \
+    QT_XML_LIB QT_NETWORK_LIB
 INCLUDEPATH += . \
     ../include
 win32{
@@ -54,7 +55,7 @@ HEADERS += ./qhorizontaltabbar.h \
     ./objloader.h \
     ./aboutdialog.h \
     ./scenecommand.h \
-    ./dllitemdelegate.h
+    ./dllrow.h
 SOURCES += ./codeedit.cpp \
     ./codingwidget.cpp \
     ./displaywidget.cpp \
@@ -71,12 +72,13 @@ SOURCES += ./codeedit.cpp \
     ./objloader.cpp \
     ./aboutdialog.cpp \
     ./scenecommand.cpp \
-    ./dllitemdelegate.cpp
+    ./dllrow.cpp
 FORMS += ./sjtuflow.ui \
     ./scenedesignwidget.ui \
     ./codingwidget.ui \
     ./displaywidget.ui \
     ./titlebar.ui \
     ./setting.ui \
-    ./aboutdialog.ui
+    ./aboutdialog.ui \
+    ./dllrow.ui
 RESOURCES += sjtuflow.qrc

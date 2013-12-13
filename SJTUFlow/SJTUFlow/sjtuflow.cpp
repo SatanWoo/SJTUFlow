@@ -34,8 +34,8 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 
     connect(ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
-    ui.tabWidget->setCurrentIndex(1);
     ui.tabWidget->setCurrentIndex(0);
+	tabChanged(0);
 
 /************************************************************************/
 /*                           connect                                    */
@@ -149,7 +149,7 @@ void SJTUFlow::tabChanged(int index)
         ui.menuPrimitive->setEnabled(false);
         ui.actionRun->setEnabled(false);
 		ui.titleBar->setFilePath(QString());
-		displayWidget->cloneScene(sceneDesignWidget->getScene());
+		//displayWidget->cloneScene(sceneDesignWidget->getScene());
     default:
         break;
     }

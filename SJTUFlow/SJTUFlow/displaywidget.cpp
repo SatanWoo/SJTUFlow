@@ -1,12 +1,22 @@
 #include "displaywidget.h"
 
+#include <QLocalSocket>
+#include <QDataStream>
+#include <QDebug>
+
 DisplayWidget::DisplayWidget(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 
-	scene = new Scene;
+	localServer = new QLocalServer(this);
+	if (!localServer->listen(QApplication::applicationName()))
+	{
+		qDebug() << "failed to listen" << QApplication::applicationName() << endl;
+	}
+	connect(localServer, SIGNAL(newConnection()), this, SLOT(dealConnection()));
 
+	scene = new Scene;
 	setCentralWidget(scene);
 
 	//example
@@ -16,15 +26,31 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 	scene->setAnimate();
 	scene->setAllowSelect();
 
-	scene->startAnimation();
+	//scene->startAnimation();
 }
 
 DisplayWidget::~DisplayWidget()
 {
-
+	QLocalServer::removeServer(QApplication::applicationName());
 }
 
 void DisplayWidget::cloneScene( Scene *scene_ )
 {
 	scene->clone(scene_);
+}
+
+void DisplayWidget::dealConnection()
+{
+	QLocalSocket *socket = localServer->nextPendingConnection();
+	connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
+}
+
+void DisplayWidget::readData()
+{
+	QLocalSocket *socket = qobject_cast<QLocalSocket *>(sender());
+	QDataStream ds(socket);
+
+	SocketPackage sp;
+	ds.readRawData((char *)(&sp), sizeof(SocketPackage));
+	scene->addParticle(sp);
 }

@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "ui_displaywidget.h"
 
+#include <QLocalServer>
+
 #include "scene.h"
 
 class DisplayWidget : public QMainWindow
@@ -20,6 +22,11 @@ private:
 	Ui::DisplayWidget ui;
 
 	Scene *scene;
+	QLocalServer *localServer;
+
+private slots:
+	void dealConnection();
+	void readData();
 };
 
 #endif // DISPLAYWIDGET_H

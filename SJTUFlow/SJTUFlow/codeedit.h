@@ -22,18 +22,15 @@ public:
 	QString getFileName(){ return fileName; }
     void setSaved(){ stateSaved = true; }
     bool saved(){ return stateSaved; }
-    bool changed(){ return stateChanged; }
     bool canUndo(){ return stateCanUndo; }
     bool canRedo(){ return stateCanRedo; }
 
 protected:
 	void resizeEvent(QResizeEvent *event);
-    void contextMenuEvent(QContextMenuEvent *){}
 
 private slots:
  	void updateLineNumberAreaWidth(int newBlockCount);
 	void updateLineNumberArea(const QRect &, int);
-    void contentChanged(bool changed);
     void changeUndoState(bool canUndo);
     void changeRedoState(bool canRedo);
 
@@ -42,7 +39,6 @@ private:
 	LineNumberArea *lineNumberArea;
 	QString fileName;
     bool stateSaved;
-    bool stateChanged;
     bool stateCanUndo;
     bool stateCanRedo;
 	int tabWidth;

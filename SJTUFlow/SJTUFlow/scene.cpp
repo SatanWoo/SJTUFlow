@@ -42,6 +42,10 @@ Scene::Scene(QWidget *parent) : QGLViewer(parent)
 	setAnimate(false);
 
 	clear(SCENE_2D);
+
+	// Test
+	pt1.x = 0.5;
+	//
 }
 
 SceneUnit::Primitive *Scene::getPrimitive(int id)
@@ -412,6 +416,54 @@ void Scene::draw()
 		}
 		glPopMatrix();
 	}
+
+	// Test
+// 	int cnt = particle0.count() - 1;
+// 	glPointSize(4.0);
+// 	if (cnt >= 0)
+// 	{
+// 		glColor3d(1.0, 1.0, 1.0);
+// 		glLineWidth(3.0);
+// 		glBegin(GL_LINE);
+// 		glVertex3d(particle0[cnt].x, particle0[cnt].y, particle0[cnt].z);
+// 		glVertex3d(particle1[cnt].x, particle1[cnt].y, particle1[cnt].z);
+// 		glEnd();
+// 	}
+// 	glBegin(GL_POINTS);
+// 	for (int i = 0; i < cnt; i++)
+// 	{
+// 		glColor3d(1.0, 0.0, 0.0);
+// 		glVertex3d(particle0[i].x, particle0[i].y, particle0[i].z);
+// 
+// 		glColor3d(1.0, 0.0, 1.0);
+// 		glVertex3d(particle1[i].x, particle1[i].y, particle1[i].z);
+// 	}
+// 	glEnd();
+
+	if (ifAnimate)
+	{
+		glDisable(GL_LIGHTING);
+		glColor3d(1.0, 1.0, 1.0);
+		glLineWidth(4.0);
+		glBegin(GL_LINES);
+		glVertex3d(pt0.x, pt0.y, pt0.z);
+		glVertex3d(pt1.x, pt1.y, pt1.z);
+		glEnd();
+
+		glPushMatrix();
+		glTranslated(pt0.x, pt0.y, pt0.z);
+		glColor3d(1.0, 0.0, 0.0);
+		gluSphere(quadric, 0.02, 32, 32);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(pt1.x, pt1.y, pt1.z);
+		glColor3d(1.0, 0.0, 1.0);
+		gluSphere(quadric, 0.02, 32, 32);
+		glPopMatrix();
+		glEnable(GL_LIGHTING);
+	}
+	//
 }
 
 void Scene::drawWithNames()
@@ -490,21 +542,21 @@ void Scene::animate()
 {
 	if (ifAnimate)
 	{
-		for (int i = 0; i < primitives.count(); i++)
-		{
-			SceneUnit::Primitive *p = primitives.at(i);
-			Vec center = p->getCenter();
-			center += Vec(dx, 0, 0);
-			if (center[0] < -0.5)
-			{
-				dx = 0.01;
-			}
-			else if (center[0] > 0.5)
-			{
-				dx = -0.01;
-			}
-			p->setCenter(center);
-		}
+// 		for (int i = 0; i < primitives.count(); i++)
+// 		{
+// 			SceneUnit::Primitive *p = primitives.at(i);
+// 			Vec center = p->getCenter();
+// 			center += Vec(dx, 0, 0);
+// 			if (center[0] < -0.5)
+// 			{
+// 				dx = 0.01;
+// 			}
+// 			else if (center[0] > 0.5)
+// 			{
+// 				dx = -0.01;
+// 			}
+// 			p->setCenter(center);
+// 		}
 	}
 }
 
