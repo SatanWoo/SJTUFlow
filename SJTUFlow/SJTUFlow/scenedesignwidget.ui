@@ -33,65 +33,11 @@ QMenuBar::item:pressed
 }
 QToolBar
 {
-	border-color: rgb(209, 209, 209);
-	background-color: rgb(209, 209, 209);
+	background-color: rgba(255, 255, 255, 50);
+	border-color: rgba(255, 255, 255, 50);
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget"/>
-  <widget class="QToolBar" name="mainToolBar">
-   <property name="contextMenuPolicy">
-    <enum>Qt::NoContextMenu</enum>
-   </property>
-   <property name="windowTitle">
-    <string>Main ToolBar</string>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::LeftToolBarArea|Qt::RightToolBarArea</set>
-   </property>
-   <property name="floatable">
-    <bool>false</bool>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QToolBar" name="toolBar2D">
-   <property name="contextMenuPolicy">
-    <enum>Qt::NoContextMenu</enum>
-   </property>
-   <property name="windowTitle">
-    <string>2D toolBar</string>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::LeftToolBarArea|Qt::RightToolBarArea</set>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QToolBar" name="toolBar3D">
-   <property name="contextMenuPolicy">
-    <enum>Qt::NoContextMenu</enum>
-   </property>
-   <property name="windowTitle">
-    <string>3D toolBar</string>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::LeftToolBarArea|Qt::RightToolBarArea</set>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <widget class="QDockWidget" name="dockWidgetProperty">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -102,7 +48,7 @@ QToolBar
    <property name="minimumSize">
     <size>
      <width>200</width>
-     <height>321</height>
+     <height>413</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -476,6 +422,60 @@ QPushButton
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>Main ToolBar</string>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftToolBarArea|Qt::RightToolBarArea</set>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="toolBar3D">
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>3D toolBar</string>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftToolBarArea|Qt::RightToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="toolBar2D">
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
+   </property>
+   <property name="windowTitle">
+    <string>2D toolBar</string>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftToolBarArea|Qt::RightToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

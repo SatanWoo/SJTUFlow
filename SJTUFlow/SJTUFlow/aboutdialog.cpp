@@ -1,6 +1,7 @@
 #include "aboutdialog.h"
 
 #include <QDesktopServices>
+#include <QShortcut>
 
 AboutDialog::AboutDialog(QWidget *parent)
 	: QDialog(parent)
@@ -14,6 +15,9 @@ AboutDialog::AboutDialog(QWidget *parent)
 	QString name = QCoreApplication::applicationName();
 	QString version = QCoreApplication::applicationVersion();
 	ui.labelName->setText(tr("%1 v%2").arg(name).arg(version));
+
+    QShortcut *shortcut = new QShortcut(QKeySequence("ctrl+w"), this);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(close()));
 }
 
 AboutDialog::~AboutDialog()

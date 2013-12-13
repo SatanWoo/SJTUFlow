@@ -86,7 +86,7 @@ QToolButton:pressed
      <property name="font">
       <font>
        <family>Comic Sans MS</family>
-       <pointsize>12</pointsize>
+       <pointsize>14</pointsize>
       </font>
      </property>
      <property name="text">

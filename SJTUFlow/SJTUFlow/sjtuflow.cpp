@@ -10,7 +10,7 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 	bgImage.load(":/SJTUFlow/Resources/background.jpg");
 
 	setWindowFlags(Qt::FramelessWindowHint);
-    setGeometry(100, 20, width(), height());
+    setGeometry(100, 25, width(), height());
 
     ui.verticalLayout->insertWidget(1, ui.menuBar);
 

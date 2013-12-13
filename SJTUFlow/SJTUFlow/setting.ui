@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>300</height>
+    <height>320</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>420</width>
-    <height>300</height>
+    <height>320</height>
    </size>
   </property>
   <property name="contextMenuPolicy">
@@ -252,6 +252,9 @@
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>3</number>
+         </property>
          <item>
           <spacer name="horizontalSpacer_3">
            <property name="orientation">
@@ -336,11 +339,20 @@
          <property name="contextMenuPolicy">
           <enum>Qt::NoContextMenu</enum>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QListWidget::item
+{
+	height: 40px;
+}</string>
+         </property>
          <property name="editTriggers">
           <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
          </property>
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="resizeMode">
+          <enum>QListView::Adjust</enum>
          </property>
         </widget>
        </item>
@@ -383,6 +395,9 @@
    </item>
    <item row="1" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>3</number>
+     </property>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -400,7 +415,7 @@
       <widget class="QPushButton" name="pushButtonOK">
        <property name="maximumSize">
         <size>
-         <width>60</width>
+         <width>70</width>
          <height>16777215</height>
         </size>
        </property>
@@ -416,7 +431,7 @@
       <widget class="QPushButton" name="pushButtonCancel">
        <property name="maximumSize">
         <size>
-         <width>60</width>
+         <width>70</width>
          <height>16777215</height>
         </size>
        </property>
@@ -432,7 +447,7 @@
       <widget class="QPushButton" name="pushButtonApply">
        <property name="maximumSize">
         <size>
-         <width>60</width>
+         <width>70</width>
          <height>16777215</height>
         </size>
        </property>

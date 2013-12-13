@@ -25,17 +25,28 @@ win32{
     }
     RC_FILE = SJTUFlow.rc
 }macx{
+    LIBS += -framework GLUT
+    qglviewerlib.path = Contents/Frameworks
     CONFIG(debug, debug|release){
-        LIBS += -L../lib/ -lQGLViewerd.2.4.0
+        LIBS += -L../lib/ -lQGLViewerd.2
         DESTDIR = ../Mac/Debug
         MOC_DIR += ./GeneratedFiles/debug
         OBJECTS_DIR += debug
+        qglviewerlib.files = ../lib/libQGLViewerd.2.dylib
+        QMAKE_POST_LINK = install_name_tool -change libQGLViewer.2.dylib \
+            @executable_path/../Frameworks/libQGLViewerd.2.dylib \
+            ../Mac/Debug/SJTUFlow.app/Contents/MacOs/SJTUFlow
     }else{
-        LIBS += -L../lib/ -lQGLViewer.2.4.0
+        LIBS += -L../lib/ -lQGLViewer.2
         DESTDIR = ../Mac/Release
         MOC_DIR += ./GeneratedFiles/release
         OBJECTS_DIR += release
+        qglviewerlib.files = ../lib/libQGLViewer.2.dylib
+        QMAKE_POST_LINK = install_name_tool -change libQGLViewer.2.dylib \
+            @executable_path/../Frameworks/libQGLViewer.2.dylib \
+            ../Mac/Release/SJTUFlow.app/Contents/MacOs/SJTUFlow
     }
+    QMAKE_BUNDLE_DATA += qglviewerlib
 }
 DEPENDPATH += .
 UI_DIR += ./GeneratedFiles

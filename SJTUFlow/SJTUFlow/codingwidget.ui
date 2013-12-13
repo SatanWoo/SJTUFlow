@@ -44,6 +44,10 @@ QTabWidget::pane
 	background-color: transparent;
 	border-radius: 5px;
 }
+QTabWidget::tab-bar
+{
+	alignment: left;
+}
 QTabBar::tab
 {
 	background-color: rgba(255, 255, 255, 100);

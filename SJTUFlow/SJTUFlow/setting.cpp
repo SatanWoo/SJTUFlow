@@ -35,6 +35,8 @@ Setting::Setting(QWidget *parent) :
 	connect(ui.listWidgetDll, SIGNAL(itemActivated(QListWidgetItem *)), 
 		this, SLOT(enterEdit(QListWidgetItem *)));
 
+    ui.pushButtonCancel->setShortcut(tr("ctrl+w"));
+
 	loadSetting();
 }
 
@@ -59,6 +61,9 @@ void Setting::insertRow()
 	newItem->setFlags(newItem->flags() | Qt::ItemIsEditable);
 	ui.listWidgetDll->insertItem(row, newItem);
 	DllRow *dllrow = new DllRow;
+#ifdef Q_OS_MAC
+    newItem->setSizeHint(dllrow->sizeHint());
+#endif
 	ui.listWidgetDll->setItemWidget(newItem, dllrow);
 	ui.listWidgetDll->setCurrentRow(row);
 	dllrow->enterEditState();
