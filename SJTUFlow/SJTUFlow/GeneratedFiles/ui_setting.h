@@ -88,8 +88,8 @@ public:
     {
         if (Setting->objectName().isEmpty())
             Setting->setObjectName(QStringLiteral("Setting"));
-        Setting->resize(420, 300);
-        Setting->setMinimumSize(QSize(420, 300));
+        Setting->resize(420, 320);
+        Setting->setMinimumSize(QSize(420, 320));
         Setting->setContextMenuPolicy(Qt::NoContextMenu);
         QIcon icon;
         icon.addFile(QStringLiteral(":/SJTUFlow/Resources/SJTU-Icon.png"), QSize(), QIcon::Normal, QIcon::Off);
@@ -231,6 +231,7 @@ public:
         verticalLayout_3->addItem(verticalSpacer_5);
 
         horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(3);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -264,8 +265,13 @@ public:
         listWidgetDll = new QListWidget(pageDllManager);
         listWidgetDll->setObjectName(QStringLiteral("listWidgetDll"));
         listWidgetDll->setContextMenuPolicy(Qt::NoContextMenu);
+        listWidgetDll->setStyleSheet(QLatin1String("QListWidget::item\n"
+"{\n"
+"	height: 40px;\n"
+"}"));
         listWidgetDll->setEditTriggers(QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed);
         listWidgetDll->setSelectionBehavior(QAbstractItemView::SelectRows);
+        listWidgetDll->setResizeMode(QListView::Adjust);
 
         verticalLayout_3->addWidget(listWidgetDll);
 
@@ -290,6 +296,7 @@ public:
         gridLayout->addWidget(stackedWidget, 0, 1, 1, 1);
 
         horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(3);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -297,21 +304,21 @@ public:
 
         pushButtonOK = new QPushButton(Setting);
         pushButtonOK->setObjectName(QStringLiteral("pushButtonOK"));
-        pushButtonOK->setMaximumSize(QSize(60, 16777215));
+        pushButtonOK->setMaximumSize(QSize(70, 16777215));
         pushButtonOK->setAutoDefault(true);
 
         horizontalLayout->addWidget(pushButtonOK);
 
         pushButtonCancel = new QPushButton(Setting);
         pushButtonCancel->setObjectName(QStringLiteral("pushButtonCancel"));
-        pushButtonCancel->setMaximumSize(QSize(60, 16777215));
+        pushButtonCancel->setMaximumSize(QSize(70, 16777215));
         pushButtonCancel->setAutoDefault(false);
 
         horizontalLayout->addWidget(pushButtonCancel);
 
         pushButtonApply = new QPushButton(Setting);
         pushButtonApply->setObjectName(QStringLiteral("pushButtonApply"));
-        pushButtonApply->setMaximumSize(QSize(60, 16777215));
+        pushButtonApply->setMaximumSize(QSize(70, 16777215));
         pushButtonApply->setAutoDefault(false);
 
         horizontalLayout->addWidget(pushButtonApply);

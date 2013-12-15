@@ -75,7 +75,7 @@ SceneDesignWidget::SceneDesignWidget(QMenuBar *menubar, QWidget *parent)
 	connect(ui.pushButtonColor, SIGNAL(clicked()), colorDialog, SLOT(show()));
 	connect(colorDialog, SIGNAL(colorSelected(QColor)), this, SLOT(colorChanged(QColor)));
 
-	new3DScene();
+	new2DScene();
 }
 
 SceneDesignWidget::~SceneDesignWidget()

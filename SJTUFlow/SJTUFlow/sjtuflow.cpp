@@ -27,6 +27,7 @@ SJTUFlow::SJTUFlow(QWidget *parent)
     codingWidget = new CodingWidget(ui.menuBar);
 	ui.tabWidget->addTab(codingWidget,
 		QIcon(":/Icons/Resources/Icons/Coding.png"), tr("Coding"));
+	connect(codingWidget, SIGNAL(running()), this, SLOT(display()));
 
 	displayWidget = new DisplayWidget;
 	ui.tabWidget->addTab(displayWidget,
@@ -124,6 +125,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionSelectAll->setVisible(false);
         sceneDesignWidget->checkState();
 		ui.titleBar->setFilePath(sceneDesignWidget->filePath());
+		displayWidget->stopAnimate();
         break;
     case 1:
         ui.menuFile->setEnabled(true);
@@ -142,6 +144,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionSelectAll->setVisible(true);
         codingWidget->checkState(0);
 		ui.titleBar->setFilePath(codingWidget->filePath());
+		displayWidget->stopAnimate();
         break;
     case 2:
         ui.menuFile->setEnabled(false);
@@ -150,6 +153,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionRun->setEnabled(false);
 		ui.titleBar->setFilePath(QString());
 		//displayWidget->cloneScene(sceneDesignWidget->getScene());
+		displayWidget->startAnimate();
     default:
         break;
     }
@@ -225,4 +229,9 @@ void SJTUFlow::sharedDelete()
     {
         codingWidget->deleteSelection();
     }
+}
+
+void SJTUFlow::display()
+{
+	ui.tabWidget->setCurrentIndex(2);
 }

@@ -63,6 +63,10 @@ public:
 "	background-color: transparent;\n"
 "	border-radius: 5px;\n"
 "}\n"
+"QTabWidget::tab-bar\n"
+"{\n"
+"	alignment: left;\n"
+"}\n"
 "QTabBar::tab\n"
 "{\n"
 "	background-color: rgba(255, 255, 255, 100);\n"
@@ -79,7 +83,8 @@ public:
 "{\n"
 "	margin-right: -4px;\n"
 "	border-top-right-radius: 4px;\n"
-"	background-color: rgba(255, 255, 255, 200);\n"
+"	background-color: rgba(255"
+                        ", 255, 255, 200);\n"
 "}"));
         centralWidget = new QWidget(CodingWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));

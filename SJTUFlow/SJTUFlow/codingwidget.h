@@ -6,7 +6,22 @@
 #include <QMenuBar>
 #include "ui_codingwidget.h"
 
-#define TEMP_FILE_NAME ".tmp"
+#include <QThread>
+
+class RunThread : public QThread
+{
+public:
+	void run()
+	{
+		system(cmd.toStdString().c_str());
+	}
+	void setCmd(QString cmd_)
+	{
+		cmd = cmd_;
+	}
+private:
+	QString cmd;
+};
 
 class CodingWidget : public QMainWindow
 {
@@ -20,6 +35,7 @@ public:
 
 signals:
 	void filePathChanged(QString);
+	void running();
 
 protected:
 

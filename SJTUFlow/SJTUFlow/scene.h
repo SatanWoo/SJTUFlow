@@ -9,20 +9,10 @@
 
 #include <qglviewer.h>
 
+#include "../SJTUFlow-SPH/Strategies/RenderSPHA.h"
+
 #define RAND_255 rand() % 255
 #define RAND_COLOR QColor(RAND_255, RAND_255, RAND_255)
-
-// Test
-struct MyVec3d
-{
-	MyVec3d(){ x = 0; y = 0; z = 0; }
-	double x, y, z;
-};
-struct SocketPackage
-{
-	MyVec3d particle0Loc, particle1Loc;
-};
-//
 
 class PrimitiveOperateCommand;
 
@@ -40,7 +30,7 @@ public:
 
 	// get the id-specific primitive
 	SceneUnit::Primitive *getPrimitive(int id);
-	void setAnimate(bool animate = true){ ifAnimate = animate; camera()->setPosition(qglviewer::Vec(0.0, 0.0, 2.0)); }
+	void setAnimate(bool animate = true){ ifAnimate = animate; camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0)); }
 	void setAllowSelect(bool allow = false){ allowSelect = allow; }
 	void setOperator(Operator op){ curOp = op; updateGL(); }
 	void setUndoStack(QUndoStack *undoStack_){ undoStack = undoStack_;}
@@ -50,16 +40,21 @@ public:
 
 	void clone(Scene *scene);
 
-	// Test
-	void addParticle(SocketPackage sp)
+	void setSocketPackage(SocketPackage sp_)
 	{
-		//particle0.append(sp.particle0Loc);
-		//particle1.append(sp.particle1Loc);
-		pt0 = sp.particle0Loc;
-		pt1 = sp.particle1Loc;
+		memcpy(&sp, &sp_, sizeof(SocketPackage));
 		updateGL();
 	}
-	//
+	void startAnimation()
+	{
+		ifAnimate = true;
+		camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0)); 
+	}
+	void stopAnimation()
+	{
+		ifAnimate = false;
+		memset(&sp, 0, sizeof(SocketPackage));
+	}
 
 signals:
 	void selectedObjChanged(int);
@@ -103,10 +98,7 @@ private:
 	static qglviewer::Vec axisDirs[3];
 	static double axisRot[3][4];
 
-	// Test
-	QVector<MyVec3d> particle0, particle1;
-	MyVec3d pt0, pt1;
-	//
+	SocketPackage sp;
 
 	bool mousePressed;
 	qglviewer::Vec mousePos;

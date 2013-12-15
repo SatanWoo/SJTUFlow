@@ -5,7 +5,6 @@
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
-#include <QLocalSocket>
 
 #include <QDebug>
 
@@ -350,22 +349,14 @@ void CodingWidget::runModule()
 	saveFile();
 	if (!codeEdit->getFileName().isEmpty())
 	{
-//		QProcess process;
-
-// 		int r = process.execute(tr("E:/Python27/python.exe %1 > %2")
-// 			.arg(codeEdit->getFileName()).arg(TEMP_FILE_NAME));
-// 		if (r != 0)
-// 		{
-// 			QString output = QString(process.readAll());
-// 			QMessageBox::information(this, tr("Output"), output, QMessageBox::Ok);
-//		}
-		QLocalSocket *socket = new QLocalSocket(this);
-		socket->connectToServer(QApplication::applicationName(), QIODevice::WriteOnly);
-		qDebug() << "socket connect to " << QApplication::applicationName();
-		QDataStream ds(socket);
-		ds << codeEdit->toPlainText();
-		socket->flush();
-		qDebug() << "send text";
+ 		QString cmd = tr("E:/Python33/python.exe %1").arg(codeEdit->getFileName());
+// 		QProcess process;
+// 		process.start("cmd", QStringList() << tr("E:/Python33/python.exe") << codeEdit->getFileName());
+		RunThread thread;
+		thread.setCmd(cmd);
+		thread.start();
+		emit running();
+		//system(cmd.toStdString().c_str());
 	}	
 }
 

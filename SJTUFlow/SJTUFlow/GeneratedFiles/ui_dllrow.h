@@ -34,31 +34,52 @@ public:
     {
         if (DllRow->objectName().isEmpty())
             DllRow->setObjectName(QStringLiteral("DllRow"));
-        DllRow->resize(250, 23);
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        DllRow->resize(250, 33);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(DllRow->sizePolicy().hasHeightForWidth());
         DllRow->setSizePolicy(sizePolicy);
+        DllRow->setMinimumSize(QSize(0, 33));
+        QFont font;
+        font.setPointSize(10);
+        DllRow->setFont(font);
         DllRow->setContextMenuPolicy(Qt::NoContextMenu);
         horizontalLayout = new QHBoxLayout(DllRow);
-        horizontalLayout->setSpacing(0);
+        horizontalLayout->setSpacing(10);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout->setContentsMargins(1, 0, 0, 0);
         lineEdit = new QLineEdit(DllRow);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
+        lineEdit->setSizePolicy(sizePolicy1);
+        lineEdit->setMinimumSize(QSize(0, 27));
         lineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
         horizontalLayout->addWidget(lineEdit);
 
         label = new QLabel(DllRow);
         label->setObjectName(QStringLiteral("label"));
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy2);
+        label->setMinimumSize(QSize(0, 27));
 
         horizontalLayout->addWidget(label);
 
         pushButton = new QPushButton(DllRow);
         pushButton->setObjectName(QStringLiteral("pushButton"));
+        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Expanding);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
+        pushButton->setSizePolicy(sizePolicy3);
         pushButton->setMinimumSize(QSize(35, 0));
         pushButton->setMaximumSize(QSize(35, 16777215));
         pushButton->setContextMenuPolicy(Qt::NoContextMenu);
@@ -75,6 +96,7 @@ public:
     void retranslateUi(QWidget *DllRow)
     {
         DllRow->setWindowTitle(QApplication::translate("DllRow", "DllRow", 0));
+        lineEdit->setText(QString());
         label->setText(QString());
         pushButton->setText(QApplication::translate("DllRow", "...", 0));
     } // retranslateUi

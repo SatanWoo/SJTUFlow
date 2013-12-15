@@ -45,7 +45,7 @@ private slots:
     void sharedRedo();
     void sharedDelete();
 
-
+	void display();
 };
 
 #endif // SJTUFLOW_H

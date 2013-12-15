@@ -82,7 +82,7 @@ public:
         labelTitle->setObjectName(QStringLiteral("labelTitle"));
         QFont font;
         font.setFamily(QStringLiteral("Comic Sans MS"));
-        font.setPointSize(12);
+        font.setPointSize(14);
         labelTitle->setFont(font);
         labelTitle->setAlignment(Qt::AlignCenter);
 

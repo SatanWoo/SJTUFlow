@@ -33,9 +33,6 @@ class Ui_SceneDesignWidget
 {
 public:
     QWidget *centralWidget;
-    QToolBar *mainToolBar;
-    QToolBar *toolBar2D;
-    QToolBar *toolBar3D;
     QDockWidget *dockWidgetProperty;
     QWidget *dockWidgetContents;
     QGridLayout *gridLayout;
@@ -65,6 +62,9 @@ public:
     QDoubleSpinBox *doubleSpinBoxPosX;
     QDoubleSpinBox *doubleSpinBoxPosY;
     QDoubleSpinBox *doubleSpinBoxPosZ;
+    QToolBar *mainToolBar;
+    QToolBar *toolBar3D;
+    QToolBar *toolBar2D;
 
     void setupUi(QMainWindow *SceneDesignWidget)
     {
@@ -88,28 +88,12 @@ public:
 "}\n"
 "QToolBar\n"
 "{\n"
-"	border-color: rgb(209, 209, 209);\n"
-"	background-color: rgb(209, 209, 209);\n"
+"	background-color: rgba(255, 255, 255, 50);\n"
+"	border-color: rgba(255, 255, 255, 50);\n"
 "}"));
         centralWidget = new QWidget(SceneDesignWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         SceneDesignWidget->setCentralWidget(centralWidget);
-        mainToolBar = new QToolBar(SceneDesignWidget);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        mainToolBar->setContextMenuPolicy(Qt::NoContextMenu);
-        mainToolBar->setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
-        mainToolBar->setFloatable(false);
-        SceneDesignWidget->addToolBar(Qt::LeftToolBarArea, mainToolBar);
-        toolBar2D = new QToolBar(SceneDesignWidget);
-        toolBar2D->setObjectName(QStringLiteral("toolBar2D"));
-        toolBar2D->setContextMenuPolicy(Qt::NoContextMenu);
-        toolBar2D->setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
-        SceneDesignWidget->addToolBar(Qt::LeftToolBarArea, toolBar2D);
-        toolBar3D = new QToolBar(SceneDesignWidget);
-        toolBar3D->setObjectName(QStringLiteral("toolBar3D"));
-        toolBar3D->setContextMenuPolicy(Qt::NoContextMenu);
-        toolBar3D->setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
-        SceneDesignWidget->addToolBar(Qt::LeftToolBarArea, toolBar3D);
         dockWidgetProperty = new QDockWidget(SceneDesignWidget);
         dockWidgetProperty->setObjectName(QStringLiteral("dockWidgetProperty"));
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -117,7 +101,7 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(dockWidgetProperty->sizePolicy().hasHeightForWidth());
         dockWidgetProperty->setSizePolicy(sizePolicy);
-        dockWidgetProperty->setMinimumSize(QSize(200, 321));
+        dockWidgetProperty->setMinimumSize(QSize(200, 413));
         dockWidgetProperty->setMaximumSize(QSize(200, 10000));
         dockWidgetProperty->setStyleSheet(QLatin1String("*\n"
 "{\n"
@@ -323,6 +307,22 @@ public:
 
         dockWidgetProperty->setWidget(dockWidgetContents);
         SceneDesignWidget->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockWidgetProperty);
+        mainToolBar = new QToolBar(SceneDesignWidget);
+        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        mainToolBar->setContextMenuPolicy(Qt::NoContextMenu);
+        mainToolBar->setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
+        mainToolBar->setFloatable(false);
+        SceneDesignWidget->addToolBar(Qt::LeftToolBarArea, mainToolBar);
+        toolBar3D = new QToolBar(SceneDesignWidget);
+        toolBar3D->setObjectName(QStringLiteral("toolBar3D"));
+        toolBar3D->setContextMenuPolicy(Qt::NoContextMenu);
+        toolBar3D->setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
+        SceneDesignWidget->addToolBar(Qt::LeftToolBarArea, toolBar3D);
+        toolBar2D = new QToolBar(SceneDesignWidget);
+        toolBar2D->setObjectName(QStringLiteral("toolBar2D"));
+        toolBar2D->setContextMenuPolicy(Qt::NoContextMenu);
+        toolBar2D->setAllowedAreas(Qt::LeftToolBarArea|Qt::RightToolBarArea);
+        SceneDesignWidget->addToolBar(Qt::LeftToolBarArea, toolBar2D);
         QWidget::setTabOrder(lineEditObjName, doubleSpinBoxPosX);
         QWidget::setTabOrder(doubleSpinBoxPosX, doubleSpinBoxPosY);
         QWidget::setTabOrder(doubleSpinBoxPosY, doubleSpinBoxPosZ);
@@ -342,9 +342,6 @@ public:
     void retranslateUi(QMainWindow *SceneDesignWidget)
     {
         SceneDesignWidget->setWindowTitle(QApplication::translate("SceneDesignWidget", "SceneDesignWidget", 0));
-        mainToolBar->setWindowTitle(QApplication::translate("SceneDesignWidget", "Main ToolBar", 0));
-        toolBar2D->setWindowTitle(QApplication::translate("SceneDesignWidget", "2D toolBar", 0));
-        toolBar3D->setWindowTitle(QApplication::translate("SceneDesignWidget", "3D toolBar", 0));
         dockWidgetProperty->setWindowTitle(QApplication::translate("SceneDesignWidget", "Property", 0));
         labelPosX->setText(QApplication::translate("SceneDesignWidget", "x", 0));
         lineEditObjName->setText(QString());
@@ -361,6 +358,9 @@ public:
         labelSizeZ->setText(QApplication::translate("SceneDesignWidget", "z", 0));
         labelSize->setText(QApplication::translate("SceneDesignWidget", "size", 0));
         labelScalar->setText(QApplication::translate("SceneDesignWidget", "Scalar", 0));
+        mainToolBar->setWindowTitle(QApplication::translate("SceneDesignWidget", "Main ToolBar", 0));
+        toolBar3D->setWindowTitle(QApplication::translate("SceneDesignWidget", "3D toolBar", 0));
+        toolBar2D->setWindowTitle(QApplication::translate("SceneDesignWidget", "2D toolBar", 0));
     } // retranslateUi
 
 };

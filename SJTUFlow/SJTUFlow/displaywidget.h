@@ -17,6 +17,14 @@ public:
 	~DisplayWidget();
 
 	void cloneScene(Scene *scene_);
+	void startAnimate()
+	{
+		scene->startAnimation();
+	}
+	void stopAnimate()
+	{
+		scene->stopAnimation();
+	}
 
 private:
 	Ui::DisplayWidget ui;
