@@ -417,19 +417,26 @@ void Scene::draw()
 
 	if (ifAnimate)
 	{
-		float r = 2.5f * kParticleRadius * kScreenWidth / kViewWidth;
+		//float r = 2.5f * kParticleRadius * kScreenWidth / kViewWidth;
+		float r = kParticleRadius;
 
-		//»æÖÆÁ£×Ó °ë¾¶r*r
-		glPointSize(r * 2);
-
-		glBegin(GL_POINTS);
-		for(int i = 0; i < sp.particleNum; ++i){
+		for(int i = 0; i < sp.particleNum; ++i)
+		{
+			SceneUnit::Circle circle;
 			if (sp.particlesMass[i] > 1.0)
-				glColor3f(.2,.6,.0);
-			else glColor3f(.2, .6, .8);
-			glVertex2f(sp.particles[i].x, sp.particles[i].y);
+			{
+				circle.setColor(QColor(51, 153, 0));
+			}
+			else
+			{
+				circle.setColor(QColor(51, 153, 204));
+			}
+			circle.setCenter(Vec(sp.particles[i].x, sp.particles[i].y, 0.0));
+			
+			glPushMatrix();
+			circle.draw(false);
+			glPopMatrix();
 		}
-		glEnd();
 	}
 }
 
@@ -461,7 +468,7 @@ void Scene::drawWithNames()
 void Scene::postDraw()
 {
 	QGLViewer::postDraw();
-	//drawCornerAxis();
+	drawCornerAxis();
 }
 
 void Scene::postSelection(const QPoint& point)

@@ -135,5 +135,8 @@
     <ClCompile Include="Strategies\UpdateGridA.cpp">
       <Filter>Source Files\Strategies</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

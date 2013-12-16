@@ -17,8 +17,15 @@ using namespace boost::python;
 class CalPressureStrategy
 {
 public:
-   virtual void CalPressure(int particleNum, Particle* particles) = 0;
-
+	////////////////////////////////////////////////////////////////////////
+	// Name:       CalPressureStrategy::CalPressure(int particleNum, Particle** particles)
+	// Purpose:    Implementation of CalPressureStrategy::CalPressure()
+	// Parameters:
+	// - particleNum
+	// - particles
+	// Return:     void
+	////////////////////////////////////////////////////////////////////////
+	virtual void CalPressure(int particleNum, Particle* particles) = 0;
 protected:
 private:
 
@@ -27,10 +34,9 @@ private:
 class CalPressureStrategyWrap : public CalPressureStrategy, public wrapper<CalPressureStrategy>
 {
 public:
-	void CalPressure(int particleNum, Particle* particles)
-	{
-		this->get_override("CalPressure")(particleNum, particles);
-	}
+	void CalPressure(int particleNum, Particle* particles);
+	
+	static void ExportClass();
 };
 
 #endif

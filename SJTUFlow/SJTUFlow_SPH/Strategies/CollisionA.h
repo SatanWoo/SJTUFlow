@@ -17,26 +17,22 @@
 class CollisionA : public CollisionStrategy
 {
 public:
-	CollisionA()
-	{
-		walls[0] = Wall( 1,  0, 0);
-		walls[1] = Wall( 0,  1, 0);
-		walls[2] = Wall(-1,  0, -kViewWidth);
-		walls[3] = Wall( 0, -1, -kViewHeight);
-	}
+	CollisionA();
 	void Collision(int particleNum, float kDt, Particle* particles, std::string scene);
+
+	static void ExportClass();
 
 protected:
 private:
-    struct Wall{
-        Wall() { }
-        Wall(float _nx, float _ny, float _c) : nx(_nx), ny(_ny), c(_c) { }
-        float nx;
-        float ny;
-        float c;
-    };
-    #define kWallCount 4
-    Wall walls[kWallCount];
+	struct Wall{
+		Wall() { }
+		Wall(float _nx, float _ny, float _c) : nx(_nx), ny(_ny), c(_c) { }
+		float nx;
+		float ny;
+		float c;
+	};
+	#define kWallCount 4
+	Wall walls[kWallCount];
 };
 
 #endif

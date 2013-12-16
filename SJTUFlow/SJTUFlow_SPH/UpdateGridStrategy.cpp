@@ -7,16 +7,13 @@
 
 #include "UpdateGridStrategy.h"
 
-////////////////////////////////////////////////////////////////////////
-// Name:       UpdateGridStrategy::UpdateGrid(int particleNum, Particle** particles)
-// Purpose:    Implementation of UpdateGridStrategy::UpdateGrid()
-// Parameters:
-// - particleNum
-// - particles
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void UpdateGridStrategy::UpdateGrid(int particleNum, Particle* particles)
+void UpdateGridStrategyWrap::UpdateGrid( int particleNum, Particle* particles )
 {
-   // TODO : implement
+	this->get_override("UpdateGrid")(particleNum, particles);
+}
+
+void UpdateGridStrategyWrap::ExportClass()
+{
+	class_<UpdateGridStrategyWrap, boost::noncopyable>("UpdateGridStrategy")
+		.def("UpdateGrid", pure_virtual(&UpdateGridStrategy::UpdateGrid));
 }

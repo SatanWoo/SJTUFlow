@@ -19,7 +19,9 @@
 class CalPressureA : public CalPressureStrategy
 {
 public:
-   void CalPressure(int particleNum, Particle* particles);
+	void CalPressure(int particleNum, Particle* particles);
+
+	static void ExportClass();
 
 protected:
 private:

@@ -108,6 +108,7 @@
     <ClCompile Include="CalPressureStrategy.cpp" />
     <ClCompile Include="CollisionStrategy.cpp" />
     <ClCompile Include="EmitStrategy.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="RelaxPosStrategy.cpp" />
     <ClCompile Include="RenderSPHStrategy.cpp" />

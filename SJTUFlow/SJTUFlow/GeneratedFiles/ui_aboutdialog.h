@@ -70,11 +70,11 @@ public:
         labelName = new QLabel(AboutDialog);
         labelName->setObjectName(QStringLiteral("labelName"));
         QFont font;
-        font.setFamily(QStringLiteral("High Tower Text"));
+        font.setFamily(QStringLiteral("Arial"));
         font.setPointSize(16);
-        font.setBold(false);
-        font.setItalic(true);
-        font.setWeight(50);
+        font.setBold(true);
+        font.setItalic(false);
+        font.setWeight(75);
         labelName->setFont(font);
 
         horizontalLayout->addWidget(labelName);
@@ -85,6 +85,11 @@ public:
         textBrowserAuthor = new QTextBrowser(AboutDialog);
         textBrowserAuthor->setObjectName(QStringLiteral("textBrowserAuthor"));
         textBrowserAuthor->setMaximumSize(QSize(16777215, 30));
+        QFont font1;
+        font1.setFamily(QStringLiteral("Arial"));
+        font1.setBold(true);
+        font1.setWeight(75);
+        textBrowserAuthor->setFont(font1);
         textBrowserAuthor->setStyleSheet(QStringLiteral("background-color:transparent;"));
         textBrowserAuthor->setFrameShape(QFrame::NoFrame);
         textBrowserAuthor->setFrameShadow(QFrame::Plain);
@@ -105,9 +110,12 @@ public:
 
         groupBox = new QGroupBox(AboutDialog);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        QFont font1;
-        font1.setPointSize(10);
-        groupBox->setFont(font1);
+        QFont font2;
+        font2.setFamily(QStringLiteral("Arial"));
+        font2.setPointSize(10);
+        font2.setBold(false);
+        font2.setWeight(50);
+        groupBox->setFont(font2);
         groupBox->setContextMenuPolicy(Qt::NoContextMenu);
         groupBox->setStyleSheet(QStringLiteral(""));
         groupBox->setAlignment(Qt::AlignCenter);
@@ -140,13 +148,13 @@ public:
         textBrowserAuthor->setHtml(QApplication::translate("AboutDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'High Tower Text'; font-size:12pt; font-style:italic;\">  Author:                          SJTU DALAB Team</span></p></body></html>", 0));
+"</style></head><body style=\" font-family:'Arial'; font-size:9pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:400; font-style:italic;\">  Author:                          SJTU DALAB Team</span></p></body></html>", 0));
         textBrowserDALAB->setHtml(QApplication::translate("AboutDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'High Tower Text'; font-size:12pt; font-style:italic;\">  DALAB Home Page:     </span><a href=\"http://dalab.se.sjtu.edu.cn/\"><span style=\" font-family:'High Tower Text'; font-size:12pt; font-style:italic; text-decoration: underline; color:#0000ff;\">http://dalab.se.sjtu.edu.cn/</span></a></p></body></html>", 0));
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Arial'; font-size:12pt; font-style:italic;\">  DALAB Home Page: </span><a href=\"http://dalab.se.sjtu.edu.cn/\"><span style=\" font-family:'Arial'; font-size:12pt; font-style:italic; text-decoration: underline; color:#0000ff;\">http://dalab.se.sjtu.edu.cn/</span></a></p></body></html>", 0));
         groupBox->setTitle(QApplication::translate("AboutDialog", "GNU General Public Licence", 0));
         plainTextEdit->setPlainText(QApplication::translate("AboutDialog", "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
 "\n"

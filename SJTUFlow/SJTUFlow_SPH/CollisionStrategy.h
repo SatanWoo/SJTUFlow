@@ -17,8 +17,17 @@ using namespace boost::python;
 class CollisionStrategy
 {
 public:
-   virtual void Collision(int particleNum, float kDt, Particle* particles, std::string scene) = 0;
-
+	////////////////////////////////////////////////////////////////////////
+	// Name:       CollisionStrategy::Collision(int particleNum, float kDt, Particle* particles, std::string scene)
+	// Purpose:    Implementation of CollisionStrategy::Collision()
+	// Parameters:
+	// - particleNum
+	// - kDt
+	// - particles
+	// - scene
+	// Return:     void
+	////////////////////////////////////////////////////////////////////////
+	virtual void Collision(int particleNum, float kDt, Particle* particles, std::string scene) = 0;
 protected:
 private:
 
@@ -27,10 +36,9 @@ private:
 class CollisionStrategyWrap : public CollisionStrategy, public wrapper<CollisionStrategy>
 {
 public:
-	void Collision(int particleNum, float kDt, Particle* particles, std::string scene)
-	{
-		this->get_override("Collision")(particleNum, kDt, particles, scene);
-	}
+	void Collision(int particleNum, float kDt, Particle* particles, std::string scene);
+
+	static void ExportClass();
 };
 
 #endif

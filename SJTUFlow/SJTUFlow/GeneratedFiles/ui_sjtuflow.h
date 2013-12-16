@@ -77,6 +77,11 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(SJTUFlowClass->sizePolicy().hasHeightForWidth());
         SJTUFlowClass->setSizePolicy(sizePolicy);
+        QFont font;
+        font.setBold(false);
+        font.setItalic(false);
+        font.setWeight(50);
+        SJTUFlowClass->setFont(font);
         SJTUFlowClass->setContextMenuPolicy(Qt::NoContextMenu);
         QIcon icon;
         icon.addFile(QStringLiteral(":/SJTUFlow/Resources/SJTU-Icon.png"), QSize(), QIcon::Normal, QIcon::Off);
@@ -274,9 +279,9 @@ public:
         menuBar = new QMenuBar(SJTUFlowClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 1024, 25));
-        QFont font;
-        font.setPointSize(10);
-        menuBar->setFont(font);
+        QFont font1;
+        font1.setPointSize(10);
+        menuBar->setFont(font1);
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuNewScene = new QMenu(menuFile);

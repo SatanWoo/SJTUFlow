@@ -17,7 +17,16 @@ using namespace boost::python;
 class BodyForceStrategy
 {
 public:
-   virtual void ApplyBodyForce(int particleNum, float kDt, Particle* particles) = 0;
+	////////////////////////////////////////////////////////////////////////
+	// Name:       BodyForceStrategy::ApplyBodyForce(int particleNum, float kDt, Particle* particles)
+	// Purpose:    Implementation of BodyForceStrategy::ApplyBodyForce()
+	// Parameters:
+	// - particleNum
+	// - kDt
+	// - particles
+	// Return:     void
+	////////////////////////////////////////////////////////////////////////
+	virtual void ApplyBodyForce(int particleNum, float kDt, Particle* particles) = 0;
 protected:
 private:
 
@@ -26,10 +35,9 @@ private:
 class BodyForceStrategyWrap : public BodyForceStrategy, public wrapper<BodyForceStrategy>
 {
 public:
-	void ApplyBodyForce(int particleNum, float kDt, Particle* particles)
-	{
-		this->get_override("ApplyBodyForce")(particleNum, kDt, particles);
-	}
+	void ApplyBodyForce(int particleNum, float kDt, Particle* particles);
+
+	static void ExportClass();
 };
 
 #endif

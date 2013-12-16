@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QStyledItemDelegate>
+#include <Windows.h>
 #include "ui_dllrow.h"
 
 class DllRow : public QWidget

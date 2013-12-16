@@ -17,7 +17,16 @@ using namespace boost::python;
 class EmitStrategy
 {
 public:
-   virtual size_t EmitParticles(int particleNum, float kDt, Particle* particles) = 0;
+	////////////////////////////////////////////////////////////////////////
+	// Name:       EmitStrategy::EmitParticles(int particleNum, float kDt, Particle* particles)
+	// Purpose:    Implementation of EmitStrategy::EmitParticles()
+	// Parameters:
+	// - particleNum
+	// - kDt
+	// - particles
+	// Return:     size_t
+	////////////////////////////////////////////////////////////////////////
+	virtual size_t EmitParticles(int particleNum, float kDt, Particle* particles) = 0;
 protected:
 private:
 
@@ -26,10 +35,9 @@ private:
 class EmitStrategyWrap : public EmitStrategy, public wrapper<EmitStrategy>
 {
 public:
-	size_t EmitParticles(int particleNum, float kDt, Particle* particles)
-	{
-		return this->get_override("EmitParticles")(particleNum, kDt, particles);
-	}
+	size_t EmitParticles(int particleNum, float kDt, Particle* particles);
+
+	static void ExportClass();
 };
 
 #endif

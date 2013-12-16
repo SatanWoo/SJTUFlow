@@ -7,17 +7,13 @@
 
 #include "CollisionStrategy.h"
 
-////////////////////////////////////////////////////////////////////////
-// Name:       CollisionStrategy::Collision(int particleNum, Particle** particles, std::string scene)
-// Purpose:    Implementation of CollisionStrategy::Collision()
-// Parameters:
-// - particleNum
-// - particles
-// - scene
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void CollisionStrategy::Collision(int particleNum, float kDt, Particle* particles, std::string scene)
+void CollisionStrategyWrap::Collision( int particleNum, float kDt, Particle* particles, std::string scene )
 {
-   // TODO : implement
+	this->get_override("Collision")(particleNum, kDt, particles, scene);
+}
+
+void CollisionStrategyWrap::ExportClass()
+{
+	class_<CollisionStrategyWrap, boost::noncopyable>("CollisionStrategy")
+		.def("Collision", pure_virtual(&CollisionStrategy::Collision));
 }

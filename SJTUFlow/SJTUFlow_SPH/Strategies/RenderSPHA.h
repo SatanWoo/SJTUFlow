@@ -12,21 +12,16 @@
 #include "../Particle.h"
 #include "../RenderSPHStrategy.h"
 
-struct SocketPackage
-{
-	int particleNum;
-	float particlesMass[kParticleCount];
-	vec2 particles[kParticleCount];
-};
-
 class RenderSPHA : public RenderSPHStrategy
 {
 public:
-   static size_t _particleNum;
-   static Particle *_particles;
-   void Render();
-   void RenderInit();
-   void RenderSPH(int particleNum, Particle* particles, std::string scene);
+	static size_t _particleNum;
+	static Particle *_particles;
+	void Render();
+	void RenderInit();
+	void RenderSPH(int particleNum, Particle* particles, std::string scene);
+
+	static void ExportClass();
 protected:
 private:
 

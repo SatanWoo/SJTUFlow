@@ -7,16 +7,13 @@
 
 #include "BodyForceStrategy.h"
 
-////////////////////////////////////////////////////////////////////////
-// Name:       BodyForceStrategy::ApplyBodyForce(int particleNum, Particle** particles)
-// Purpose:    Implementation of BodyForceStrategy::ApplyBodyForce()
-// Parameters:
-// - particleNum
-// - particles
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void BodyForceStrategy::ApplyBodyForce(int particleNum, float kDt, Particle* particles)
+void BodyForceStrategyWrap::ApplyBodyForce( int particleNum, float kDt, Particle* particles )
 {
-   // TODO : implement
+	this->get_override("ApplyBodyForce")(particleNum, kDt, particles);
+}
+
+void BodyForceStrategyWrap::ExportClass()
+{
+	class_<BodyForceStrategyWrap, boost::noncopyable>("BodyForceStrategy")
+		.def("ApplyBodyForce", pure_virtual(&BodyForceStrategy::ApplyBodyForce));
 }

@@ -81,7 +81,7 @@ public:
         labelTitle = new QLabel(TitleBar);
         labelTitle->setObjectName(QStringLiteral("labelTitle"));
         QFont font;
-        font.setFamily(QStringLiteral("Comic Sans MS"));
+        font.setFamily(QStringLiteral("Arial"));
         font.setPointSize(14);
         labelTitle->setFont(font);
         labelTitle->setAlignment(Qt::AlignCenter);

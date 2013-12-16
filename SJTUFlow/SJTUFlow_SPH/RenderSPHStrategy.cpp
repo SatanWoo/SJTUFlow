@@ -7,17 +7,19 @@
 
 #include "RenderSPHStrategy.h"
 
-////////////////////////////////////////////////////////////////////////
-// Name:       RenderSPHStrategy::RenderSPH(int particleNum, Particle** particles, std::string scene)
-// Purpose:    Implementation of RenderSPHStrategy::RenderSPH()
-// Parameters:
-// - particleNum
-// - particles
-// - scene
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void RenderSPHStrategy::RenderSPH(int particleNum, Particle* particles, std::string scene)
+void RenderSPHStrategyWrap::RenderInit()
 {
-   // TODO : implement
+	this->get_override("RenderInit")();
+}
+
+void RenderSPHStrategyWrap::RenderSPH( int particleNum, Particle* particles, std::string scene )
+{
+	this->get_override("RenderSPH")(particleNum, particles, scene);
+}
+
+void RenderSPHStrategyWrap::ExportClass()
+{
+	class_<RenderSPHStrategyWrap, boost::noncopyable>("RenderSPHStrategy")
+		.def("RenderInit", pure_virtual(&RenderSPHStrategy::RenderInit))
+		.def("RenderSPH", pure_virtual(&RenderSPHStrategy::RenderSPH));
 }

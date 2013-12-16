@@ -2,6 +2,7 @@
 #include "ui_setting.h"
 
 #include "dllrow.h"
+#include "AlgorithmManager.h"
 
 #include <QSettings>
 
@@ -105,6 +106,29 @@ void Setting::saveSetting()
 	QPushButton *pushbutton = qobject_cast<QPushButton *>(sender());
 	if (tr("pushButtonOK") == pushbutton->objectName())
 	{
+		// open dll
+		for (int i = 0; i < ui.listWidgetDll->count(); i++)
+		{
+			QListWidgetItem *item = ui.listWidgetDll->item(i);
+			DllRow *dllrow = qobject_cast<DllRow *>(
+				ui.listWidgetDll->itemWidget(item));
+
+			std::string str = dllrow->text().toStdString();
+			if (str == "")
+				continue;
+			
+			if (AlgorithmManager::GetInstance().hModule != NULL)
+				FreeLibrary(AlgorithmManager::GetInstance().hModule);
+
+			wchar_t *buf = new wchar_t[str.size()+1];
+			MultiByteToWideChar(CP_ACP, NULL, str.c_str(), str.size(), buf, str.size() * sizeof(wchar_t));
+			buf[str.size()] = 0;
+			AlgorithmManager::GetInstance().hModule = LoadLibraryEx(buf, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+			delete buf;
+
+			break; // no dll list; just single dll
+		}
+
 		close();
 	}
 }

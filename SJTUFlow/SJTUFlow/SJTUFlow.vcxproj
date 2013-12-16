@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="aboutdialog.cpp" />
+    <ClCompile Include="AlgorithmManager.cpp" />
     <ClCompile Include="codeedit.cpp" />
     <ClCompile Include="codingwidget.cpp" />
     <ClCompile Include="displaywidget.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="scenedesignwidget.cpp" />
     <ClCompile Include="setting.cpp" />
     <ClCompile Include="sjtuflow.cpp" />
+    <ClCompile Include="StableFluidsApplication.cpp" />
     <ClCompile Include="titlebar.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +208,14 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AlgorithmManager.h" />
+    <ClInclude Include="Stable2DAdvectStrategy.h" />
+    <ClInclude Include="Stable2DBoundaryStrategy.h" />
+    <ClInclude Include="Stable2DDiffuseStrategy.h" />
+    <ClInclude Include="Stable2DProjectStrategy.h" />
+    <ClInclude Include="StableFluids.h" />
+    <ClInclude Include="StableFluidsApplication.h" />
+    <ClInclude Include="Utility.h" />
     <CustomBuild Include="dllrow.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing dllrow.h...</Message>
@@ -216,7 +226,11 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_NETWORK_LIB  "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtNetwork"</Command>
     </CustomBuild>
+    <ClInclude Include="AdvectStrategy.h" />
+    <ClInclude Include="BoundaryStrategy.h" />
+    <ClInclude Include="DiffuseStrategy.h" />
     <ClInclude Include="GeneratedFiles\ui_dllrow.h" />
+    <ClInclude Include="ProjectStrategy.h" />
     <ClInclude Include="resource.h" />
     <CustomBuild Include="scenecommand.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalInputs)</AdditionalInputs>
@@ -457,7 +471,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\GeneratedFiles" MocDir=".\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="Qt5.1.1_msvc2010_opengl" />
+      <UserProperties UicDir=".\GeneratedFiles" MocDir=".\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="$(DefaultQtVersion)" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

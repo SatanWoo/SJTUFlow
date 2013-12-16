@@ -38,3 +38,9 @@ void CalPressureA::CalPressure(int particleNum, Particle* particles)
         pi.nearP = kNearStiffness * nearDensity;
     }
 }
+
+void CalPressureA::ExportClass()
+{
+	class_<CalPressureA, bases<CalPressureStrategy> >("CalPressureA", init<>())
+		.def("CalPressure", &CalPressureA::CalPressure);
+}

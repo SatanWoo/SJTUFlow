@@ -7,16 +7,13 @@
 
 #include "CalPressureStrategy.h"
 
-////////////////////////////////////////////////////////////////////////
-// Name:       CalPressureStrategy::CalPressure(int particleNum, Particle** particles)
-// Purpose:    Implementation of CalPressureStrategy::CalPressure()
-// Parameters:
-// - particleNum
-// - particles
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void CalPressureStrategy::CalPressure(int particleNum, Particle* particles)
+void CalPressureStrategyWrap::CalPressure( int particleNum, Particle* particles )
 {
-   // TODO : implement
+	this->get_override("CalPressure")(particleNum, particles);
+}
+
+void CalPressureStrategyWrap::ExportClass()
+{
+	class_<CalPressureStrategyWrap, boost::noncopyable>("CalPressureStrategy")
+		.def("CalPressure", pure_virtual(&CalPressureStrategy::CalPressure));
 }

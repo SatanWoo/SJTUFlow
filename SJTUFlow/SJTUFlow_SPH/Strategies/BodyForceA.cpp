@@ -8,10 +8,11 @@
 #include "BodyForceA.h"
 
 ////////////////////////////////////////////////////////////////////////
-// Name:       BodyForceA::ApplyBodyForce(int particleNum, Particle* particles)
+// Name:       BodyForceA::ApplyBodyForce(int particleNum, float kDt, Particle* particles)
 // Purpose:    Implementation of BodyForceA::ApplyBodyForce()
 // Parameters:
 // - particleNum
+// - kDt
 // - particles
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
@@ -29,4 +30,10 @@ void BodyForceA::ApplyBodyForce(int particleNum, float kDt, Particle* particles)
         pi.curPos.x += kDt * pi.vel.x;
         pi.curPos.y += kDt * pi.vel.y;
     }
+}
+
+void BodyForceA::ExportClass()
+{
+	class_<BodyForceA, bases<BodyForceStrategy> >("BodyForceA", init<>())
+		.def("ApplyBodyForce", &BodyForceA::ApplyBodyForce);
 }

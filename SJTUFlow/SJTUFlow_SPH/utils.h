@@ -35,4 +35,11 @@ class vec2{
     vec2(){}
 };
 
+struct SocketPackage
+{
+	int particleNum;
+	float particlesMass[kParticleCount];
+	vec2 particles[kParticleCount];
+};
+
 #endif

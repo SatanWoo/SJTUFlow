@@ -22,7 +22,9 @@ const size_t kGridCellCount = kGridWidth * kGridHeight;
 class UpdateGridA : public UpdateGridStrategy
 {
 public:
-   void UpdateGrid(int particleNum, Particle* particles);
+	void UpdateGrid(int particleNum, Particle* particles);
+
+	static void ExportClass();
 
 protected:
 private:

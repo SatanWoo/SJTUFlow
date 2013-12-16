@@ -7,6 +7,17 @@
 
 #include "SPHSolver.h"
 
+SPHSolver::SPHSolver()
+{
+	emitStrategy = new EmitA;
+	bodyForceStrategy = new BodyForceA;
+	updateGridStrategy = new UpdateGridA;
+	calPressureStrategy = new CalPressureA;
+	relaxPosStrategy = new RelaxPosA;
+	collisionStrategy = new CollisionA;
+	renderSPHStrategy = new RenderSPHA;
+}
+
 ////////////////////////////////////////////////////////////////////////
 // Name:       SPHSolver::SetScene(std::string fileName)
 // Purpose:    Implementation of SPHSolver::SetScene()
@@ -248,4 +259,27 @@ void SPHSolver::RenderSPH(void)
 {
    // TODO : implement
    renderSPHStrategy->RenderSPH(curParticleNum, particles, scene);
+}
+
+void SPHSolver::ExportClass()
+{
+	class_<SPHSolver>("SPHSolver", init<>())
+		.def("SetScene", &SPHSolver::SetScene)
+		.def("SolverDestroy", &SPHSolver::SolverDestroy)
+		.def("SolverInitSPH", &SPHSolver::SolverInitSPH)
+		.def("SetEmitStrategy", &SPHSolver::SetEmitStrategy)
+		.def("SetBodyForceStrategy", &SPHSolver::SetBodyForceStrategy)
+		.def("SetUpdateGridStrategy", &SPHSolver::SetUpdateGridStrategy)
+		.def("SetCalPressureStrategy", &SPHSolver::SetCalPressureStrategy)
+		.def("SetRelaxPosStrategy", &SPHSolver::SetRelaxPosStrategy)
+		.def("SetCollisionStrategy", &SPHSolver::SetCollisionStrategy)
+		.def("SetRenderSPHStrategy", &SPHSolver::SetRenderSPHStrategy)
+		.def("Emit", &SPHSolver::Emit)
+		.def("BodyForce", &SPHSolver::BodyForce)
+		.def("UpdateGrid", &SPHSolver::UpdateGrid)
+		.def("CalPressure", &SPHSolver::CalPressure)
+		.def("RelaxPos", &SPHSolver::RelaxPos)
+		.def("Collision", &SPHSolver::Collision)
+		.def("RenderInit", &SPHSolver::RenderInit)
+		.def("RenderSPH", &SPHSolver::RenderSPH);
 }

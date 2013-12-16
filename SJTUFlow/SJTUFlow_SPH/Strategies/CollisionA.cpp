@@ -7,12 +7,22 @@
 
 #include "CollisionA.h"
 
+CollisionA::CollisionA()
+{
+	walls[0] = Wall( 1,  0, 0);
+	walls[1] = Wall( 0,  1, 0);
+	walls[2] = Wall(-1,  0, -kViewWidth);
+	walls[3] = Wall( 0, -1, -kViewHeight);
+}
+
 ////////////////////////////////////////////////////////////////////////
-// Name:       CollisionA::Collision(int particleNum, Particle* particles)
+// Name:       CollisionA::Collision(int particleNum, float kDt, Particle* particles, std::string scene)
 // Purpose:    Implementation of CollisionA::Collision()
 // Parameters:
 // - particleNum
+// - kDt
 // - particles
+// - scene
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
@@ -33,4 +43,10 @@ void CollisionA::Collision(int particleNum, float kDt, Particle* particles, std:
             }
         }
     }
+}
+
+void CollisionA::ExportClass()
+{
+	class_<CollisionA, bases<CollisionStrategy> >("CollisionA", init<>())
+		.def("Collision", &CollisionA::Collision);
 }

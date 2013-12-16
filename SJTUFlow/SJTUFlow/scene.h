@@ -9,7 +9,7 @@
 
 #include <qglviewer.h>
 
-#include "../SJTUFlow-SPH/Strategies/RenderSPHA.h"
+#include "../SJTUFlow_SPH/utils.h"
 
 #define RAND_255 rand() % 255
 #define RAND_COLOR QColor(RAND_255, RAND_255, RAND_255)

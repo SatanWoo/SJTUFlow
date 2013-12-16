@@ -17,8 +17,16 @@ using namespace boost::python;
 class RelaxPosStrategy
 {
 public:
-   virtual void RelaxPos(int particleNum, float kDt, Particle* particles) = 0;
-
+	////////////////////////////////////////////////////////////////////////
+	// Name:       RelaxPosStrategy::RelaxPos(int particleNum, float kDt, Particle* particles)
+	// Purpose:    Implementation of RelaxPosStrategy::RelaxPos()
+	// Parameters:
+	// - particleNum
+	// - kDt
+	// - particles
+	// Return:     void
+	////////////////////////////////////////////////////////////////////////
+	virtual void RelaxPos(int particleNum, float kDt, Particle* particles) = 0;
 protected:
 private:
 
@@ -27,10 +35,9 @@ private:
 class RelaxPosStrategyWrap : public RelaxPosStrategy, public wrapper<RelaxPosStrategy>
 {
 public:
-	void RelaxPos(int particleNum, float kDt, Particle* particles)
-	{
-		this->get_override("RelaxPos")(particleNum, kDt, particles);
-	}
+	void RelaxPos(int particleNum, float kDt, Particle* particles);
+
+	static void ExportClass();
 };
 
 #endif

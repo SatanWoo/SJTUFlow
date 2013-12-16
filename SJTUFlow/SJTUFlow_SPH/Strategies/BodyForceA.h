@@ -15,8 +15,9 @@
 class BodyForceA : public BodyForceStrategy
 {
 public:
-   void ApplyBodyForce(int particleNum, float kDt, Particle* particles);
+	void ApplyBodyForce(int particleNum, float kDt, Particle* particles);
 
+	static void ExportClass();
 protected:
 private:
 

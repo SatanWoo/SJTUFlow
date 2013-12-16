@@ -8,18 +8,19 @@
 #include "RelaxPosA.h"
 
 ////////////////////////////////////////////////////////////////////////
-// Name:       RelaxPosA::RelaxPos(int particleNum, Particle* particles)
+// Name:       RelaxPosA::RelaxPos(int particleNum, float kDt, Particle* particles)
 // Purpose:    Implementation of RelaxPosA::RelaxPos()
 // Parameters:
 // - particleNum
+// - kDt
 // - particles
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
 void RelaxPosA::RelaxPos(int particleNum, float kDt, Particle* particles)
 {
-   // TODO : implement
-   for (size_t i=0; i<particleNum; ++i){
+	// TODO : implement
+	for (size_t i=0; i<particleNum; ++i){
         Particle& pi = particles[i];
 
         float x = pi.curPos.x;
@@ -61,4 +62,10 @@ void RelaxPosA::RelaxPos(int particleNum, float kDt, Particle* particles)
         pi.vel.x = (pi.curPos.x - pi.prePos.x) / kDt;
         pi.vel.y = (pi.curPos.y - pi.prePos.y) / kDt;
     }
+}
+
+void RelaxPosA::ExportClass()
+{
+	class_<RelaxPosA, bases<RelaxPosStrategy> >("RelaxPosA", init<>())
+		.def("RelaxPos", &RelaxPosA::RelaxPos);
 }

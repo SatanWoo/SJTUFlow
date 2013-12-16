@@ -17,8 +17,15 @@ using namespace boost::python;
 class UpdateGridStrategy
 {
 public:
-   virtual void UpdateGrid(int particleNum, Particle* particles) = 0;
-
+	////////////////////////////////////////////////////////////////////////
+	// Name:       UpdateGridStrategy::UpdateGrid(int particleNum, Particle** particles)
+	// Purpose:    Implementation of UpdateGridStrategy::UpdateGrid()
+	// Parameters:
+	// - particleNum
+	// - particles
+	// Return:     void
+	////////////////////////////////////////////////////////////////////////
+	virtual void UpdateGrid(int particleNum, Particle* particles) = 0;
 protected:
 private:
 
@@ -27,10 +34,9 @@ private:
 class UpdateGridStrategyWrap : public UpdateGridStrategy, public wrapper<UpdateGridStrategy>
 {
 public:
-	void UpdateGrid(int particleNum, Particle* particles)
-	{
-		this->get_override("UpdateGrid")(particleNum, particles);
-	}
+	void UpdateGrid(int particleNum, Particle* particles);
+
+	static void ExportClass();
 };
 
 #endif

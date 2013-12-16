@@ -19,7 +19,9 @@
 class RelaxPosA : public RelaxPosStrategy
 {
 public:
-   void RelaxPos(int particleNum, float kDt, Particle* particles);
+	void RelaxPos(int particleNum, float kDt, Particle* particles);
+
+	static void ExportClass();
 
 protected:
 private:

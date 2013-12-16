@@ -18,7 +18,6 @@ DllRow::DllRow(QWidget *parent)
 
 DllRow::~DllRow()
 {
-
 }
 
 void DllRow::enterEditState()
@@ -45,6 +44,7 @@ void DllRow::openDll()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Load Dll"),
 		QDir::homePath(), tr("Dynamic Link Libraries(*.dll)"));
+	
 	if(!fileName.isEmpty())
 	{
 		ui.lineEdit->setText(fileName);

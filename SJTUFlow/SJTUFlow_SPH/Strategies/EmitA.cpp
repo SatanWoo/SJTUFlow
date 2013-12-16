@@ -7,11 +7,18 @@
 
 #include "EmitA.h"
 
+EmitA::EmitA()
+{
+	emitters[0] = Emitter(1.0f, vec2(0.05f*kViewWidth, 0.8f*kViewHeight), vec2(4, 1), 0.2f, 5, 0);
+	emitters[1] = Emitter(1.4f, vec2(0.05f*kViewWidth, 0.9f*kViewHeight), vec2(4, 1), 0.2f, 5, 6);
+}
+
 ////////////////////////////////////////////////////////////////////////
-// Name:       EmitA::Emit(int particleNum, Particle* particles)
+// Name:       EmitA::Emit(int particleNum, float kDt, Particle* particles)
 // Purpose:    Implementation of EmitA::Emit()
 // Parameters:
 // - particleNum
+// - kDt
 // - particles
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
@@ -58,4 +65,10 @@ size_t EmitA::EmitParticles(int particleNum, float kDt, Particle* particles)
 
     emitDelay = 0;
     return particleCount;
+}
+
+void EmitA::ExportClass()
+{
+	class_<EmitA, bases<EmitStrategy> >("EmitA", init<>())
+		.def("EmitParticles", &EmitA::EmitParticles);
 }

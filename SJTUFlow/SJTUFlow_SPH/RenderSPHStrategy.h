@@ -11,28 +11,35 @@
 #include "utils.h"
 #include "Particle.h"
 
+#include <boost/python.hpp>
+using namespace boost::python;
+
 class RenderSPHStrategy
 {
 public:
-   virtual void RenderInit() = 0;
-   virtual void RenderSPH(int particleNum, Particle* particles, std::string scene) = 0;
-
+	virtual void RenderInit() = 0;
+	////////////////////////////////////////////////////////////////////////
+	// Name:       RenderSPHStrategy::RenderSPH(int particleNum, Particle* particles, std::string scene)
+	// Purpose:    Implementation of RenderSPHStrategy::RenderSPH()
+	// Parameters:
+	// - particleNum
+	// - particles
+	// - scene
+	// Return:     void
+	////////////////////////////////////////////////////////////////////////
+	virtual void RenderSPH(int particleNum, Particle* particles, std::string scene) = 0;
 protected:
 private:
 
 };
 
-// class RenderSPHStrategyWrap : public RenderSPHStrategy, public wrapper<RenderSPHStrategy>
-// {
-// public:
-// 	void RenderInit()
-// 	{
-// 		this->get_override("RenderInit")();
-// 	}
-// 	void RenderSPH(int particleNum, Particle* particles, std::string scene)
-// 	{
-// 		this->get_override("RenderSPH")(particleNum, particles, scene);
-// 	}
-// };
+class RenderSPHStrategyWrap : public RenderSPHStrategy, public wrapper<RenderSPHStrategy>
+{
+public:
+	void RenderInit();
+	void RenderSPH(int particleNum, Particle* particles, std::string scene);
+
+	static void ExportClass();
+};
 
 #endif

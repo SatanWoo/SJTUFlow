@@ -18,8 +18,8 @@
 
 void UpdateGridA::UpdateGrid(int particleNum, Particle* particles)
 {
-   // TODO : implement
-   memset(grid, 0, kGridCellCount*sizeof(Particle*));
+	// TODO : implement
+	memset(grid, 0, kGridCellCount*sizeof(Particle*));
     // Add particles to grid
     for (size_t i=0; i<particleNum; ++i){
         Particle& pi = particles[i];
@@ -70,4 +70,10 @@ void UpdateGridA::UpdateGrid(int particleNum, Particle* particles)
             }
         }
     }
+}
+
+void UpdateGridA::ExportClass()
+{
+	class_<UpdateGridA, bases<UpdateGridStrategy> >("UpdateGridA", init<>())
+		.def("UpdateGrid", &UpdateGridA::UpdateGrid);
 }

@@ -85,7 +85,7 @@ QToolButton:pressed
     <widget class="QLabel" name="labelTitle">
      <property name="font">
       <font>
-       <family>Comic Sans MS</family>
+       <family>Arial</family>
        <pointsize>14</pointsize>
       </font>
      </property>

@@ -7,16 +7,13 @@
 
 #include "RelaxPosStrategy.h"
 
-////////////////////////////////////////////////////////////////////////
-// Name:       RelaxPosStrategy::RelaxPos(int particleNum, Particle** particles)
-// Purpose:    Implementation of RelaxPosStrategy::RelaxPos()
-// Parameters:
-// - particleNum
-// - particles
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void RelaxPosStrategy::RelaxPos(int particleNum, float kDt, Particle* particles)
+void RelaxPosStrategyWrap::RelaxPos( int particleNum, float kDt, Particle* particles )
 {
-   // TODO : implement
+	this->get_override("RelaxPos")(particleNum, kDt, particles);
+}
+
+void RelaxPosStrategyWrap::ExportClass()
+{
+	class_<RelaxPosStrategyWrap, boost::noncopyable>("RelaxPosStrategy")
+		.def("RelaxPos", pure_virtual(&RelaxPosStrategy::RelaxPos));
 }

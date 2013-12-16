@@ -53,11 +53,12 @@ void RenderSPHA::Render()
 }
 
 ////////////////////////////////////////////////////////////////////////
-// Name:       RenderSPHA::RenderSPH(int particleNum, Particle* particles)
+// Name:       RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string scene)
 // Purpose:    Implementation of RenderSPHA::RenderSPH()
 // Parameters:
 // - particleNum
 // - particles
+// - scene
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
@@ -101,4 +102,11 @@ void RenderSPHA::RenderInit()
 //    glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE);
 //    glutCreateWindow("SPH");
 //    glutDisplayFunc(Render);
+}
+
+void RenderSPHA::ExportClass()
+{
+	class_<RenderSPHA, bases<RenderSPHStrategy> >("RenderSPHA", init<>())
+		.def("RenderInit", &RenderSPHA::RenderInit)
+		.def("RenderSPH", &RenderSPHA::RenderSPH);
 }
