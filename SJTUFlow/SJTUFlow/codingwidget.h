@@ -4,24 +4,8 @@
 #include <QMap>
 #include <QMainWindow>
 #include <QMenuBar>
+#include <QProcess>
 #include "ui_codingwidget.h"
-
-#include <QThread>
-
-class RunThread : public QThread
-{
-public:
-	void run()
-	{
-		system(cmd.toStdString().c_str());
-	}
-	void setCmd(QString cmd_)
-	{
-		cmd = cmd_;
-	}
-private:
-	QString cmd;
-};
 
 class CodingWidget : public QMainWindow
 {
@@ -35,7 +19,7 @@ public:
 
 signals:
 	void filePathChanged(QString);
-	void running();
+	void running(int);
 
 protected:
 
@@ -87,6 +71,8 @@ public slots:
 /*                        tool bar slots                                */
 /************************************************************************/
 	void copyAvailable(bool yes);
+
+	void showRunError();
 };
 
 #endif // CODINGWIDGET_H

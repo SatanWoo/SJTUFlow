@@ -27,7 +27,7 @@ SJTUFlow::SJTUFlow(QWidget *parent)
     codingWidget = new CodingWidget(ui.menuBar);
 	ui.tabWidget->addTab(codingWidget,
 		QIcon(":/Icons/Resources/Icons/Coding.png"), tr("Coding"));
-	connect(codingWidget, SIGNAL(running()), this, SLOT(display()));
+	connect(codingWidget, SIGNAL(running(int)), this, SLOT(display(int)));
 
 	displayWidget = new DisplayWidget;
 	ui.tabWidget->addTab(displayWidget,
@@ -231,7 +231,7 @@ void SJTUFlow::sharedDelete()
     }
 }
 
-void SJTUFlow::display()
+void SJTUFlow::display(int index)
 {
-	ui.tabWidget->setCurrentIndex(2);
+	ui.tabWidget->setCurrentIndex(index);
 }

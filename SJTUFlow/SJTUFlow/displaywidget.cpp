@@ -18,14 +18,7 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 
 	scene = new Scene;
 	setCentralWidget(scene);
-
-	//example
-// 	scene->clear(Scene::SCENE_3D);
-// 	scene->newPrimitive(SceneUnit::Primitive::T_Sphere);
-    //SceneUnit::Primitive *p = scene->getPrimitive(0);
-	//scene->setAnimate();
 	scene->setAllowSelect();
-
 	scene->startAnimation();
 }
 
@@ -40,11 +33,19 @@ void DisplayWidget::cloneScene( Scene *scene_ )
 	scene->clone(scene_);
 }
 
+void DisplayWidget::startAnimate()
+{
+	scene->startAnimation();
+}
+
+void DisplayWidget::stopAnimate()
+{
+	scene->stopAnimation();
+}
+
 void DisplayWidget::dealConnection()
 {
 	QLocalSocket *socket = localServer->nextPendingConnection();
-// 	connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
-// 	connect(socket, SIGNAL(disconnected()), socket, SLOT(abort()));
 	socket->waitForReadyRead();
 	QDataStream ds(socket);
 
@@ -53,9 +54,4 @@ void DisplayWidget::dealConnection()
 	scene->setSocketPackage(sp);
 
 	socket->disconnectFromServer();
-}
-
-void DisplayWidget::readData()
-{
-	QLocalSocket *socket = qobject_cast<QLocalSocket *>(sender());
 }

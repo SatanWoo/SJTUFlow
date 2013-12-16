@@ -17,14 +17,8 @@ public:
 	~DisplayWidget();
 
 	void cloneScene(Scene *scene_);
-	void startAnimate()
-	{
-		scene->startAnimation();
-	}
-	void stopAnimate()
-	{
-		scene->stopAnimation();
-	}
+	void startAnimate();
+	void stopAnimate();
 
 private:
 	Ui::DisplayWidget ui;
@@ -34,7 +28,6 @@ private:
 
 private slots:
 	void dealConnection();
-	void readData();
 };
 
 #endif // DISPLAYWIDGET_H
