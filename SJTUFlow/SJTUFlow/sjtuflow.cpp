@@ -109,13 +109,16 @@ void SJTUFlow::tabChanged(int index)
     switch (index)
     {
     case 0:
-        ui.menuFile->setEnabled(true);
-        ui.menuEdit->setEnabled(true);
-        ui.menuPrimitive->setEnabled(true);
-        ui.actionNewFile->setVisible(false);
-        ui.menuNewScene->menuAction()->setVisible(true);
+		ui.menuEdit->setEnabled(true);
+		ui.menuPrimitive->setEnabled(true);
+		ui.actionNewFile->setVisible(false);
+		ui.menuNewScene->menuAction()->setVisible(true);
 		ui.action2DScene->setVisible(true);
 		ui.action3DScene->setVisible(true);
+		ui.menuNewScene->menuAction()->setEnabled(true);
+		ui.actionOpen->setEnabled(true);
+		ui.actionSave->setEnabled(true);
+		ui.actionSaveAs->setEnabled(true);
         ui.actionClose->setVisible(false);
         ui.actionCloseAll->setVisible(false);
         ui.actionRun->setEnabled(false);
@@ -128,13 +131,18 @@ void SJTUFlow::tabChanged(int index)
 		displayWidget->stopAnimate();
         break;
     case 1:
-        ui.menuFile->setEnabled(true);
         ui.menuEdit->setEnabled(true);
         ui.menuPrimitive->setEnabled(false);
+		ui.actionNewFile->setEnabled(true);
         ui.actionNewFile->setVisible(true);
         ui.menuNewScene->menuAction()->setVisible(false);
 		ui.action2DScene->setVisible(false);
 		ui.action3DScene->setVisible(false);
+		ui.actionOpen->setEnabled(true);
+		ui.actionSave->setEnabled(true);
+		ui.actionSaveAs->setEnabled(true);
+		ui.actionClose->setEnabled(true);
+		ui.actionCloseAll->setEnabled(true);
         ui.actionClose->setVisible(true);
         ui.actionCloseAll->setVisible(true);
         ui.actionRun->setEnabled(true);
@@ -147,7 +155,13 @@ void SJTUFlow::tabChanged(int index)
 		displayWidget->stopAnimate();
         break;
     case 2:
-        ui.menuFile->setEnabled(false);
+		ui.menuNewScene->menuAction()->setEnabled(false);
+		ui.actionNewFile->setEnabled(false);
+		ui.actionOpen->setEnabled(false);
+		ui.actionSave->setEnabled(false);
+		ui.actionSaveAs->setEnabled(false);
+		ui.actionClose->setEnabled(false);
+		ui.actionCloseAll->setEnabled(false);
         ui.menuEdit->setEnabled(false);
         ui.menuPrimitive->setEnabled(false);
         ui.actionRun->setEnabled(false);

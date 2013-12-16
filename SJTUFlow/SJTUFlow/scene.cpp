@@ -6,9 +6,11 @@
 #include <GL/glut.h>
 #endif
 
+#include <QApplication>
+#include <QLocalSocket>
+#include <QDataStream>
 #include <QMouseEvent>
 #include <time.h>
-#include <QDebug>
 
 #include "objloader.h"
 #include "scenecommand.h"
@@ -39,11 +41,13 @@ Scene::Scene(QWidget *parent) : QGLViewer(parent)
 	undoStack = NULL;
 
 	setMouseTracking(true);
-	setAnimate(false);
 
 	clear(SCENE_2D);
 
 	sp.particleNum = 0;
+
+	setAnimationPeriod(0);
+	localServer = new QLocalServer(this);
 }
 
 SceneUnit::Primitive *Scene::getPrimitive(int id)
@@ -162,6 +166,25 @@ Scene::Error Scene::initFromDomElement(
 	}
 	updateGL();
 	return ret;
+}
+
+void Scene::startAnimation()
+{
+	if (!localServer->listen(QApplication::applicationName()))
+	{
+		qDebug() << "failed to listen" << QApplication::applicationName() << endl;
+	}
+
+	camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0));
+	QGLViewer::startAnimation();
+}
+
+void Scene::stopAnimation()
+{
+	localServer->close();
+
+	memset(&sp, 0, sizeof(SocketPackage));
+	QGLViewer::stopAnimation();
 }
 
 void Scene::clone(Scene *scene)
@@ -415,7 +438,7 @@ void Scene::draw()
 		glPopMatrix();
 	}
 
-	if (ifAnimate)
+	if (animationIsStarted())
 	{
 		//float r = 2.5f * kParticleRadius * kScreenWidth / kViewWidth;
 		float r = kParticleRadius;
@@ -514,23 +537,15 @@ void Scene::postSelection(const QPoint& point)
 
 void Scene::animate()
 {
-	if (ifAnimate)
+	QLocalSocket *socket = localServer->nextPendingConnection();
+	if (socket)
 	{
-// 		for (int i = 0; i < primitives.count(); i++)
-// 		{
-// 			SceneUnit::Primitive *p = primitives.at(i);
-// 			Vec center = p->getCenter();
-// 			center += Vec(dx, 0, 0);
-// 			if (center[0] < -0.5)
-// 			{
-// 				dx = 0.01;
-// 			}
-// 			else if (center[0] > 0.5)
-// 			{
-// 				dx = -0.01;
-// 			}
-// 			p->setCenter(center);
-// 		}
+		socket->waitForReadyRead();
+		QDataStream ds(socket);
+
+		ds.readRawData((char *)(&sp), sizeof(SocketPackage));
+
+		socket->disconnectFromServer();
 	}
 }
 

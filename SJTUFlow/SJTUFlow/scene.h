@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QDomDocument>
 #include <QUndoStack>
+#include <QLocalServer>
 
 #include "primitive.h"
 
@@ -27,10 +28,10 @@ public:
 	enum Error{OK = 0, NOTMATCH, PATHERR};
 
 	Scene(QWidget *parent = 0);
+	~Scene(){ stopAnimation(); }
 
 	// get the id-specific primitive
 	SceneUnit::Primitive *getPrimitive(int id);
-	void setAnimate(bool animate = true){ ifAnimate = animate; camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0)); }
 	void setAllowSelect(bool allow = false){ allowSelect = allow; }
 	void setOperator(Operator op){ curOp = op; updateGL(); }
 	void setUndoStack(QUndoStack *undoStack_){ undoStack = undoStack_;}
@@ -40,21 +41,8 @@ public:
 
 	void clone(Scene *scene);
 
-	void setSocketPackage(SocketPackage sp_)
-	{
-		memcpy(&sp, &sp_, sizeof(SocketPackage));
-		updateGL();
-	}
-	void startAnimation()
-	{
-		ifAnimate = true;
-		camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0)); 
-	}
-	void stopAnimation()
-	{
-		ifAnimate = false;
-		memset(&sp, 0, sizeof(SocketPackage));
-	}
+	void startAnimation();
+	void stopAnimation();
 
 signals:
 	void selectedObjChanged(int);
@@ -98,7 +86,9 @@ private:
 	static qglviewer::Vec axisDirs[3];
 	static double axisRot[3][4];
 
+	QLocalServer *localServer;
 	SocketPackage sp;
+	bool allowSelect;
 
 	bool mousePressed;
 	qglviewer::Vec mousePos;
@@ -109,9 +99,6 @@ private:
 
     Mode sceneMode;
 	Operator curOp;
-
-	bool ifAnimate;
-	bool allowSelect;
 
 	int circleNum;
 	int rectangleNum;

@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
+#include <QSettings>
 
 #include <QDebug>
 
@@ -204,6 +205,10 @@ void CodingWidget::parseMenuActions(QMenuBar *menubar)
         {
             actions["run"] = action;
         }
+		else if(tr("actionSetting") == action->objectName())
+		{
+			actions["setting"] = action;
+		}
     }
 }
 
@@ -348,18 +353,27 @@ void CodingWidget::runModule()
 	saveFile();
 	if (!codeEdit->getFileName().isEmpty())
 	{
-//D:/Projects/SJTUFlow/SJTUFlow/Win32/Debug
-		QString execStr = tr("import sys\nsys.path.append('%1')\n")
-			.arg(QDir::currentPath()) + codeEdit->toPlainText();
-		QProcess *process = new QProcess(this);
-		connect(process, SIGNAL(readyReadStandardError()), 
-			this, SLOT(showRunError()));
-		process->start("E:/Python33/python.exe");
-		process->waitForStarted();
-		process->write(execStr.toStdString().c_str());
-		process->closeWriteChannel();
+		QSettings settings;
+		QString pyPath = settings.value(tr("PyPath")).toString();
+		if (pyPath.isEmpty())
+		{
+			actions["setting"]->trigger();
+		}
+		else
+		{
+			QString execStr = tr("import sys\nsys.path.append('%1')\n")
+				.arg(QDir::currentPath()) + codeEdit->toPlainText();
+			QProcess *process = new QProcess(this);
+			connect(process, SIGNAL(readyReadStandardError()), 
+				this, SLOT(showRunError()));
+			process->start(pyPath);
+			process->waitForStarted();
+			process->write(execStr.toStdString().c_str());
+			process->closeWriteChannel();
 
-		emit running(2);
+			emit running(2);
+		}
+//D:/Projects/SJTUFlow/SJTUFlow/Win32/Debug
 	}	
 }
 
@@ -424,8 +438,9 @@ void CodingWidget::copyAvailable( bool yes )
 
 void CodingWidget::showRunError()
 {
-	emit running(1);
 	QProcess *process = qobject_cast<QProcess *>(sender());
 	QString errStr = QString::fromLocal8Bit(process->readAllStandardError());
+	process->kill();
 	QMessageBox::warning(this, tr("Runtime Error"), errStr, QMessageBox::Ok);
+	emit running(1);
 }
