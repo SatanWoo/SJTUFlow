@@ -65,7 +65,6 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 
 SJTUFlow::~SJTUFlow()
 {
-
 }
 
 void SJTUFlow::paintEvent( QPaintEvent *)

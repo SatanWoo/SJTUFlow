@@ -39,8 +39,15 @@ void CalPressureA::CalPressure(int particleNum, Particle* particles)
     }
 }
 
+CalPressureStrategy * CalPressureA::Create()
+{
+	return new CalPressureA;
+}
+
 void CalPressureA::ExportClass()
 {
 	class_<CalPressureA, bases<CalPressureStrategy> >("CalPressureA", init<>())
-		.def("CalPressure", &CalPressureA::CalPressure);
+		.def("CalPressure", &CalPressureA::CalPressure)
+		.def("Create", &CalPressureA::Create, return_value_policy<manage_new_object>())
+		.staticmethod("Create");
 }

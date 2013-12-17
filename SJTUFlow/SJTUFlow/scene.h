@@ -11,6 +11,7 @@
 #include <qglviewer.h>
 
 #include "../SJTUFlow_SPH/utils.h"
+#include "StableFluidsApplication.h"
 
 #define RAND_255 rand() % 255
 #define RAND_COLOR QColor(RAND_255, RAND_255, RAND_255)

@@ -9,13 +9,6 @@
 
 SPHSolver::SPHSolver()
 {
-	emitStrategy = new EmitA;
-	bodyForceStrategy = new BodyForceA;
-	updateGridStrategy = new UpdateGridA;
-	calPressureStrategy = new CalPressureA;
-	relaxPosStrategy = new RelaxPosA;
-	collisionStrategy = new CollisionA;
-	renderSPHStrategy = new RenderSPHA;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -267,13 +260,19 @@ void SPHSolver::ExportClass()
 		.def("SetScene", &SPHSolver::SetScene)
 		.def("SolverDestroy", &SPHSolver::SolverDestroy)
 		.def("SolverInitSPH", &SPHSolver::SolverInitSPH)
-		.def("SetEmitStrategy", &SPHSolver::SetEmitStrategy)
-		.def("SetBodyForceStrategy", &SPHSolver::SetBodyForceStrategy)
-		.def("SetUpdateGridStrategy", &SPHSolver::SetUpdateGridStrategy)
-		.def("SetCalPressureStrategy", &SPHSolver::SetCalPressureStrategy)
-		.def("SetRelaxPosStrategy", &SPHSolver::SetRelaxPosStrategy)
-		.def("SetCollisionStrategy", &SPHSolver::SetCollisionStrategy)
-		.def("SetRenderSPHStrategy", &SPHSolver::SetRenderSPHStrategy)
+		.def("SetEmitStrategy", &SPHSolver::SetEmitStrategy,
+		with_custodian_and_ward<1, 2>())
+		.def("SetBodyForceStrategy", &SPHSolver::SetBodyForceStrategy, 
+		with_custodian_and_ward<1, 2>())
+		.def("SetUpdateGridStrategy", &SPHSolver::SetUpdateGridStrategy, 
+		with_custodian_and_ward<1, 2>())
+		.def("SetCalPressureStrategy", &SPHSolver::SetCalPressureStrategy, with_custodian_and_ward<1, 2>())
+		.def("SetRelaxPosStrategy", &SPHSolver::SetRelaxPosStrategy, 
+		with_custodian_and_ward<1, 2>())
+		.def("SetCollisionStrategy", &SPHSolver::SetCollisionStrategy, 
+		with_custodian_and_ward<1, 2>())
+		.def("SetRenderSPHStrategy", &SPHSolver::SetRenderSPHStrategy, 
+		with_custodian_and_ward<1, 2>())
 		.def("Emit", &SPHSolver::Emit)
 		.def("BodyForce", &SPHSolver::BodyForce)
 		.def("UpdateGrid", &SPHSolver::UpdateGrid)

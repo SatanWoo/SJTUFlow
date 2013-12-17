@@ -20,6 +20,7 @@ public:
 	CollisionA();
 	void Collision(int particleNum, float kDt, Particle* particles, std::string scene);
 
+	static CollisionStrategy *Create();
 	static void ExportClass();
 
 protected:

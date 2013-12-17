@@ -22,34 +22,34 @@ Particle* RenderSPHA::_particles = NULL;
 
 void RenderSPHA::Render()
 {
-   // TODO : implement
-//    glClearColor(0.02f, 0.01f, 0.01f, 1);
-//    glClear(GL_COLOR_BUFFER_BIT);
+	// TODO : implement
+// 	glClearColor(0.02f, 0.01f, 0.01f, 1);
+// 	glClear(GL_COLOR_BUFFER_BIT);
 // 
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//    glOrtho(0, kViewWidth, 0, kViewHeight, 0, 1);
+// 	glMatrixMode(GL_PROJECTION);
+// 	glLoadIdentity();
+// 	glOrtho(0, kViewWidth, 0, kViewHeight, 0, 1);
+// 
+// 	glEnable(GL_POINT_SMOOTH);
+// 	glEnable(GL_BLEND);
+// 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-//    glEnable(GL_POINT_SMOOTH);
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	float r = 2.5f*kParticleRadius*kScreenWidth/kViewWidth;
 
-   float r = 2.5f*kParticleRadius*kScreenWidth/kViewWidth;
+	//绘制粒子 半径r*r
+	glPointSize(r*2);
 
-   //绘制粒子 半径r*r
-   glPointSize(r*2);
-
-   glBegin(GL_POINTS);
-   for(unsigned int i=0; i < RenderSPHA::_particleNum; ++i){
-        const Particle& pi = RenderSPHA::_particles[i];
-        if(pi.m > 1.0)
-            glColor3f(.2,.6,.0);
-        else glColor3f(.2,.6,.8);
+	glBegin(GL_POINTS);
+	for(unsigned int i=0; i < RenderSPHA::_particleNum; ++i){
+		const Particle& pi = RenderSPHA::_particles[i];
+		if(pi.m > 1.0)
+			glColor3f(.2,.6,.0);
+		else glColor3f(.2,.6,.8);
 		glVertex2f(pi.curPos.x, pi.curPos.y);
-   }
-   glEnd();
+	}
+	glEnd();
 
-   //glutSwapBuffers();
+	//glutSwapBuffers();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -64,28 +64,26 @@ void RenderSPHA::Render()
 
 void RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string scene)
 {
-   // TODO : implement
-   _particleNum = particleNum;
-   _particles = particles;
+	// TODO : implement
+	_particleNum = particleNum;
+	_particles = particles;
 
-   SocketPackage sp;
-   sp.particleNum = particleNum;
-   for (int i = 0; i < particleNum; i++)
-   {
-	   sp.particles[i] = particles[i].curPos;
-	   sp.particlesMass[i] = particles[i].m;
-   }
+	SocketPackage sp;
+	sp.particleNum = particleNum;
+	for (int i = 0; i < particleNum; i++)
+	{
+		sp.particles[i] = particles[i].curPos;
+		sp.particlesMass[i] = particles[i].m;
+	}
 
-   QLocalSocket socket;
-   socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
-   socket.waitForConnected();
-   //std::cout << sp.particleNum << std::endl;
-   QDataStream ds(&socket);
-   ds.writeRawData((const char *)(&sp), sizeof(SocketPackage));
-   socket.waitForBytesWritten();
-
-   socket.disconnectFromServer();
-   //Render();
+	QLocalSocket socket;
+	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
+	socket.waitForConnected();
+	QDataStream ds(&socket);
+	ds.writeRawData((const char *)(&sp), sizeof(SocketPackage));
+	socket.waitForBytesWritten();
+	socket.disconnectFromServer();
+	//Render();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -97,16 +95,23 @@ void RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string sce
 
 void RenderSPHA::RenderInit()
 {
-   // TODO : implement
+	// TODO : implement
 //    glutInitWindowSize(kScreenWidth, kScreenHeight);
 //    glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE);
 //    glutCreateWindow("SPH");
 //    glutDisplayFunc(Render);
 }
 
+RenderSPHStrategy * RenderSPHA::Create()
+{
+	return new RenderSPHA;
+}
+
 void RenderSPHA::ExportClass()
 {
 	class_<RenderSPHA, bases<RenderSPHStrategy> >("RenderSPHA", init<>())
 		.def("RenderInit", &RenderSPHA::RenderInit)
-		.def("RenderSPH", &RenderSPHA::RenderSPH);
+		.def("RenderSPH", &RenderSPHA::RenderSPH)
+		.def("Create", &RenderSPHA::Create, return_value_policy<manage_new_object>())
+		.staticmethod("Create");
 }

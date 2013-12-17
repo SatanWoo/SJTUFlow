@@ -21,6 +21,7 @@ class RelaxPosA : public RelaxPosStrategy
 public:
 	void RelaxPos(int particleNum, float kDt, Particle* particles);
 
+	static RelaxPosStrategy *Create();
 	static void ExportClass();
 
 protected:

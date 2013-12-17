@@ -2,7 +2,9 @@
 #include "Utility.h"
 
 StableFluidsApplication::StableFluidsApplication(int size, int timeStep, float diff):m_size(size), m_time(timeStep), m_diff(diff)
-{}
+{
+
+}
 
 StableFluidsApplication::~StableFluidsApplication()
 {
@@ -79,4 +81,24 @@ void StableFluidsApplication::addSource(float *current, float *old)
 {
 	int i, size=(m_size + 2) * (m_size + 2);
 	for ( i=0 ; i<size ; i++ ) current[i] += m_time * old[i];
+}
+
+void StableFluidsApplication::importAlgorithm(HMODULE hModule)
+{
+	if (hModule == NULL)
+		return;
+
+	PFGetStable2DAdvectStrategy pfAdvect = (PFGetStable2DAdvectStrategy)(GetProcAddress(hModule, "getStable2DAdvectStrategy"));
+	PFGetStable2DBoundaryStrategy pfBoundary = (PFGetStable2DBoundaryStrategy)(GetProcAddress(hModule, "getStable2DBoundaryStrategy"));
+	PFGetStable2DDiffuseStrategy pfDiffuse = (PFGetStable2DDiffuseStrategy)(GetProcAddress(hModule, "getStable2DDiffuseStrategy"));
+	PFGetStable2DProjectStrategy pfProject = (PFGetStable2DProjectStrategy)(GetProcAddress(hModule, "getStable2DProjectStrategy"));
+
+	if (pfAdvect)
+		setAdvectStrategy(pfAdvect());
+	if (pfDiffuse)
+		setDiffuseStrategy(pfDiffuse());
+	if (pfProject)
+		setProjectStrategy(pfProject());
+	if (pfBoundary)
+		setBoundaryStrategy(pfBoundary());
 }

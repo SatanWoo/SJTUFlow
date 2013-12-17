@@ -64,8 +64,15 @@ void RelaxPosA::RelaxPos(int particleNum, float kDt, Particle* particles)
     }
 }
 
+RelaxPosStrategy * RelaxPosA::Create()
+{
+	return new RelaxPosA;
+}
+
 void RelaxPosA::ExportClass()
 {
 	class_<RelaxPosA, bases<RelaxPosStrategy> >("RelaxPosA", init<>())
-		.def("RelaxPos", &RelaxPosA::RelaxPos);
+		.def("RelaxPos", &RelaxPosA::RelaxPos)
+		.def("Create", &RelaxPosA::Create, return_value_policy<manage_new_object>())
+		.staticmethod("Create");
 }

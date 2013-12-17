@@ -44,12 +44,14 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QLabel *labelPyPath;
     QLineEdit *lineEditPyPath;
+    QPushButton *pushButtonPyPath;
     QGroupBox *groupBoxRunOutput;
     QGridLayout *gridLayout_2;
     QLineEdit *lineEditRunOutputName;
     QLabel *labelRunPath;
     QLineEdit *lineEditRunOutputPath;
     QLabel *labelRunName;
+    QPushButton *pushButtonOutputPath;
     QLabel *labelPromote;
     QSpacerItem *verticalSpacer;
     QWidget *pageRender;
@@ -119,8 +121,15 @@ public:
 
         lineEditPyPath = new QLineEdit(groupBoxPy);
         lineEditPyPath->setObjectName(QStringLiteral("lineEditPyPath"));
+        lineEditPyPath->setReadOnly(true);
 
         horizontalLayout_2->addWidget(lineEditPyPath);
+
+        pushButtonPyPath = new QPushButton(groupBoxPy);
+        pushButtonPyPath->setObjectName(QStringLiteral("pushButtonPyPath"));
+        pushButtonPyPath->setMaximumSize(QSize(50, 16777215));
+
+        horizontalLayout_2->addWidget(pushButtonPyPath);
 
 
         verticalLayout->addWidget(groupBoxPy);
@@ -149,10 +158,16 @@ public:
 
         gridLayout_2->addWidget(labelRunName, 1, 0, 1, 1);
 
+        pushButtonOutputPath = new QPushButton(groupBoxRunOutput);
+        pushButtonOutputPath->setObjectName(QStringLiteral("pushButtonOutputPath"));
+        pushButtonOutputPath->setMaximumSize(QSize(50, 16777215));
+
+        gridLayout_2->addWidget(pushButtonOutputPath, 0, 2, 1, 1);
+
         labelPromote = new QLabel(groupBoxRunOutput);
         labelPromote->setObjectName(QStringLiteral("labelPromote"));
 
-        gridLayout_2->addWidget(labelPromote, 2, 1, 1, 1);
+        gridLayout_2->addWidget(labelPromote, 2, 1, 1, 2);
 
 
         verticalLayout->addWidget(groupBoxRunOutput);
@@ -318,6 +333,7 @@ public:
 
         pushButtonApply = new QPushButton(Setting);
         pushButtonApply->setObjectName(QStringLiteral("pushButtonApply"));
+        pushButtonApply->setEnabled(false);
         pushButtonApply->setMaximumSize(QSize(70, 16777215));
         pushButtonApply->setAutoDefault(false);
 
@@ -377,9 +393,11 @@ public:
         Setting->setWindowTitle(QApplication::translate("Setting", "Setting", 0));
         groupBoxPy->setTitle(QApplication::translate("Setting", "Python", 0));
         labelPyPath->setText(QApplication::translate("Setting", "Path", 0));
+        pushButtonPyPath->setText(QApplication::translate("Setting", "Browse", 0));
         groupBoxRunOutput->setTitle(QApplication::translate("Setting", "Output", 0));
         labelRunPath->setText(QApplication::translate("Setting", "Path", 0));
         labelRunName->setText(QApplication::translate("Setting", "Name", 0));
+        pushButtonOutputPath->setText(QApplication::translate("Setting", "Browse", 0));
         labelPromote->setText(QApplication::translate("Setting", "TextLabel", 0));
         checkBoxRender->setText(QApplication::translate("Setting", "Render the results using renderer", 0));
         groupBoxRenderOutput->setTitle(QApplication::translate("Setting", "Output", 0));
@@ -412,7 +430,7 @@ public:
 #endif // QT_NO_WHATSTHIS
         pushButtonDelete->setText(QString());
         labelSysLib->setText(QApplication::translate("Setting", "System Libraries", 0));
-        plainTextEditSysLib->setPlainText(QApplication::translate("Setting", "*.dll", 0));
+        plainTextEditSysLib->setPlainText(QApplication::translate("Setting", "SJTUFlow_SPH.pyd", 0));
         pushButtonOK->setText(QApplication::translate("Setting", "OK", 0));
         pushButtonCancel->setText(QApplication::translate("Setting", "Cancel", 0));
         pushButtonApply->setText(QApplication::translate("Setting", "Apply", 0));

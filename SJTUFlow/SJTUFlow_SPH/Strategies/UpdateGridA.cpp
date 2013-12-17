@@ -72,8 +72,15 @@ void UpdateGridA::UpdateGrid(int particleNum, Particle* particles)
     }
 }
 
+UpdateGridStrategy * UpdateGridA::Create()
+{
+	return new UpdateGridA;
+}
+
 void UpdateGridA::ExportClass()
 {
 	class_<UpdateGridA, bases<UpdateGridStrategy> >("UpdateGridA", init<>())
-		.def("UpdateGrid", &UpdateGridA::UpdateGrid);
+		.def("UpdateGrid", &UpdateGridA::UpdateGrid)
+		.def("Create", &UpdateGridA::Create, return_value_policy<manage_new_object>())
+		.staticmethod("Create");
 }

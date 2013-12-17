@@ -67,8 +67,15 @@ size_t EmitA::EmitParticles(int particleNum, float kDt, Particle* particles)
     return particleCount;
 }
 
+EmitStrategy * EmitA::Create()
+{
+	return new EmitA;
+}
+
 void EmitA::ExportClass()
 {
 	class_<EmitA, bases<EmitStrategy> >("EmitA", init<>())
-		.def("EmitParticles", &EmitA::EmitParticles);
+		.def("EmitParticles", &EmitA::EmitParticles)
+		.def("Create", &EmitA::Create, return_value_policy<manage_new_object>())
+		.staticmethod("Create");
 }

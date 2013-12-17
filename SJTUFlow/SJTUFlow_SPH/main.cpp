@@ -27,8 +27,8 @@ BOOST_PYTHON_MODULE(SJTUFlow_SPH)
 	CollisionStrategyWrap::ExportClass();
 	CollisionA::ExportClass();
 
-	// 	RenderSPHStrategyWrap::ExportClass();
-	// 	RenderSPHA::ExportClass();
+	RenderSPHStrategyWrap::ExportClass();
+	RenderSPHA::ExportClass();
 
 	SPHSolver::ExportClass();
 }

@@ -5,6 +5,8 @@
 #include "AlgorithmManager.h"
 
 #include <QSettings>
+#include <QFileDialog>
+#include <QMessageBox>
 
 Setting::Setting(QWidget *parent) :
     QDialog(parent)
@@ -27,6 +29,9 @@ Setting::Setting(QWidget *parent) :
 
     connect(ui.listWidget, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
             this, SLOT(changePage(QListWidgetItem*,QListWidgetItem*)));
+
+	connect(ui.lineEditPyPath, SIGNAL(textChanged(QString)), this, SLOT(canApply(QString)));
+	connect(ui.pushButtonPyPath, SIGNAL(clicked()), this, SLOT(selectPyPath()));
    
 	connect(ui.checkBoxRender, SIGNAL(toggled(bool)), 
 		ui.groupBoxRenderOutput, SLOT(setEnabled(bool)));
@@ -54,6 +59,21 @@ void Setting::changePage(QListWidgetItem *current, QListWidgetItem *previous)
     ui.stackedWidget->setCurrentIndex(ui.listWidget->row(current));
 }
 
+void Setting::selectPyPath()
+{
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Set Python Path"),
+		QDir::homePath(), tr("Executable File(*.exe)"));
+	if (fileName.endsWith(tr("python.exe")))
+	{
+		ui.lineEditPyPath->setText(fileName);
+	}
+	else if (!fileName.isEmpty())
+	{
+		QMessageBox::warning(this, tr("Warning"), 
+			tr("Please select the python executable file"), QMessageBox::Ok);
+	}
+}
+
 void Setting::insertRow()
 {
 	int row = ui.listWidgetDll->currentRow() + 1;
@@ -68,6 +88,8 @@ void Setting::insertRow()
 	ui.listWidgetDll->setItemWidget(newItem, dllrow);
 	ui.listWidgetDll->setCurrentRow(row);
 	dllrow->enterEditState();
+
+	canApply();
 }
 
 void Setting::removeRow()
@@ -75,6 +97,8 @@ void Setting::removeRow()
 	int row = ui.listWidgetDll->currentRow();
 
 	ui.listWidgetDll->takeItem(row);
+
+	canApply();
 }
 
 void Setting::enterEdit(QListWidgetItem *item)
@@ -87,8 +111,11 @@ void Setting::enterEdit(QListWidgetItem *item)
 void Setting::saveSetting()
 {
 	//TODO save setting
-
 	QSettings settings;
+
+	QString pyPath = ui.lineEditPyPath->text();
+	settings.setValue(tr("PyPath"), pyPath);
+
 	QStringList dllList;
 	for (int i = 0; i < ui.listWidgetDll->count(); i++)
 	{
@@ -102,6 +129,8 @@ void Setting::saveSetting()
 		}
 	}
 	settings.setValue(tr("DllList"), dllList);
+
+	ui.pushButtonApply->setEnabled(false);
 
 	QPushButton *pushbutton = qobject_cast<QPushButton *>(sender());
 	if (tr("pushButtonOK") == pushbutton->objectName())
@@ -133,11 +162,24 @@ void Setting::saveSetting()
 	}
 }
 
+void Setting::canApply()
+{
+	ui.pushButtonApply->setEnabled(true);
+}
+
+void Setting::canApply(QString)
+{
+	canApply();
+}
+
 void Setting::loadSetting()
 {
 	//TODO load setting
-
 	QSettings settings;
+
+	QString pyPath = settings.value(tr("PyPath")).toString();
+	ui.lineEditPyPath->setText(pyPath);
+
 	QStringList dllList = settings.value(tr("DllList")).toStringList();
 	foreach (QString s, dllList)
 	{
@@ -148,4 +190,6 @@ void Setting::loadSetting()
 		dllrow->setText(s);
 		ui.listWidgetDll->setItemWidget(newItem, dllrow);
 	}
+
+	ui.pushButtonApply->setEnabled(false);
 }

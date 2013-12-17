@@ -21,6 +21,7 @@ public:
 	void RenderInit();
 	void RenderSPH(int particleNum, Particle* particles, std::string scene);
 
+	static RenderSPHStrategy *Create();
 	static void ExportClass();
 protected:
 private:

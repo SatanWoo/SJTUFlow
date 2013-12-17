@@ -10,7 +10,6 @@
 #include "displaywidget.h"
 #include "setting.h"
 #include "aboutdialog.h"
-#include "StableFluidsApplication.h"
 
 class SJTUFlow : public QMainWindow
 {

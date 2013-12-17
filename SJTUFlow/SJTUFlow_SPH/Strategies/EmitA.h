@@ -19,6 +19,7 @@ public:
 	EmitA();
 	size_t EmitParticles(int particleNum, float kDt, Particle* particles);
 
+	static EmitStrategy *Create();
 	static void ExportClass();
 
 protected:

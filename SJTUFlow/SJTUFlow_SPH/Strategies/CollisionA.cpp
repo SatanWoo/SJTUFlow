@@ -45,8 +45,15 @@ void CollisionA::Collision(int particleNum, float kDt, Particle* particles, std:
     }
 }
 
+CollisionStrategy * CollisionA::Create()
+{
+	return new CollisionA;
+}
+
 void CollisionA::ExportClass()
 {
 	class_<CollisionA, bases<CollisionStrategy> >("CollisionA", init<>())
-		.def("Collision", &CollisionA::Collision);
+		.def("Collision", &CollisionA::Collision)
+		.def("Create", &CollisionA::Create, return_value_policy<manage_new_object>())
+		.staticmethod("Create");
 }

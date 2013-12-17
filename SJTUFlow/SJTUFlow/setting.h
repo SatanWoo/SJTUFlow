@@ -17,11 +17,15 @@ public:
 private slots:
     void changePage(QListWidgetItem *current, QListWidgetItem *previous);
 
+	void selectPyPath();
+
 	void insertRow();
 	void removeRow();
 
 	void enterEdit(QListWidgetItem *item);
 
+	void canApply();
+	void canApply(QString);
 	void saveSetting();
 
 private:

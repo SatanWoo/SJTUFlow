@@ -32,8 +32,15 @@ void BodyForceA::ApplyBodyForce(int particleNum, float kDt, Particle* particles)
     }
 }
 
+BodyForceStrategy * BodyForceA::Create()
+{
+	return new BodyForceA;
+}
+
 void BodyForceA::ExportClass()
 {
 	class_<BodyForceA, bases<BodyForceStrategy> >("BodyForceA", init<>())
-		.def("ApplyBodyForce", &BodyForceA::ApplyBodyForce);
+		.def("ApplyBodyForce", &BodyForceA::ApplyBodyForce)
+		.def("Create", &BodyForceA::Create, return_value_policy<manage_new_object>())
+		.staticmethod("Create");
 }

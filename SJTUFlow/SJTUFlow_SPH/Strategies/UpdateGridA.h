@@ -24,6 +24,7 @@ class UpdateGridA : public UpdateGridStrategy
 public:
 	void UpdateGrid(int particleNum, Particle* particles);
 
+	static UpdateGridStrategy *Create();
 	static void ExportClass();
 
 protected:

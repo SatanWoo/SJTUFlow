@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include "StableFluids.h"
+#include "SimulationFramework.h"
 
 using namespace std;
 
-class StableFluidsApplication
+class StableFluidsApplication : public SimulationFramework
 {
 public:
 	StableFluidsApplication(int size, int timeStep, float diff);
@@ -19,6 +20,8 @@ public:
 
 	void simulateDensity();
 	void simulateVelocity();
+
+	virtual void importAlgorithm(HMODULE hModule);
 
 private:
 	AdvectStrategy *m_as;
