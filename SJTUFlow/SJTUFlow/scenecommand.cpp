@@ -53,7 +53,7 @@ void SceneNewCommand::redo()
 }
 
 SceneImportCommand::SceneImportCommand( Scene *scene_, QUndoCommand *parent )
-	: SceneNewCommand(Primitive::T_Object, scene_)
+    : SceneNewCommand(Primitive::T_Object, scene_, parent)
 {
 }
 

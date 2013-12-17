@@ -15,6 +15,10 @@ CodingWidget::CodingWidget(QMenuBar *menubar, QWidget *parent)
 {
 	ui.setupUi(this);
 
+    scriptProcess = new QProcess(this);
+    connect(scriptProcess, SIGNAL(readyReadStandardError()),
+        this, SLOT(showRunError()));
+
     parseMenuActions(menubar);
 
 	codingTabNum = 0;
@@ -61,6 +65,14 @@ CodingWidget::CodingWidget(QMenuBar *menubar, QWidget *parent)
 CodingWidget::~CodingWidget()
 {
 
+}
+
+void CodingWidget::terminateScriptProcess()
+{
+    if (scriptProcess->state() == QProcess::Running)
+    {
+        scriptProcess->kill();
+    }
 }
 
 void CodingWidget::loadFile(const QString &fileName)
@@ -363,13 +375,11 @@ void CodingWidget::runModule()
 		{
 			QString execStr = tr("import sys\nsys.path.append('%1')\n")
 				.arg(QDir::currentPath()) + codeEdit->toPlainText();
-			QProcess *process = new QProcess(this);
-			connect(process, SIGNAL(readyReadStandardError()), 
-				this, SLOT(showRunError()));
-			process->start(pyPath);
-			process->waitForStarted();
-			process->write(execStr.toStdString().c_str());
-			process->closeWriteChannel();
+
+            scriptProcess->start(pyPath);
+            scriptProcess->waitForStarted();
+            scriptProcess->write(execStr.toStdString().c_str());
+            scriptProcess->closeWriteChannel();
 
 			emit running(2);
 		}
@@ -438,9 +448,9 @@ void CodingWidget::copyAvailable( bool yes )
 
 void CodingWidget::showRunError()
 {
-	QProcess *process = qobject_cast<QProcess *>(sender());
-	QString errStr = QString::fromLocal8Bit(process->readAllStandardError());
-	process->kill();
+    //QProcess *process = qobject_cast<QProcess *>(sender());
+    QString errStr = QString::fromLocal8Bit(scriptProcess->readAllStandardError());
+    scriptProcess->kill();
 	QMessageBox::warning(this, tr("Runtime Error"), errStr, QMessageBox::Ok);
 	emit running(1);
 }

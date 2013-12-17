@@ -127,6 +127,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionSelectAll->setVisible(false);
         sceneDesignWidget->checkState();
 		ui.titleBar->setFilePath(sceneDesignWidget->filePath());
+        codingWidget->terminateScriptProcess();
 		displayWidget->stopAnimate();
         break;
     case 1:
@@ -151,6 +152,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionSelectAll->setVisible(true);
         codingWidget->checkState(0);
 		ui.titleBar->setFilePath(codingWidget->filePath());
+        codingWidget->terminateScriptProcess();
 		displayWidget->stopAnimate();
         break;
     case 2:

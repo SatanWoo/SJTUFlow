@@ -17,6 +17,8 @@ public:
 
 	QString filePath(){ return curFilePath; }
 
+    void terminateScriptProcess();
+
 signals:
 	void filePathChanged(QString);
 	void running(int);
@@ -25,6 +27,8 @@ protected:
 
 private:
 	Ui::CodingWidget ui;
+
+    QProcess *scriptProcess;
 
     QMap<QString, QAction *> actions;
 
