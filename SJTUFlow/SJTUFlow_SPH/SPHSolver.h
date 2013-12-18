@@ -8,7 +8,13 @@
 #if !defined(__SJTUFLOW2_SPHSolver_h)
 #define __SJTUFLOW2_SPHSolver_h
 
-#include "Strategies/Strategies.h"
+#include "EmitStrategy.h"
+#include "BodyForceStrategy.h"
+#include "UpdateGridStrategy.h"
+#include "CalPressureStrategy.h"
+#include "RelaxPosStrategy.h"
+#include "CollisionStrategy.h"
+#include "RenderSPHStrategy.h"
 
 #include "utils.h"
 #include <iostream>

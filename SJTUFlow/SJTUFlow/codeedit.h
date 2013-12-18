@@ -25,8 +25,11 @@ public:
     bool canUndo(){ return stateCanUndo; }
     bool canRedo(){ return stateCanRedo; }
 
+	void setPlainText(const QString &text);
+
 protected:
 	void resizeEvent(QResizeEvent *event);
+	void keyPressEvent(QKeyEvent *e);
 
 private slots:
  	void updateLineNumberAreaWidth(int newBlockCount);

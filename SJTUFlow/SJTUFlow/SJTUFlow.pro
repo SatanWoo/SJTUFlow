@@ -51,54 +51,39 @@ win32{
 DEPENDPATH += .
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
-HEADERS += ./AlgorithmManager.h \
-    ./resource.h \
-    ./objloader.h \
-    ./qhorizontaltabbar.h \
+HEADERS += ./qhorizontaltabbar.h \
     ./qhorizontaltabwidget.h \
     ./sjtuflow.h \
-    ./dllrow.h \
-    ./scenecommand.h \
-    ./setting.h \
     ./titlebar.h \
     ./codingwidget.h \
     ./displaywidget.h \
     ./codeedit.h \
-    ./aboutdialog.h \
     ./pysyntaxhighlighter.h \
     ./scene.h \
     ./primitive.h \
     ./scenedesignwidget.h \
-    ./Stable2DAdvectStrategy.h \
-    ./Stable2DBoundaryStrategy.h \
-    ./Stable2DDiffuseStrategy.h \
-    ./Stable2DProjectStrategy.h \
-    ./StableFluids.h \
-    ./StableFluidsApplication.h \
-    ./Utility.h \
-    ./AdvectStrategy.h \
-    ./BoundaryStrategy.h \
-    ./DiffuseStrategy.h \
-    ./ProjectStrategy.h
-SOURCES += ./aboutdialog.cpp \
-    ./AlgorithmManager.cpp \
-    ./codeedit.cpp \
+    ./setting.h \
+    ./objloader.h \
+    ./aboutdialog.h \
+    ./scenecommand.h \
+    ./dllrow.h
+SOURCES += ./codeedit.cpp \
     ./codingwidget.cpp \
     ./displaywidget.cpp \
-    ./dllrow.cpp \
-    ./objloader.cpp \
     ./primitive.cpp \
     ./scene.cpp \
     ./main.cpp \
     ./pysyntaxhighlighter.cpp \
     ./qhorizontaltabbar.cpp \
     ./qhorizontaltabwidget.cpp \
-    ./scenecommand.cpp \
     ./scenedesignwidget.cpp \
-    ./setting.cpp \
     ./sjtuflow.cpp \
     ./titlebar.cpp \
-    ./StableFluidsApplication.cpp
+    ./setting.cpp \
+    ./objloader.cpp \
+    ./aboutdialog.cpp \
+    ./scenecommand.cpp \
+    ./dllrow.cpp
 FORMS += ./sjtuflow.ui \
     ./scenedesignwidget.ui \
     ./codingwidget.ui \

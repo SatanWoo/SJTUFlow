@@ -181,13 +181,10 @@ void Scene::startAnimation()
 
 void Scene::stopAnimation()
 {
-    if (animationIsStarted())
-    {
-        localServer->close();
+	localServer->close();
 
-        memset(&sp, 0, sizeof(SocketPackage));
-        QGLViewer::stopAnimation();
-    }
+	memset(&sp, 0, sizeof(SocketPackage));
+	QGLViewer::stopAnimation();
 }
 
 void Scene::clone(Scene *scene)

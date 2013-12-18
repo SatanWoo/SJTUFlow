@@ -7,8 +7,17 @@
 
 #include "SPHSolver.h"
 
+#include "Strategies/Strategies.h"
+
 SPHSolver::SPHSolver()
 {
+	emitStrategy = new EmitA;
+	bodyForceStrategy = new BodyForceA;
+	updateGridStrategy = new UpdateGridA;
+	calPressureStrategy = new CalPressureA;
+	relaxPosStrategy = new RelaxPosA;
+	collisionStrategy = new CollisionA;
+	renderSPHStrategy = new RenderSPHA;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -258,7 +267,6 @@ void SPHSolver::ExportClass()
 {
 	class_<SPHSolver>("SPHSolver", init<>())
 		.def("SetScene", &SPHSolver::SetScene)
-		.def("SolverDestroy", &SPHSolver::SolverDestroy)
 		.def("SolverInitSPH", &SPHSolver::SolverInitSPH)
 		.def("SetEmitStrategy", &SPHSolver::SetEmitStrategy,
 		with_custodian_and_ward<1, 2>())

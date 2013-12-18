@@ -26,4 +26,4 @@ if __name__ == '__main__':
             _SPHSolver.Collision()
         _SPHSolver.RenderSPH()
 
-    _SPHSolver.SolverDestroy()
+    #_SPHSolver.SolverDestroy()

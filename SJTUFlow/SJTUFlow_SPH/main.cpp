@@ -1,4 +1,5 @@
 #include "SPHSolver.h"
+#include "Strategies/Strategies.h"
 
 BOOST_PYTHON_MODULE(SJTUFlow_SPH)
 {

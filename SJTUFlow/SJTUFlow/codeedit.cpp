@@ -84,12 +84,32 @@ int CodeEdit::lineNumberAreaWidth()
 	return space;
 }
 
+void CodeEdit::setPlainText( const QString &text )
+{
+	QString t = text;
+	t = t.replace('\t', QString(tabWidth, ' '));
+	QPlainTextEdit::setPlainText(t);
+}
+
 void CodeEdit::resizeEvent( QResizeEvent *event )
 {
 	QPlainTextEdit::resizeEvent(event);
 
 	QRect cr = contentsRect();
 	lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+}
+
+void CodeEdit::keyPressEvent( QKeyEvent *e )
+{
+	if (e->key() == Qt::Key_Tab)
+	{
+		insertPlainText(QString(tabWidth, ' '));
+		e->accept();
+	}
+	else
+	{
+		QPlainTextEdit::keyPressEvent(e);
+	}
 }
 
 void CodeEdit::updateLineNumberAreaWidth( int )
