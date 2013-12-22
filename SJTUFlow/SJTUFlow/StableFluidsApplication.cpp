@@ -64,7 +64,7 @@ void StableFluidsApplication::simulateVelocity()
 	m_bs->setUpBoundary(m_size, BounadaryTypeVertical, v);
 }
 
-void StableFluidsApplication::gaussSiedelIteration(BounadaryType type, float *current, float *old, float a, float c)
+void StableFluidsApplication::gaussSiedelIteration(BoundaryType type, float *current, float *old, float a, float c)
 {
 	int i, j, k;
 	int N  = m_size;

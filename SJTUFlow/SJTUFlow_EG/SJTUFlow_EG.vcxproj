@@ -10,10 +10,40 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AddSourceStrategy.h" />
+    <ClInclude Include="AdvectStrategy.h" />
+    <ClInclude Include="BoundaryStrategy.h" />
+    <ClInclude Include="DiffuseStrategy.h" />
+    <ClInclude Include="EulerGrid2D.h" />
+    <ClInclude Include="MathHelper.h" />
+    <ClInclude Include="ProjectStrategy.h" />
+    <ClInclude Include="Stable2DAddSourceStrategy.h" />
+    <ClInclude Include="Stable2DAdvectStrategy.h" />
+    <ClInclude Include="Stable2DBoundaryStrategy.h" />
+    <ClInclude Include="Stable2DDiffuseStrategy.h" />
+    <ClInclude Include="Stable2DProjectStrategy.h" />
+    <ClInclude Include="StableFluids.h" />
+    <ClInclude Include="StableFluidsApplication.h" />
+    <ClInclude Include="Utility.h" />
+    <ClInclude Include="Vector2D.h" />
+    <ClInclude Include="Velocity2D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EulerGrid2D.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Stable2DAddSourceStrategy.cpp" />
+    <ClCompile Include="Stable2DAdvectStrategy.cpp" />
+    <ClCompile Include="Stable2DBoundaryStrategy.cpp" />
+    <ClCompile Include="Stable2DDiffuseStrategy.cpp" />
+    <ClCompile Include="Stable2DProjectStrategy.cpp" />
+    <ClCompile Include="StableFluidsApplication.cpp" />
+    <ClCompile Include="Vector2D.cpp" />
+    <ClCompile Include="Velocity2D.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{79AB9251-6943-450D-A5B7-FB4DBFB6EEDA}</ProjectGuid>
+    <ProjectGuid>{4E1390BB-9ADE-4229-970E-5E6948A1AF20}</ProjectGuid>
     <Keyword>Qt4VSv1.0</Keyword>
-    <ProjectName>SJTUFlow_SPH</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,16 +72,16 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PythonPath)include;$(BoostPath);$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PythonPath)include;$(BoostPath);$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PythonPath)libs;$(BoostPath)stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PythonPath)libs;$(BoostPath)stage\lib;$(LibraryPath)</LibraryPath>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.pyd</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.pyd</TargetExt>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PythonPath)include;$(BoostPath);$(IncludePath)</IncludePath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(PythonPath)libs;$(BoostPath)stage\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PythonPath)include;$(BoostPath);$(IncludePath)</IncludePath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(PythonPath)libs;$(BoostPath)stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_NETWORK_LIB;SJTUFLOW-SPH_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_NETWORK_LIB;SJTUFLOW_EG_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtNetwork;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -61,14 +91,14 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).pyd</OutputFile>
-      <AdditionalLibraryDirectories>$(BoostPath)stage\lib;$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5Networkd.lib;boost_python-vc100-mt-gd-1_55.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_NETWORK_LIB;SJTUFLOW-SPH_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_NETWORK_LIB;SJTUFLOW_EG_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtNetwork;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>
       </DebugInformationFormat>
@@ -83,51 +113,12 @@
       <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Network.lib;boost_python-vc100-mt-1_55.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="BodyForceStrategy.h" />
-    <ClInclude Include="CalPressureStrategy.h" />
-    <ClInclude Include="CollisionStrategy.h" />
-    <ClInclude Include="EmitStrategy.h" />
-    <ClInclude Include="Particle.h" />
-    <ClInclude Include="RelaxPosStrategy.h" />
-    <ClInclude Include="RenderSPHStrategy.h" />
-    <ClInclude Include="SPHSolver.h" />
-    <ClInclude Include="Strategies\BodyForceA.h" />
-    <ClInclude Include="Strategies\CalPressureA.h" />
-    <ClInclude Include="Strategies\CollisionA.h" />
-    <ClInclude Include="Strategies\EmitA.h" />
-    <ClInclude Include="Strategies\RelaxPosA.h" />
-    <ClInclude Include="Strategies\RenderSPHA.h" />
-    <ClInclude Include="Strategies\Strategies.h" />
-    <ClInclude Include="Strategies\UpdateGridA.h" />
-    <ClInclude Include="UpdateGridStrategy.h" />
-    <ClInclude Include="utils.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="BodyForceStrategy.cpp" />
-    <ClCompile Include="CalPressureStrategy.cpp" />
-    <ClCompile Include="CollisionStrategy.cpp" />
-    <ClCompile Include="EmitStrategy.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="RelaxPosStrategy.cpp" />
-    <ClCompile Include="RenderSPHStrategy.cpp" />
-    <ClCompile Include="SPHSolver.cpp" />
-    <ClCompile Include="Strategies\BodyForceA.cpp" />
-    <ClCompile Include="Strategies\CalPressureA.cpp" />
-    <ClCompile Include="Strategies\CollisionA.cpp" />
-    <ClCompile Include="Strategies\EmitA.cpp" />
-    <ClCompile Include="Strategies\RelaxPosA.cpp" />
-    <ClCompile Include="Strategies\RenderSPHA.cpp" />
-    <ClCompile Include="Strategies\UpdateGridA.cpp" />
-    <ClCompile Include="UpdateGridStrategy.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\GeneratedFiles" MocDir=".\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="$(DefaultQtVersion)" />
+      <UserProperties UicDir=".\GeneratedFiles" MocDir=".\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_Win32="Qt5.1.1_msvc2010_opengl" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

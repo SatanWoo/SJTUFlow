@@ -68,20 +68,23 @@ void RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string sce
 	_particleNum = particleNum;
 	_particles = particles;
 
-	SocketPackage sp;
+	SocketPackageSPH sp;
 	sp.particleNum = particleNum;
 	for (int i = 0; i < particleNum; i++)
 	{
 		sp.particles[i] = particles[i].curPos;
 		sp.particlesMass[i] = particles[i].m;
 	}
-
 	QLocalSocket socket;
 	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
-	socket.waitForConnected();
+	if (!socket.waitForConnected(3000))
+	{
+	}
 	QDataStream ds(&socket);
-	ds.writeRawData((const char *)(&sp), sizeof(SocketPackage));
-	socket.waitForBytesWritten();
+	SocketType type = SC_SPH;
+	ds.writeRawData((const char *)(&type), sizeof(SocketType));
+	ds.writeRawData((const char *)(&sp), sizeof(SocketPackageSPH));
+	socket.waitForBytesWritten(3000);
 	socket.disconnectFromServer();
 	//Render();
 }

@@ -44,7 +44,8 @@ Scene::Scene(QWidget *parent) : QGLViewer(parent)
 
 	clear(SCENE_2D);
 
-	sp.particleNum = 0;
+	memset(&spSPH, 0, sizeof(SocketPackageSPH));
+	memset(&spEG, 0, sizeof(SocketPackageEuler));
 
 	setAnimationPeriod(0);
 	localServer = new QLocalServer(this);
@@ -175,7 +176,6 @@ void Scene::startAnimation()
 		qDebug() << "failed to listen" << QApplication::applicationName() << endl;
 	}
 
-	camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0));
 	QGLViewer::startAnimation();
 }
 
@@ -183,8 +183,16 @@ void Scene::stopAnimation()
 {
 	localServer->close();
 
-	memset(&sp, 0, sizeof(SocketPackage));
-	QGLViewer::stopAnimation();
+	memset(&spSPH, 0, sizeof(SocketPackageSPH));
+	if (spEG.density)
+	{
+		delete[] spEG.density;
+	}
+	memset(&spEG, 0, sizeof(SocketPackageEuler));
+	if (animationIsStarted())
+	{
+		QGLViewer::stopAnimation();
+	}
 }
 
 void Scene::clone(Scene *scene)
@@ -440,13 +448,12 @@ void Scene::draw()
 
 	if (animationIsStarted())
 	{
-		//float r = 2.5f * kParticleRadius * kScreenWidth / kViewWidth;
-		float r = kParticleRadius;
-
-		for(int i = 0; i < sp.particleNum; ++i)
+		camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0));
+		float r = 0.05f;
+		for(int i = 0; i < spSPH.particleNum; ++i)
 		{
 			SceneUnit::Circle circle;
-			if (sp.particlesMass[i] > 1.0)
+			if (spSPH.particlesMass[i] > 1.0)
 			{
 				circle.setColor(QColor(51, 153, 0));
 			}
@@ -454,11 +461,43 @@ void Scene::draw()
 			{
 				circle.setColor(QColor(51, 153, 204));
 			}
-			circle.setCenter(Vec(sp.particles[i].x, sp.particles[i].y, 0.0));
+			circle.setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, 0.0));
 			
 			glPushMatrix();
 			circle.draw(false);
 			glPopMatrix();
+		}
+
+		if (spEG.size > 0)
+		{
+#define IX(i,j) ((i)+(N+2)*(j))
+			camera()->setPosition(qglviewer::Vec(0.0, 0.0, 2.0));
+			int N = spEG.size;
+			float h = 1.0f / N;
+			glDisable(GL_LIGHTING);
+			glPushMatrix();
+			glBegin(GL_QUADS);
+			for (int i = 0; i <= N; i++)
+			{
+				float x = i * h - 0.5f;
+				for (int j = 0; j <= N; j++)
+				{
+					float y = j * h - 0.5f;
+
+					float d00 = spEG.density[IX(i, j)];
+					float d01 = spEG.density[IX(i, j + 1)];
+					float d10 = spEG.density[IX(i + 1, j)];
+					float d11 = spEG.density[IX(i + 1, j + 1)];
+
+					glColor3f(d00, d00, d00); glVertex3f (x, y, 0.0f);
+					glColor3f(d10, d10, d10); glVertex3f (x + h, y, 0.0f);
+					glColor3f(d11, d11, d11); glVertex3f (x + h, y + h, 0.0f);
+					glColor3f(d01, d01, d01); glVertex3f (x, y + h, 0.0f);
+				}
+			}
+			glEnd();
+			glPopMatrix();
+			glEnable(GL_LIGHTING);
 		}
 	}
 }
@@ -540,11 +579,25 @@ void Scene::animate()
 	QLocalSocket *socket = localServer->nextPendingConnection();
 	if (socket)
 	{
-		socket->waitForReadyRead();
 		QDataStream ds(socket);
-
-		ds.readRawData((char *)(&sp), sizeof(SocketPackage));
-
+		socket->waitForReadyRead();
+		SocketType type;
+		ds.readRawData((char *)(&type), sizeof(SocketType));
+		if (type == SC_SPH)
+		{
+			ds.readRawData((char *)(&spSPH), sizeof(SocketPackageSPH));
+		}
+		else if (type == SC_EG)
+		{
+			int size = spEG.size;
+			ds.readRawData((char *)(&spEG.size), sizeof(int));
+			ds.readRawData((char *)(&spEG.totalSize), sizeof(int));
+			if (spEG.size != size)
+			{
+				spEG.density = new float[spEG.totalSize];
+			}
+			ds.readRawData((char *)(spEG.density), spEG.totalSize * sizeof(float));
+		}
 		socket->disconnectFromServer();
 	}
 }

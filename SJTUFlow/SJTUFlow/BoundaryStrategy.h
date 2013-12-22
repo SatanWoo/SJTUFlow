@@ -6,12 +6,12 @@ typedef enum
 	BounadaryTypeNone = 0,
 	BounadaryTypeHorizontal = 1,
 	BounadaryTypeVertical = 2
-}BounadaryType;
+}BoundaryType;
 
 class BoundaryStrategy
 {
 public:
-	virtual void setUpBoundary(int size, BounadaryType type, float *boundary) = 0;
+	virtual void setUpBoundary(int size, BoundaryType type, float *boundary) = 0;
 };
 
 #endif

@@ -6,7 +6,7 @@
 class DiffuseStrategy
 {
 public:
-	virtual void diffuse(int size, BounadaryType type, float *x, float *x0, float diff, float dt) = 0; 
+	virtual void diffuse(int size, BoundaryType type, float *x, float *x0, float diff, float dt) = 0; 
 };
 
 #endif

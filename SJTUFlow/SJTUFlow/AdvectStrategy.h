@@ -6,7 +6,7 @@
 class AdvectStrategy
 {
 public:
-	virtual void advect(int size, BounadaryType type, float *d, float *d0, float *u ,float *v, float dt) = 0;
+	virtual void advect(int size, BoundaryType type, float *d, float *d0, float *u ,float *v, float dt) = 0;
 
 };
 

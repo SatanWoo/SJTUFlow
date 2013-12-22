@@ -13,6 +13,8 @@
 #include <math.h>
 #include <GL/glut.h>
 
+#include "../include/SJTUFlow/global.h"
+
 #define kScreenWidth 640
 #define kScreenHeight 480
 #define kViewWidth 10.0f
@@ -27,19 +29,5 @@
 #define kNearNorm (30/(2*kPi*kH*kH))
 
 #define kPi 3.1415926535f
-
-class vec2{
-    public:
-    float x,y;
-    vec2(float x, float y) : x(x), y(y){}
-    vec2(){}
-};
-
-struct SocketPackage
-{
-	int particleNum;
-	float particlesMass[kParticleCount];
-	vec2 particles[kParticleCount];
-};
 
 #endif

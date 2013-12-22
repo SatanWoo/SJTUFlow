@@ -10,8 +10,8 @@
 
 #include <qglviewer.h>
 
-#include "../SJTUFlow_SPH/utils.h"
-#include "StableFluidsApplication.h"
+#include "SJTUFlow/global.h"
+//#include "StableFluidsApplication.h"
 
 #define RAND_255 rand() % 255
 #define RAND_COLOR QColor(RAND_255, RAND_255, RAND_255)
@@ -88,7 +88,8 @@ private:
 	static double axisRot[3][4];
 
 	QLocalServer *localServer;
-	SocketPackage sp;
+	SocketPackageSPH spSPH;
+	SocketPackageEuler spEG;
 	bool allowSelect;
 
 	bool mousePressed;

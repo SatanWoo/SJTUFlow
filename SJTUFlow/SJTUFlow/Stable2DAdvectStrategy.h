@@ -7,7 +7,7 @@
 class EULERSOLVERDLL_API Stable2DAdvectStrategy : public AdvectStrategy
 {
 public:
-	virtual void advect(int size, BounadaryType type, float *d, float *d0, float *u ,float *v, float dt);
+	virtual void advect(int size, BoundaryType type, float *d, float *d0, float *u ,float *v, float dt);
 };
 
 extern "C"

@@ -274,7 +274,8 @@ void SPHSolver::ExportClass()
 		with_custodian_and_ward<1, 2>())
 		.def("SetUpdateGridStrategy", &SPHSolver::SetUpdateGridStrategy, 
 		with_custodian_and_ward<1, 2>())
-		.def("SetCalPressureStrategy", &SPHSolver::SetCalPressureStrategy, with_custodian_and_ward<1, 2>())
+		.def("SetCalPressureStrategy", &SPHSolver::SetCalPressureStrategy, 
+		with_custodian_and_ward<1, 2>())
 		.def("SetRelaxPosStrategy", &SPHSolver::SetRelaxPosStrategy, 
 		with_custodian_and_ward<1, 2>())
 		.def("SetCollisionStrategy", &SPHSolver::SetCollisionStrategy, 

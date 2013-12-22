@@ -6,7 +6,7 @@
 
 class EULERSOLVERDLL_API Stable2DBoundaryStrategy : public BoundaryStrategy
 {
-	virtual void setUpBoundary(int size, BounadaryType type, float *boundary);
+	virtual void setUpBoundary(int size, BoundaryType type, float *boundary);
 };
 
 extern "C"

@@ -40,7 +40,7 @@ private:
 	int m_time;
 	float m_diff;
 
-	void gaussSiedelIteration(BounadaryType type, float *current, float *old, float a, float c);
+	void gaussSiedelIteration(BoundaryType type, float *current, float *old, float a, float c);
 	void addSource(float *current, float *old);
 };
 
