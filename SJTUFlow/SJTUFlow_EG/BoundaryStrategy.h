@@ -3,9 +3,10 @@
 
 typedef enum
 {
-	BounadaryTypeNone = 0,
-	BounadaryTypeHorizontal = 1,
-	BounadaryTypeVertical = 2
+	BoundaryTypeNone = 0,
+	BoundaryTypeU = 1,
+	BoundaryTypeV = 2,
+	BoundaryTypeW = 3
 }BoundaryType;
 
 #include "boost/python.hpp"
@@ -14,21 +15,21 @@ using namespace boost::python;
 class BoundaryStrategy
 {
 public:
-	virtual void setUpBoundary(int size, BoundaryType type, float *boundary) = 0;
+	virtual void setBoundary(int size, BoundaryType type, float *boundary) = 0;
 };
 
 class BoundaryStrategyWrap : public BoundaryStrategy, public wrapper<BoundaryStrategy>
 {
 public:
-	void setUpBoundary(int size, BoundaryType type, float *boundary)
+	void setBoundary(int size, BoundaryType type, float *boundary)
 	{
-		this->get_override("setUpBoundary")(size, type, boundary);
+		this->get_override("setBoundary")(size, type, boundary);
 	}
 
 	static void ExportClass()
 	{
 		class_<BoundaryStrategyWrap, boost::noncopyable>("BoundaryStrategy")
-			.def("setUpBoundary", pure_virtual(&BoundaryStrategy::setUpBoundary));
+			.def("setBoundary", pure_virtual(&BoundaryStrategy::setBoundary));
 	}
 };
 

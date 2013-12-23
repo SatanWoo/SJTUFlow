@@ -29,4 +29,27 @@ public:
 	}
 };
 
+class Project3DStrategy
+{
+public:
+	virtual void project(int N, float * u, float * v, float * w, float * p, float * div) = 0;
+protected:
+	BoundaryStrategy *m_bs;
+};
+
+class Project3DStrategyWrap : public Project3DStrategy, public wrapper<Project3DStrategy>
+{
+public:
+	void project(int N, float * u, float * v, float * w, float * p, float * div)
+	{
+		this->get_override("project")(N, u, v, w, p, div);
+	}
+
+	static void ExportClass()
+	{
+		class_<Project3DStrategyWrap, boost::noncopyable>("Project3DStrategy")
+			.def("project", pure_virtual(&Project3DStrategy::project));
+	}
+};
+
 #endif

@@ -25,4 +25,26 @@ public:
 	}
 };
 
+class Advect3DStrategy
+{
+public:
+	virtual void advect(int N, BoundaryType type, float *density, float *preDensity, float *u, float *v, float *w, float dt) = 0;
+
+};
+
+class Advect3DStrategyWrap : public Advect3DStrategy, public wrapper<Advect3DStrategy>
+{
+public:
+	void advect(int N, BoundaryType type, float *density, float *preDensity, float *u, float *v, float *w, float dt)
+	{
+		this->get_override("advect")(N, type, density, preDensity, u, v, w, dt);
+	}
+
+	static void ExportClass()
+	{
+		class_<Advect3DStrategyWrap, boost::noncopyable>("Advect3DStrategy")
+			.def("advect", pure_virtual(&Advect3DStrategy::advect));
+	}
+};
+
 #endif

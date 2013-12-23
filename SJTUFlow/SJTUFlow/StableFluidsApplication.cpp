@@ -45,14 +45,14 @@ void StableFluidsApplication::simulateVelocity()
 
 	m_ps->projectStepTwo(m_size, u, v, prevU, prevV);
 	m_bs->setUpBoundary(m_size, BounadaryTypeHorizontal, u);
-	m_bs->setUpBoundary(m_size, BounadaryTypeVertical, v);
+	m_bs->setUpBoundary(m_size, BounadaryTypeV, v);
 
 	SWAP(prevU, u); SWAP(prevV, v);
 
 	m_as->advect(m_size, BounadaryTypeHorizontal, u, prevU, prevU, prevV, m_time);
 	m_bs->setUpBoundary(m_size, BounadaryTypeHorizontal, u);
-	m_as->advect(m_size, BounadaryTypeVertical, v, prevV, prevU, prevV, m_time);
-	m_bs->setUpBoundary(m_size, BounadaryTypeVertical, v);
+	m_as->advect(m_size, BounadaryTypeV, v, prevV, prevU, prevV, m_time);
+	m_bs->setUpBoundary(m_size, BounadaryTypeV, v);
 
 	m_ps->projectStepOne(m_size, u, v, prevU, prevV);
 	m_bs->setUpBoundary(m_size, BounadaryTypeNone, prevV);
@@ -61,7 +61,7 @@ void StableFluidsApplication::simulateVelocity()
 
 	m_ps->projectStepTwo(m_size, u, v, prevU, prevV);
 	m_bs->setUpBoundary(m_size, BounadaryTypeHorizontal, u);
-	m_bs->setUpBoundary(m_size, BounadaryTypeVertical, v);
+	m_bs->setUpBoundary(m_size, BounadaryTypeV, v);
 }
 
 void StableFluidsApplication::gaussSiedelIteration(BoundaryType type, float *current, float *old, float a, float c)

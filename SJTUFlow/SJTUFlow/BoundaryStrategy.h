@@ -5,7 +5,7 @@ typedef enum
 {
 	BounadaryTypeNone = 0,
 	BounadaryTypeHorizontal = 1,
-	BounadaryTypeVertical = 2
+	BounadaryTypeV = 2
 }BoundaryType;
 
 class BoundaryStrategy

@@ -12,19 +12,18 @@
 #include "boost/python.hpp"
 using namespace boost::python;
 
-
 class AddSourceStrategy
 {
 public:
-    virtual void addSource(int N, float * x, float * s, float dt) = 0;
+    virtual void addSource(int N, float *value, float *value_prev, float dt) = 0;
 };
 
 class AddSourceStrategyWrap : public AddSourceStrategy, public wrapper<AddSourceStrategy>
 {
 public:
-	void addSource(int N, float * x, float * s, float dt)
+	void addSource(int N, float *value, float *value_prev, float dt)
 	{
-		this->get_override("addSource")(N, x, s, dt);
+		this->get_override("addSource")(N, value, value_prev, dt);
 	}
 
 	static void ExportClass()

@@ -9,7 +9,7 @@
 #ifndef Eulter_SE_MathHelper_h
 #define Eulter_SE_MathHelper_h
 #include "BoundaryStrategy.h"
-#include "Velocity2D.h"
+#include "Velocity.h"
 #include "Utility.h"
 
 class MathHelper
@@ -31,6 +31,34 @@ public:
             //set_bnd ( N, b, x );
         }
     }
+
+	static void linearCalculation3D(int N, BoundaryType b, float *value, float *value_prev, float a, float c)
+	{
+		int count;
+		int count_x;
+		int count_y;
+		int count_z;
+
+		for(count=0; count<10; count++)
+		{
+			for(count_x=1; count_x<=N; count_x++)
+			{
+				for(count_y=1; count_y<=N; count_y++)
+				{
+					for(count_z=1; count_z<=N; count_z++)
+					{
+						value[IX3D(count_x, count_y, count_z)] =  (value_prev[IX3D(count_x, count_y, count_z)] +
+							a * (value[IX3D(count_x-1, count_y, count_z)]+
+							value[IX3D(count_x+1, count_y, count_z)]+
+							value[IX3D(count_x, count_y-1, count_z)]+
+							value[IX3D(count_x, count_y+1, count_z)]+
+							value[IX3D(count_x, count_y, count_z-1)]+
+							value[IX3D(count_x, count_y, count_z+1)]))/c;
+					}
+				}
+			}
+		}
+	}
     
 private:
     static int linearIndex(int size, int i, int j)

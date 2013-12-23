@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "StableFluids.h"
-#include "EulerGrid2D.h"
+#include "EulerGrid.h"
 
 using namespace std;
 
@@ -32,7 +32,7 @@ public:
     void addSourceVelocity();
     void addSourceDensity();
 
-	bool render();
+	void render();
 	static void ExportClass();
     
     EulerGrid2D *grid;

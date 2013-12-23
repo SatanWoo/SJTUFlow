@@ -11,7 +11,7 @@ public:
     vec2(){}
 };
 
-enum SocketType{SC_SPH = 0, SC_EG};
+enum SocketType{SC_SPH = 0, SC_EG_2D, SC_EG_3D};
 
 #define kParticleCount 1000
 

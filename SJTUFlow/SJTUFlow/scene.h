@@ -125,6 +125,8 @@ private:
 	void drawRotateRing(double radius, Axis axis, bool withName = false);
 	void drawScaleBox(qglviewer::Vec bmin, qglviewer::Vec bmax, bool withName = false);
 	void drawSubScaleBox(double len, double x, double y, double z = 0.0, bool s3d = true);
+
+	void drawEuler();
 };
 
 #endif // GLWIDGET_H

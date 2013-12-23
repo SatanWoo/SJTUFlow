@@ -15,7 +15,7 @@
     <ClInclude Include="AdvectStrategy.h" />
     <ClInclude Include="BoundaryStrategy.h" />
     <ClInclude Include="DiffuseStrategy.h" />
-    <ClInclude Include="EulerGrid2D.h" />
+    <ClInclude Include="EulerGrid.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="ProjectStrategy.h" />
     <ClInclude Include="Stable2DAddSourceStrategy.h" />
@@ -23,23 +23,33 @@
     <ClInclude Include="Stable2DBoundaryStrategy.h" />
     <ClInclude Include="Stable2DDiffuseStrategy.h" />
     <ClInclude Include="Stable2DProjectStrategy.h" />
+    <ClInclude Include="Stable3DAddSourceStrategy.h" />
+    <ClInclude Include="Stable3DAdvectStrategy.h" />
+    <ClInclude Include="Stable3DBoundaryStrategy.h" />
+    <ClInclude Include="Stable3DDiffuseStrategy.h" />
+    <ClInclude Include="Stable3DProjectStrategy.h" />
     <ClInclude Include="StableFluids.h" />
+    <ClInclude Include="StableFluids3DApplication.h" />
     <ClInclude Include="StableFluidsApplication.h" />
     <ClInclude Include="Utility.h" />
-    <ClInclude Include="Vector2D.h" />
-    <ClInclude Include="Velocity2D.h" />
+    <ClInclude Include="Velocity.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EulerGrid2D.cpp" />
+    <ClCompile Include="EulerGrid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Stable2DAddSourceStrategy.cpp" />
     <ClCompile Include="Stable2DAdvectStrategy.cpp" />
     <ClCompile Include="Stable2DBoundaryStrategy.cpp" />
     <ClCompile Include="Stable2DDiffuseStrategy.cpp" />
     <ClCompile Include="Stable2DProjectStrategy.cpp" />
+    <ClCompile Include="Stable3DAddSourceStrategy.cpp" />
+    <ClCompile Include="Stable3DAdvectStrategy.cpp" />
+    <ClCompile Include="Stable3DBoundaryStrategy.cpp" />
+    <ClCompile Include="Stable3DDiffuseStrategy.cpp" />
+    <ClCompile Include="Stable3DProjectStrategy.cpp" />
+    <ClCompile Include="StableFluids3DApplication.cpp" />
     <ClCompile Include="StableFluidsApplication.cpp" />
-    <ClCompile Include="Vector2D.cpp" />
-    <ClCompile Include="Velocity2D.cpp" />
+    <ClCompile Include="Velocity.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4E1390BB-9ADE-4229-970E-5E6948A1AF20}</ProjectGuid>

@@ -33,13 +33,13 @@ void StableFluidsApplication::initialize()
 
 void StableFluidsApplication::addSourceVelocity()
 {
-    this->m_ass->addSource(m_size, grid->getU()->getU(), grid->getU()->getV(), m_time);
-    this->m_ass->addSource(m_size, grid->getV()->getU(), grid->getV()->getV(), m_time);
+    this->m_ass->addSource(m_size, grid->getU()->getCurrent(), grid->getU()->getPrevious(), m_time);
+    this->m_ass->addSource(m_size, grid->getV()->getCurrent(), grid->getV()->getPrevious(), m_time);
 }
 
 void StableFluidsApplication::addSourceDensity()
 {
-    this->m_ass->addSource(m_size, grid->getDensity()->getU(), grid->getDensity()->getV(), m_time);
+    this->m_ass->addSource(m_size, grid->getDensity()->getCurrent(), grid->getDensity()->getPrevious(), m_time);
 }
 
 void StableFluidsApplication::advectVelocity()
@@ -47,54 +47,53 @@ void StableFluidsApplication::advectVelocity()
     grid->getU()->swap();
     grid->getV()->swap();
     
-    this->m_as->advect(m_size, BounadaryTypeHorizontal, grid->getU()->getU(), grid->getU()->getV(), grid->getU()->getV(), grid->getV()->getV(), m_time);
-    this->m_as->advect(m_size, BounadaryTypeVertical, grid->getV()->getU(), grid->getV()->getV(), grid->getU()->getV(), grid->getV()->getV(), m_time);
+    this->m_as->advect(m_size, BoundaryTypeU, grid->getU()->getCurrent(), grid->getU()->getPrevious(), grid->getU()->getPrevious(), grid->getV()->getPrevious(), m_time);
+    this->m_as->advect(m_size, BoundaryTypeV, grid->getV()->getCurrent(), grid->getV()->getPrevious(), grid->getU()->getPrevious(), grid->getV()->getPrevious(), m_time);
 }
 
 void StableFluidsApplication::advectDensity()
 {
     grid->getDensity()->swap();
-    this->m_as->advect(m_size, BounadaryTypeNone, grid->getDensity()->getU(), grid->getDensity()->getV(), grid->getU()->getU(), grid->getV()->getU(), m_time);
+    this->m_as->advect(m_size, BoundaryTypeNone, grid->getDensity()->getCurrent(), grid->getDensity()->getPrevious(), grid->getU()->getCurrent(), grid->getV()->getCurrent(), m_time);
 
 }
 
 void StableFluidsApplication::diffuseVelocity()
 {
     grid->getU()->swap();
-    this->m_ds->diffuse(m_size, BounadaryTypeHorizontal, grid->getU()->getU(), grid->getU()->getV(), m_diff, m_time);
+    this->m_ds->diffuse(m_size, BoundaryTypeU, grid->getU()->getCurrent(), grid->getU()->getPrevious(), m_diff, m_time);
     grid->getV()->swap();
-    this->m_ds->diffuse(m_size, BounadaryTypeVertical, grid->getV()->getU(), grid->getV()->getV(), m_diff, m_time);
+    this->m_ds->diffuse(m_size, BoundaryTypeV, grid->getV()->getCurrent(), grid->getV()->getPrevious(), m_diff, m_time);
 }
 
 void StableFluidsApplication::diffuseDensity()
 {
     grid->getDensity()->swap();
-    this->m_ds->diffuse(m_size, BounadaryTypeNone, grid->getDensity()->getU(), grid->getDensity()->getV(), m_diff, m_time);
+    this->m_ds->diffuse(m_size, BoundaryTypeNone, grid->getDensity()->getCurrent(), grid->getDensity()->getPrevious(), m_diff, m_time);
 }
 
 void StableFluidsApplication::projectVelocity()
 {
-    this->m_ps->project(m_size, grid->getU()->getU(), grid->getV()->getU(), grid->getU()->getV(), grid->getV()->getV());
+    this->m_ps->project(m_size, grid->getU()->getCurrent(), grid->getV()->getCurrent(), grid->getU()->getPrevious(), grid->getV()->getPrevious());
 }
 
-bool StableFluidsApplication::render()
+void StableFluidsApplication::render()
 {
 	int size = (m_size + 2) * (m_size + 2);
 	QLocalSocket socket;
 	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
 	if (!socket.waitForConnected(3000))
 	{
-		return false;
+		throw UnconnectedException();
 	}
 	QDataStream ds(&socket);
-	SocketType type = SC_EG;
+	SocketType type = SC_EG_2D;
 	ds.writeRawData((const char *)(&type), sizeof(SocketType));
 	ds.writeRawData((const char *)(&m_size), sizeof(int));
 	ds.writeRawData((const char *)(&size), sizeof(int));
-	ds.writeRawData((const char *)(grid->getDensity()->getU()), size * sizeof(float));
+	ds.writeRawData((const char *)(grid->getDensity()->getCurrent()), size * sizeof(float));
 	socket.waitForBytesWritten(3000);
 	socket.disconnectFromServer();
-	return true;
 }
 
 void StableFluidsApplication::ExportClass()

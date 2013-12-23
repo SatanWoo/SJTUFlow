@@ -10,6 +10,8 @@
 
 #include "codeedit.h"
 
+#include "SJTUFlow/global.h"
+
 CodingWidget::CodingWidget(QMenuBar *menubar, QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -451,6 +453,10 @@ void CodingWidget::showRunError()
     //QProcess *process = qobject_cast<QProcess *>(sender());
     QString errStr = QString::fromLocal8Bit(scriptProcess->readAllStandardError());
     scriptProcess->kill();
+	if (errStr.contains(UnconnectedException().msg.c_str()))
+	{
+		return;
+	}
 	QMessageBox::warning(this, tr("Runtime Error"), errStr, QMessageBox::Ok);
 	emit running(1);
 }

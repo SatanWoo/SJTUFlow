@@ -79,6 +79,7 @@ void RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string sce
 	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
 	if (!socket.waitForConnected(3000))
 	{
+		throw UnconnectedException();
 	}
 	QDataStream ds(&socket);
 	SocketType type = SC_SPH;

@@ -448,7 +448,7 @@ void Scene::draw()
 
 	if (animationIsStarted())
 	{
-		camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0));
+		//camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0));
 		float r = 0.05f;
 		for(int i = 0; i < spSPH.particleNum; ++i)
 		{
@@ -470,34 +470,7 @@ void Scene::draw()
 
 		if (spEG.size > 0)
 		{
-#define IX(i,j) ((i)+(N+2)*(j))
-			camera()->setPosition(qglviewer::Vec(0.0, 0.0, 2.0));
-			int N = spEG.size;
-			float h = 1.0f / N;
-			glDisable(GL_LIGHTING);
-			glPushMatrix();
-			glBegin(GL_QUADS);
-			for (int i = 0; i <= N; i++)
-			{
-				float x = i * h - 0.5f;
-				for (int j = 0; j <= N; j++)
-				{
-					float y = j * h - 0.5f;
-
-					float d00 = spEG.density[IX(i, j)];
-					float d01 = spEG.density[IX(i, j + 1)];
-					float d10 = spEG.density[IX(i + 1, j)];
-					float d11 = spEG.density[IX(i + 1, j + 1)];
-
-					glColor3f(d00, d00, d00); glVertex3f (x, y, 0.0f);
-					glColor3f(d10, d10, d10); glVertex3f (x + h, y, 0.0f);
-					glColor3f(d11, d11, d11); glVertex3f (x + h, y + h, 0.0f);
-					glColor3f(d01, d01, d01); glVertex3f (x, y + h, 0.0f);
-				}
-			}
-			glEnd();
-			glPopMatrix();
-			glEnable(GL_LIGHTING);
+			drawEuler();
 		}
 	}
 }
@@ -587,13 +560,35 @@ void Scene::animate()
 		{
 			ds.readRawData((char *)(&spSPH), sizeof(SocketPackageSPH));
 		}
-		else if (type == SC_EG)
+		else if (type == SC_EG_2D || type == SC_EG_3D)
 		{
 			int size = spEG.size;
+			if (sceneMode == SCENE_2D)
+			{
+				if (type == SC_EG_3D)
+				{
+					size = 0;
+					sceneMode = SCENE_3D;
+					setSceneMode();
+				}
+			}
+			else
+			{
+				if (type == SC_EG_2D)
+				{
+					size = 0;
+					sceneMode = SCENE_2D;
+					setSceneMode();
+				}
+			}
 			ds.readRawData((char *)(&spEG.size), sizeof(int));
 			ds.readRawData((char *)(&spEG.totalSize), sizeof(int));
 			if (spEG.size != size)
 			{
+				if (spEG.density != NULL)
+				{
+					delete[] spEG.density;
+				}
 				spEG.density = new float[spEG.totalSize];
 			}
 			ds.readRawData((char *)(spEG.density), spEG.totalSize * sizeof(float));
@@ -1085,4 +1080,139 @@ void Scene::drawSubScaleBox(double len, double x, double y, double z, bool s3d)
 		r.draw(false);
 	}
 	glPopMatrix();
+}
+
+void Scene::drawEuler()
+{
+	//camera()->setPosition(qglviewer::Vec(0.0, 0.0, 2.0));
+	int N = spEG.size;
+	glDisable(GL_LIGHTING);
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	if (sceneMode == SCENE_2D)
+	{
+#define IX(i, j) ((i) + (N + 2) * (j))
+		float h = 1.0f / N;
+		for (int i = 0; i <= N; i++)
+		{
+			float x = i * h - 0.5f;
+			for (int j = 0; j <= N; j++)
+			{
+				float y = j * h - 0.5f;
+
+				float d00 = spEG.density[IX(i, j)];
+				float d01 = spEG.density[IX(i, j + 1)];
+				float d10 = spEG.density[IX(i + 1, j)];
+				float d11 = spEG.density[IX(i + 1, j + 1)];
+
+				glColor3f(d00, d00, d00); glVertex3f (x, y, 0.0f);
+				glColor3f(d10, d10, d10); glVertex3f (x + h, y, 0.0f);
+				glColor3f(d11, d11, d11); glVertex3f (x + h, y + h, 0.0f);
+				glColor3f(d01, d01, d01); glVertex3f (x, y + h, 0.0f);
+			}
+		}
+	}
+	else
+	{
+#define IX3D(i, j, k) ((i) + (N + 2) * (j) + (N + 2) * (N + 2) * k)
+		float h= 1.0f / N;
+		float alpha = 0.05f;
+		for (int i = 0; i < N; i++)
+		{
+			float x = i * h - 0.5f;
+			for (int j = 0; j < N; j++)
+			{
+				float y = j * h - 0.5f;
+				for (int k = 0; k < N; k++)
+				{
+					float z = k * h - 0.5f;
+
+					float density000 = spEG.density[IX3D(i, j, k)];
+					float density010 = spEG.density[IX3D(i, j + 1, k)];
+					float density100 = spEG.density[IX3D(i + 1, j, k)];
+					float density110 = spEG.density[IX3D(i + 1, j + 1, k)];
+
+					float density001 = spEG.density[IX3D(i, j, k + 1)];
+					float density011 = spEG.density[IX3D(i, j + 1, k + 1)];
+					float density101 = spEG.density[IX3D(i + 1, j, k + 1)];
+					float density111 = spEG.density[IX3D(i + 1, j + 1, k + 1)];
+
+					glColor4f(density111, density111, density111, alpha);
+					glVertex3f(x + h, y + h, z + h);
+
+					glColor4f(density011, density011, density011, alpha);
+					glVertex3f(x, y + h, z + h);
+
+					glColor4f(density001, density001, density001, alpha);
+					glVertex3f(x, y, z + h);
+
+					glColor4f(density101, density101, density101, alpha);
+					glVertex3f(x + h, y, z + h);
+
+					glColor4f(density110, density110, density110, alpha);
+					glVertex3f(x + h, y + h, z);
+
+					glColor4f(density111, density111, density111, alpha);
+					glVertex3f(x + h, y + h, z + h);
+
+					glColor4f(density101, density101, density101, alpha);
+					glVertex3f(x + h, y, z + h);
+
+					glColor4f(density100, density100, density100, alpha);
+					glVertex3f(x + h, y, z);
+
+					glColor4f(density010, density010, density010, alpha);
+					glVertex3f(x, y + h, z);
+
+					glColor4f(density110, density110, density110, alpha);
+					glVertex3f(x + h, y + h, z);
+
+					glColor4f(density100, density100, density100, alpha);
+					glVertex3f(x + h, y, z);
+
+					glColor4f(density000, density000, density000, alpha);
+					glVertex3f(x, y, z);
+
+					glColor4f(density011, density011, density011, alpha);
+					glVertex3f(x, y + h, z + h);
+
+					glColor4f(density010, density010, density010, alpha);
+					glVertex3f(x, y + h, z);
+
+					glColor4f(density000, density000, density000, alpha);
+					glVertex3f(x, y, z);
+
+					glColor4f(density001, density001, density001, alpha);
+					glVertex3f(x, y, z + h);
+
+					glColor4f(density100, density100, density100, alpha);
+					glVertex3f(x + h, y, z);
+
+					glColor4f(density000, density000, density000, alpha);
+					glVertex3f(x, y, z);
+
+					glColor4f(density001, density001, density001, alpha);
+					glVertex3f(x, y, z + h);
+
+					glColor4f(density101, density101, density101, alpha);
+					glVertex3f(x+h, y, z + h);
+
+					glColor4f(density110, density110, density110, alpha);
+					glVertex3f(x + h, y + h, z);
+
+					glColor4f(density010, density010, density010, alpha);
+					glVertex3f(x, y + h, z);
+
+					glColor4f(density011, density011, density011, alpha);
+					glVertex3f(x, y + h, z + h);
+
+					glColor4f(density111, density111, density111, alpha);
+					glVertex3f(x + h, y + h, z + h);
+				}
+			}
+		}
+	}
+	glEnd();
+	glPopMatrix();
+	glEnable(GL_LIGHTING);
 }

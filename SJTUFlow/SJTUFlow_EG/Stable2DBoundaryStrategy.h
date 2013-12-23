@@ -5,7 +5,7 @@
 class Stable2DBoundaryStrategy : public BoundaryStrategy
 {
 public:
-	virtual void setUpBoundary(int size, BoundaryType type, float *boundary);
+	virtual void setBoundary(int size, BoundaryType type, float *boundary);
 
 	static BoundaryStrategy *Create();
 

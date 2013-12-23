@@ -23,6 +23,18 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Header Files\Stable2D">
+      <UniqueIdentifier>{3ed8adfc-04ad-4411-b5f9-8e38e2a4416e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Stable2D">
+      <UniqueIdentifier>{4b68cada-a1a6-460f-997b-aa7febbb9cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Stable3D">
+      <UniqueIdentifier>{ad5617c6-944a-4394-8205-f3e1fbfb9f54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Stable3D">
+      <UniqueIdentifier>{6441c5d0-11c8-44c8-88d6-cab333fb9d9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddSourceStrategy.h">
@@ -37,76 +49,106 @@
     <ClInclude Include="DiffuseStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EulerGrid2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MathHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProjectStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Stable2DAddSourceStrategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stable2DAdvectStrategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stable2DBoundaryStrategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stable2DDiffuseStrategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stable2DProjectStrategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StableFluids.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StableFluidsApplication.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2D.h">
+    <ClInclude Include="Stable2DAddSourceStrategy.h">
+      <Filter>Header Files\Stable2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Stable2DProjectStrategy.h">
+      <Filter>Header Files\Stable2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Stable2DAdvectStrategy.h">
+      <Filter>Header Files\Stable2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Stable2DBoundaryStrategy.h">
+      <Filter>Header Files\Stable2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Stable2DDiffuseStrategy.h">
+      <Filter>Header Files\Stable2D</Filter>
+    </ClInclude>
+    <ClInclude Include="StableFluidsApplication.h">
+      <Filter>Header Files\Stable2D</Filter>
+    </ClInclude>
+    <ClInclude Include="EulerGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Velocity2D.h">
+    <ClInclude Include="Velocity.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stable3DAddSourceStrategy.h">
+      <Filter>Header Files\Stable3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Stable3DAdvectStrategy.h">
+      <Filter>Header Files\Stable3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Stable3DBoundaryStrategy.h">
+      <Filter>Header Files\Stable3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Stable3DDiffuseStrategy.h">
+      <Filter>Header Files\Stable3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Stable3DProjectStrategy.h">
+      <Filter>Header Files\Stable3D</Filter>
+    </ClInclude>
+    <ClInclude Include="StableFluids3DApplication.h">
+      <Filter>Header Files\Stable3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EulerGrid2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Stable2DAddSourceStrategy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Stable2DAdvectStrategy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Stable2DBoundaryStrategy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Stable2DDiffuseStrategy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Stable2DProjectStrategy.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Stable2D</Filter>
     </ClCompile>
     <ClCompile Include="StableFluidsApplication.cpp">
+      <Filter>Source Files\Stable2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Stable2DAdvectStrategy.cpp">
+      <Filter>Source Files\Stable2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Stable2DBoundaryStrategy.cpp">
+      <Filter>Source Files\Stable2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Stable2DDiffuseStrategy.cpp">
+      <Filter>Source Files\Stable2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Stable2DProjectStrategy.cpp">
+      <Filter>Source Files\Stable2D</Filter>
+    </ClCompile>
+    <ClCompile Include="EulerGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2D.cpp">
+    <ClCompile Include="Velocity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Velocity2D.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Stable3DAddSourceStrategy.cpp">
+      <Filter>Source Files\Stable3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Stable3DAdvectStrategy.cpp">
+      <Filter>Source Files\Stable3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Stable3DBoundaryStrategy.cpp">
+      <Filter>Source Files\Stable3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Stable3DDiffuseStrategy.cpp">
+      <Filter>Source Files\Stable3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Stable3DProjectStrategy.cpp">
+      <Filter>Source Files\Stable3D</Filter>
+    </ClCompile>
+    <ClCompile Include="StableFluids3DApplication.cpp">
+      <Filter>Source Files\Stable3D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

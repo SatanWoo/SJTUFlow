@@ -1,9 +1,17 @@
 #include "SPHSolver.h"
 #include "Strategies/Strategies.h"
 
+#include "../include/SJTUFlow/global.h"
+
+void translate(const UnconnectedException &exc)
+{
+	PyErr_SetString(PyExc_ConnectionError, exc.msg.c_str());
+}
+
 BOOST_PYTHON_MODULE(SJTUFlow_SPH)
 {
 	using namespace boost::python;
+	register_exception_translator<UnconnectedException>(&translate);
 
 	class_<vec2>("vec2", init<>())
 		.def(init<float, float>())
