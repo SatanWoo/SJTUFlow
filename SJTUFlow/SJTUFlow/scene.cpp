@@ -176,21 +176,22 @@ void Scene::startAnimation()
 		qDebug() << "failed to listen" << QApplication::applicationName() << endl;
 	}
 
+	memset(&spSPH, 0, sizeof(SocketPackageSPH));
+	if (spEG.density)
+	{
+		delete[] spEG.density;
+		spEG.density = NULL;
+	}
+	memset(&spEG, 0, sizeof(SocketPackageEuler));
+
 	QGLViewer::startAnimation();
 }
 
 void Scene::stopAnimation()
 {
-	localServer->close();
-
-	memset(&spSPH, 0, sizeof(SocketPackageSPH));
-	if (spEG.density)
-	{
-		delete[] spEG.density;
-	}
-	memset(&spEG, 0, sizeof(SocketPackageEuler));
 	if (animationIsStarted())
 	{
+		localServer->close();
 		QGLViewer::stopAnimation();
 	}
 }
@@ -723,6 +724,25 @@ void Scene::mouseReleaseEvent(QMouseEvent *event)
 	QGLViewer::mouseReleaseEvent(event);
 }
 
+void Scene::wheelEvent( QWheelEvent *event )
+{
+	if (sceneMode == SCENE_3D)
+	{
+		QGLViewer::wheelEvent(event);
+	}
+	else
+	{
+		Qt::KeyboardModifiers kms = event->modifiers();
+		if ((kms & Qt::ControlModifier) == Qt::ControlModifier)
+		{
+			Vec trans(0.0, 0.0, event->delta() * 8e-4);
+			camera()->setPosition(camera()->position() + trans);
+			updateGL();
+			event->accept();
+		}
+	}
+}
+
 void Scene::timerEvent(QTimerEvent *e)
 {
 	QGLViewer::timerEvent(e);
@@ -1087,6 +1107,14 @@ void Scene::drawEuler()
 	//camera()->setPosition(qglviewer::Vec(0.0, 0.0, 2.0));
 	int N = spEG.size;
 	glDisable(GL_LIGHTING);
+	glDisable(GL_COLOR_MATERIAL);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0);
+
 	glPushMatrix();
 	glBegin(GL_QUADS);
 	if (sceneMode == SCENE_2D)
@@ -1095,10 +1123,10 @@ void Scene::drawEuler()
 		float h = 1.0f / N;
 		for (int i = 0; i <= N; i++)
 		{
-			float x = i * h - 0.5f;
+			float x = (i - 0.5f) * h - 0.5f;
 			for (int j = 0; j <= N; j++)
 			{
-				float y = j * h - 0.5f;
+				float y = (j - 0.5f) * h - 0.5f;
 
 				float d00 = spEG.density[IX(i, j)];
 				float d01 = spEG.density[IX(i, j + 1)];
@@ -1214,5 +1242,10 @@ void Scene::drawEuler()
 	}
 	glEnd();
 	glPopMatrix();
+
+	glDisable(GL_BLEND);
+	glDisable(GL_ALPHA_TEST);
+
+	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHTING);
 }

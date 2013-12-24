@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     _SPHSolver.RenderInit()
 
-    for i in range(1, 1000):
+    for i in range(1, 100):
         for j in range(0, kSubSteps):
             _SPHSolver.Emit()
             _SPHSolver.BodyForce()

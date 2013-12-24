@@ -450,13 +450,20 @@ void CodingWidget::copyAvailable( bool yes )
 
 void CodingWidget::showRunError()
 {
-    //QProcess *process = qobject_cast<QProcess *>(sender());
     QString errStr = QString::fromLocal8Bit(scriptProcess->readAllStandardError());
-    scriptProcess->kill();
-	if (errStr.contains(UnconnectedException().msg.c_str()))
+	if (errStr.contains(UnconnectedException().msg.c_str()) ||
+		errStr.contains(tr("QWindowsPipeReader")))
 	{
 		return;
 	}
+	errStr = errStr.replace(tr("<stdin>"), curFilePath);
+	int pos = errStr.indexOf(tr("line")) + 5;
+	QString num = errStr.mid(pos);
+	QStringList tokens = num.split(' ', QString::SkipEmptyParts);
+	int lineNum = tokens[0].toInt();
+	lineNum -= 2;
+	QString lineStr = tr("line %1").arg(lineNum);
+	errStr = errStr.replace(QRegExp("line [0-9]+"), lineStr);
 	QMessageBox::warning(this, tr("Runtime Error"), errStr, QMessageBox::Ok);
 	emit running(1);
 }

@@ -5,16 +5,19 @@ N = 64
 application = StableFluidsApplication(N, 0.1, 0.0)
 
 def initialize():
-    x = randint(0, N - 1)
-    y = randint(0, N - 1)
-    t = randint(0, 2 * N)
-    if t < N:
-        application.grid.setPreDensity(x, y, 10)
-    elif t < 2 * N:
-        dx = randint(-10, 10) * 5.0
-        dy = randint(-10, 10) * 5.0
-        application.grid.setPreU(x, y, dx)
-        application.grid.setPreV(x, y, dy)
+    application.grid.setPreDensity(int(N / 2), int(N / 2), 100)
+    for x in range(1, N):
+        for y in range(1, N):
+            d = application.grid.getPreDensity(x, y)
+            if d > 0:
+                du = 5
+                dv = 5
+                if randint(0, 2 * N) < N:
+                    du = -5
+                else:
+                    dv = -5
+                application.grid.setPreU(x, y, du)
+                application.grid.setPreV(x, y, dv)
 
 if __name__ == '__main__':
     application.setAdvectStrategy(Stable2DAdvectStrategy.Create())
@@ -24,7 +27,7 @@ if __name__ == '__main__':
     application.setAddSourceStrategY(Stable2DAddSourceStrategy.Create())
 
     for i in range(1, 1000):
-        initialize()        
+        initialize()
 
         application.addSourceVelocity()
         application.diffuseVelocity()

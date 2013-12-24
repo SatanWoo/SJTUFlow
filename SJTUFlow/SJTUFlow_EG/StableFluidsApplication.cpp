@@ -94,6 +94,10 @@ void StableFluidsApplication::render()
 	ds.writeRawData((const char *)(grid->getDensity()->getCurrent()), size * sizeof(float));
 	socket.waitForBytesWritten(3000);
 	socket.disconnectFromServer();
+
+	memset(grid->getDensity()->getPrevious(), 0, size * sizeof(float));
+	memset(grid->getU()->getPrevious(), 0, size * sizeof(float));
+	memset(grid->getV()->getPrevious(), 0, size * sizeof(float));
 }
 
 void StableFluidsApplication::ExportClass()
