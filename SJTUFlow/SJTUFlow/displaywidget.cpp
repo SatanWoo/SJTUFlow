@@ -8,6 +8,7 @@ DisplayWidget::DisplayWidget(QWidget *parent)
 	scene = new Scene;
 	setCentralWidget(scene);
 	scene->setAllowSelect(false);
+	scene->setFPSIsDisplayed();
 }
 
 DisplayWidget::~DisplayWidget()

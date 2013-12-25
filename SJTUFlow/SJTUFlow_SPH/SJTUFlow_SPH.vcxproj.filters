@@ -23,11 +23,17 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="Header Files\Strategies">
+    <Filter Include="Header Files\StrategiesA">
       <UniqueIdentifier>{cb65a492-aea8-4df0-b5cb-a18e524099ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Strategies">
+    <Filter Include="Source Files\StrategiesA">
       <UniqueIdentifier>{9c7b1db4-7595-4aa5-ad88-6d52e6b84f6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\StrategiesB">
+      <UniqueIdentifier>{40079592-e2fb-4a5e-ad93-0288728e3acc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\StrategiesB">
+      <UniqueIdentifier>{d504fc26-ad09-48b8-9d9f-fd929e60b1c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,28 +68,52 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Strategies\BodyForceA.h">
-      <Filter>Header Files\Strategies</Filter>
+      <Filter>Header Files\StrategiesA</Filter>
     </ClInclude>
     <ClInclude Include="Strategies\CalPressureA.h">
-      <Filter>Header Files\Strategies</Filter>
+      <Filter>Header Files\StrategiesA</Filter>
     </ClInclude>
     <ClInclude Include="Strategies\CollisionA.h">
-      <Filter>Header Files\Strategies</Filter>
+      <Filter>Header Files\StrategiesA</Filter>
     </ClInclude>
     <ClInclude Include="Strategies\EmitA.h">
-      <Filter>Header Files\Strategies</Filter>
+      <Filter>Header Files\StrategiesA</Filter>
     </ClInclude>
     <ClInclude Include="Strategies\RelaxPosA.h">
-      <Filter>Header Files\Strategies</Filter>
+      <Filter>Header Files\StrategiesA</Filter>
     </ClInclude>
     <ClInclude Include="Strategies\RenderSPHA.h">
-      <Filter>Header Files\Strategies</Filter>
+      <Filter>Header Files\StrategiesA</Filter>
     </ClInclude>
     <ClInclude Include="Strategies\Strategies.h">
-      <Filter>Header Files\Strategies</Filter>
+      <Filter>Header Files\StrategiesA</Filter>
     </ClInclude>
     <ClInclude Include="Strategies\UpdateGridA.h">
-      <Filter>Header Files\Strategies</Filter>
+      <Filter>Header Files\StrategiesA</Filter>
+    </ClInclude>
+    <ClInclude Include="mtxlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Strategies\BodyForceB.h">
+      <Filter>Header Files\StrategiesB</Filter>
+    </ClInclude>
+    <ClInclude Include="Strategies\CalPressureB.h">
+      <Filter>Header Files\StrategiesB</Filter>
+    </ClInclude>
+    <ClInclude Include="Strategies\CollisionB.h">
+      <Filter>Header Files\StrategiesB</Filter>
+    </ClInclude>
+    <ClInclude Include="Strategies\EmitB.h">
+      <Filter>Header Files\StrategiesB</Filter>
+    </ClInclude>
+    <ClInclude Include="Strategies\RelaxPosB.h">
+      <Filter>Header Files\StrategiesB</Filter>
+    </ClInclude>
+    <ClInclude Include="Strategies\RenderSPHB.h">
+      <Filter>Header Files\StrategiesB</Filter>
+    </ClInclude>
+    <ClInclude Include="Strategies\UpdateGridB.h">
+      <Filter>Header Files\StrategiesB</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -115,28 +145,52 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Strategies\BodyForceA.cpp">
-      <Filter>Source Files\Strategies</Filter>
+      <Filter>Source Files\StrategiesA</Filter>
     </ClCompile>
     <ClCompile Include="Strategies\CalPressureA.cpp">
-      <Filter>Source Files\Strategies</Filter>
+      <Filter>Source Files\StrategiesA</Filter>
     </ClCompile>
     <ClCompile Include="Strategies\CollisionA.cpp">
-      <Filter>Source Files\Strategies</Filter>
+      <Filter>Source Files\StrategiesA</Filter>
     </ClCompile>
     <ClCompile Include="Strategies\EmitA.cpp">
-      <Filter>Source Files\Strategies</Filter>
+      <Filter>Source Files\StrategiesA</Filter>
     </ClCompile>
     <ClCompile Include="Strategies\RelaxPosA.cpp">
-      <Filter>Source Files\Strategies</Filter>
+      <Filter>Source Files\StrategiesA</Filter>
     </ClCompile>
     <ClCompile Include="Strategies\RenderSPHA.cpp">
-      <Filter>Source Files\Strategies</Filter>
+      <Filter>Source Files\StrategiesA</Filter>
     </ClCompile>
     <ClCompile Include="Strategies\UpdateGridA.cpp">
-      <Filter>Source Files\Strategies</Filter>
+      <Filter>Source Files\StrategiesA</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mtxlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Strategies\BodyForceB.cpp">
+      <Filter>Source Files\StrategiesB</Filter>
+    </ClCompile>
+    <ClCompile Include="Strategies\CalPressureB.cpp">
+      <Filter>Source Files\StrategiesB</Filter>
+    </ClCompile>
+    <ClCompile Include="Strategies\CollisionB.cpp">
+      <Filter>Source Files\StrategiesB</Filter>
+    </ClCompile>
+    <ClCompile Include="Strategies\EmitB.cpp">
+      <Filter>Source Files\StrategiesB</Filter>
+    </ClCompile>
+    <ClCompile Include="Strategies\RelaxPosB.cpp">
+      <Filter>Source Files\StrategiesB</Filter>
+    </ClCompile>
+    <ClCompile Include="Strategies\RenderSPHB.cpp">
+      <Filter>Source Files\StrategiesB</Filter>
+    </ClCompile>
+    <ClCompile Include="Strategies\UpdateGridB.cpp">
+      <Filter>Source Files\StrategiesB</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

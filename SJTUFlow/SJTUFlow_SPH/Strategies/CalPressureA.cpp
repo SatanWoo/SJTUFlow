@@ -26,7 +26,7 @@ void CalPressureA::CalPressure(int particleNum, Particle* particles)
         float nearDensity = 0;
         for (size_t j=0; j<pi.neighbour_count; ++j)
         {
-            const Particle& pj = *pi.neighbours[j];
+            const Particle& pj = particles[pi.neighbours[j]];
             float r = pi.r[j];
             float a = 1 - r/kH;
             density += pj.m * a*a*a * kNorm;

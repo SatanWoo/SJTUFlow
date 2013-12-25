@@ -49,6 +49,8 @@ Scene::Scene(QWidget *parent) : QGLViewer(parent)
 
 	setAnimationPeriod(0);
 	localServer = new QLocalServer(this);
+
+	setSceneRadius(5.0f);
 }
 
 SceneUnit::Primitive *Scene::getPrimitive(int id)
@@ -204,6 +206,9 @@ void Scene::clone(Scene *scene)
 		Primitive *p = scene->primitives[i];
 		appendPrimitive(p);
 	}
+	QDomDocument doc;
+	camera()->initFromDOMElement(
+		scene->camera()->domElement(tr("Camera"), doc));
 }
 
 bool Scene::importObject(QString filename)
@@ -425,6 +430,13 @@ void Scene::init()
 #endif
 
 	setForegroundColor(QColor(255, 255, 255));
+
+	GLfloat light_ambient[4]={0.5, 0.5, 0.5, 1.0};
+	GLfloat light_diffuse[4]={1.0, 1.0, 1.0, 1.0};
+	GLfloat light_position[4]={0.0, 0.0, 2.0, 0.0};
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 }
 
 void Scene::draw()
@@ -453,19 +465,28 @@ void Scene::draw()
 		float r = 0.05f;
 		for(int i = 0; i < spSPH.particleNum; ++i)
 		{
-			SceneUnit::Circle circle;
-			if (spSPH.particlesMass[i] > 1.0)
+			SceneUnit::Primitive *p;
+			if (sceneMode == SCENE_2D)
 			{
-				circle.setColor(QColor(51, 153, 0));
+				p = new SceneUnit::Circle;
+				if (spSPH.particlesMass[i] > 1.0)
+				{
+					p->setColor(QColor(51, 153, 0));
+				}
+				else
+				{
+					p->setColor(QColor(51, 153, 204));
+				}
+				p->setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, 0.0));
 			}
 			else
 			{
-				circle.setColor(QColor(51, 153, 204));
+				p = new SceneUnit::Sphere(quadric, 10, 10);
+				p->setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, spSPH.particles[i].z));
+				p->setRadius(0.2);
 			}
-			circle.setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, 0.0));
-			
 			glPushMatrix();
-			circle.draw(false);
+			p->draw(false);
 			glPopMatrix();
 		}
 
@@ -555,33 +576,37 @@ void Scene::animate()
 	{
 		QDataStream ds(socket);
 		socket->waitForReadyRead();
+
+		int size = spEG.size;
+
+		SceneType st;
+		ds.readRawData((char *)(&st), sizeof(SceneType));
+		if (sceneMode == SCENE_2D)
+		{
+			if (st == SC_3D)
+			{
+				size = 0;
+				sceneMode = SCENE_3D;
+				setSceneMode();
+			}
+		}
+		else
+		{
+			if (st == SC_2D)
+			{
+				size = 0;
+				sceneMode = SCENE_2D;
+				setSceneMode();
+			}
+		}
 		SocketType type;
 		ds.readRawData((char *)(&type), sizeof(SocketType));
 		if (type == SC_SPH)
 		{
 			ds.readRawData((char *)(&spSPH), sizeof(SocketPackageSPH));
 		}
-		else if (type == SC_EG_2D || type == SC_EG_3D)
+		else
 		{
-			int size = spEG.size;
-			if (sceneMode == SCENE_2D)
-			{
-				if (type == SC_EG_3D)
-				{
-					size = 0;
-					sceneMode = SCENE_3D;
-					setSceneMode();
-				}
-			}
-			else
-			{
-				if (type == SC_EG_2D)
-				{
-					size = 0;
-					sceneMode = SCENE_2D;
-					setSceneMode();
-				}
-			}
 			ds.readRawData((char *)(&spEG.size), sizeof(int));
 			ds.readRawData((char *)(&spEG.totalSize), sizeof(int));
 			if (spEG.size != size)

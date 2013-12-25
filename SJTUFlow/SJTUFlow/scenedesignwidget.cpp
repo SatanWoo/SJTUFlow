@@ -623,7 +623,7 @@ void SceneDesignWidget::openScene( QString fileName )
 	{
 		new3DScene();
 	}
-	Scene::Error ret = scene->initFromDomElement(node);
+	Scene::Error ret = scene->initFromDomElement(node, true);
 	if (ret == Scene::NOTMATCH)
 	{
 		QMessageBox::warning(this, tr("Parse File Error"),
@@ -647,7 +647,7 @@ void SceneDesignWidget::saveScene(QString fileName)
 	doc.appendChild(instruction);
 	QDomElement root = doc.createElement(tr("SJTUFlow"));
 	doc.appendChild(root);
-	root.appendChild(scene->domElement(doc));
+	root.appendChild(scene->domElement(doc, true));
 
 	QFile file(fileName);
 	if (!file.open(QFile::WriteOnly | QFile::Text))

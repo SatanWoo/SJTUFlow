@@ -100,7 +100,9 @@ void StableFluids3DApplication::render()
 		throw UnconnectedException();
 	}
 	QDataStream ds(&socket);
-	SocketType type = SC_EG_3D;
+	SceneType st = SC_3D;
+	SocketType type = SC_EG;
+	ds.writeRawData((const char *)(&st), sizeof(SceneType));
 	ds.writeRawData((const char *)(&type), sizeof(SocketType));
 	ds.writeRawData((const char *)(&m_size), sizeof(int));
 	ds.writeRawData((const char *)(&size), sizeof(int));

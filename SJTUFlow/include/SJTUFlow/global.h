@@ -3,23 +3,21 @@
 
 #include <string>
 
-class vec2
-{
-public:
-    float x,y;
-    vec2(float x, float y) : x(x), y(y){}
-    vec2(){}
-};
-
-enum SocketType{SC_SPH = 0, SC_EG_2D, SC_EG_3D};
+enum SocketType{SC_SPH = 0, SC_EG};
+enum SceneType{SC_2D = 0, SC_3D};
 
 #define kParticleCount 1000
+
+struct vec3
+{
+	float x, y, z;
+};
 
 struct SocketPackageSPH
 {
 	int particleNum;
 	float particlesMass[kParticleCount];
-	vec2 particles[kParticleCount];
+	vec3 particles[kParticleCount];
 };
 
 struct SocketPackageEuler

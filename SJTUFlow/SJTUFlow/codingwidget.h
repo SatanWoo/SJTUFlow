@@ -17,8 +17,6 @@ public:
 
 	QString filePath(){ return curFilePath; }
 
-    void terminateScriptProcess();
-
 signals:
 	void filePathChanged(QString);
 	void running(int);

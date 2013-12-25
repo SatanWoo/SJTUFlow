@@ -1,9 +1,9 @@
 /***********************************************************************
- * Module:  utils.h
- * Author:  zs
- * Modified: 2013Äê11ÔÂ23ÈÕ 0:24:58
- * Purpose: Declaration of the class utils
- ***********************************************************************/
+* Module:  utils.h
+* Author:  zs
+* Modified: 2013年11月23日 0:24:58
+* Purpose: Declaration of the class utils
+***********************************************************************/
 
 #if !defined(__SJTUFLOW2_utils_h)
 #define __SJTUFLOW2_utils_h
@@ -12,6 +12,7 @@
 #include <memory.h>
 #include <math.h>
 #include <GL/glut.h>
+#include "mtxlib.h"
 
 #include "../include/SJTUFlow/global.h"
 
@@ -29,5 +30,8 @@
 #define kNearNorm (30/(2*kPi*kH*kH))
 
 #define kPi 3.1415926535f
+
+#define SMOOTHING_LENGTH 0.01f
+#define MAX_FLOAT 3.40282347e+36F
 
 #endif

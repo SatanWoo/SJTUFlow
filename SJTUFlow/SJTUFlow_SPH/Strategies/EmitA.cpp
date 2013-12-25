@@ -9,8 +9,8 @@
 
 EmitA::EmitA()
 {
-	emitters[0] = Emitter(1.0f, vec2(0.05f*kViewWidth, 0.8f*kViewHeight), vec2(4, 1), 0.2f, 5, 0);
-	emitters[1] = Emitter(1.4f, vec2(0.05f*kViewWidth, 0.9f*kViewHeight), vec2(4, 1), 0.2f, 5, 6);
+	emitters[0] = Emitter(1.0f, vector2(0.05f*kViewWidth, 0.8f*kViewHeight), vector2(4, 1), 0.2f, 5, 0);
+	emitters[1] = Emitter(1.4f, vector2(0.05f*kViewWidth, 0.9f*kViewHeight), vector2(4, 1), 0.2f, 5, 6);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -49,6 +49,7 @@ size_t EmitA::EmitParticles(int particleNum, float kDt, Particle* particles)
         for (size_t i=0; i<=steps && particleCount<kParticleCount; ++i)
         {
             Particle& pi = particles[particleCount];
+            pi.index = particleCount;
             ++particleCount;
             ++emitter.count;
 

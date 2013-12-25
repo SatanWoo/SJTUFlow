@@ -238,21 +238,25 @@ void Circle::setRadius(GLdouble radius_)
 	emit propertyChanged();
 }
 
-Sphere::Sphere(GLUquadric *quadric_) : Circle()
+Sphere::Sphere(GLUquadric *quadric_, int slice_, int stack_) : Circle()
 {
 	setRadius(radius);
     type = T_Sphere;
     quadric = quadric_;
+	slices = slice_;
+	stacks = stack_;
 }
 
 Sphere::Sphere(qglviewer::Vec center, QColor color,
-	GLdouble radius, GLUquadric *quadric_, bool fill) : Circle()
+	GLdouble radius, GLUquadric *quadric_, int slice_, int stack_, bool fill) : Circle()
 {
 	setCenter(center);
 	setColor(color);
 	setRadius(radius);
 	setFill(fill);
 	quadric = quadric_;
+	slices = slice_;
+	stacks = stack_;
 	type = T_Sphere;
 }
 
@@ -262,7 +266,7 @@ void Sphere::draw(bool selected)
 
 	Primitive::draw(selected);
 
-	gluSphere(quadric, radius, 32, 32);
+	gluSphere(quadric, radius, slices, stacks);
 
 	if (!fill)
 	{

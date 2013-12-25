@@ -62,7 +62,7 @@ void UpdateGridA::UpdateGrid(int particleNum, Particle* particles)
 
                     float r = sqrt(r2);
                     if (pi.neighbour_count < kMaxNeighbourCount){
-                        pi.neighbours[pi.neighbour_count] = &pj;
+                        pi.neighbours[pi.neighbour_count] = pj.index;
                         pi.r[pi.neighbour_count] = r;
                         ++pi.neighbour_count;
                     }

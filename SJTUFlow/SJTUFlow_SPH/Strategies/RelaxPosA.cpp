@@ -27,7 +27,7 @@ void RelaxPosA::RelaxPos(int particleNum, float kDt, Particle* particles)
         float y = pi.curPos.y;
 
         for (size_t j=0; j<pi.neighbour_count; ++j){
-            const Particle& pj = *pi.neighbours[j];
+            const Particle& pj = particles[pi.neighbours[j]];
             float r = pi.r[j];
             float dx = pj.curPos.x - pi.curPos.x;
             float dy = pj.curPos.y - pi.curPos.y;

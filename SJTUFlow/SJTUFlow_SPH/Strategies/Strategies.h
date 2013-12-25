@@ -16,4 +16,12 @@
 #include "CollisionA.h"
 #include "RenderSPHA.h"
 
+#include "EmitB.h"
+#include "BodyForceB.h"
+#include "UpdateGridB.h"
+#include "CalPressureB.h"
+#include "RelaxPosB.h"
+#include "CollisionB.h"
+#include "RenderSPHB.h"
+
 #endif

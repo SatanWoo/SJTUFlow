@@ -28,15 +28,15 @@ private:
 	float Random(float a, float b) { return a + (b-a)*Random01(); }
 	struct Emitter{
 		Emitter(){};
-		Emitter(float mass, const vec2& position, const vec2& direction, float size, float speed, float delay)
+		Emitter(float mass, const vector2& position, const vector2& direction, float size, float speed, float delay)
 			: mass(mass), position(position), direction(direction), size(size), speed(speed), delay(delay), count(0){
 			float len = sqrt(direction.x*direction.x + direction.y*direction.y);
 			this->direction.x /= len;
 			this->direction.y /= len;
 		}
 		float mass;
-		vec2 position;
-		vec2 direction;
+		vector2 position;
+		vector2 direction;
 		float size;
 		float speed;
 		float delay;

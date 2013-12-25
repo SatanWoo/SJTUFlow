@@ -14,9 +14,12 @@
 class Particle
 {
 public:
-    vec2 curPos;
-    vec2 prePos;
-    vec2 vel;
+    int index;
+    vector3 curPos;
+    vector3 prePos;
+    vector3 vel;
+    vector3 vel_half;
+	vector3 acc;
     float m;
     float P;
     float nearP;
@@ -24,7 +27,7 @@ public:
     float nearDens;
     //
     Particle* next;
-    const Particle* neighbours[kMaxNeighbourCount];
+    int neighbours[kMaxNeighbourCount];
     float r[kMaxNeighbourCount];
     size_t neighbour_count;
 protected:

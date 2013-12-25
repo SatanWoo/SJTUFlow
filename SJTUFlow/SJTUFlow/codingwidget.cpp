@@ -69,14 +69,6 @@ CodingWidget::~CodingWidget()
 
 }
 
-void CodingWidget::terminateScriptProcess()
-{
-    if (scriptProcess->state() == QProcess::Running)
-    {
-        scriptProcess->kill();
-    }
-}
-
 void CodingWidget::loadFile(const QString &fileName)
 {
 	QFile file(fileName);
@@ -376,7 +368,21 @@ void CodingWidget::runModule()
 		else
 		{
 			QString execStr = tr("import sys\nsys.path.append('%1')\n")
-				.arg(QDir::currentPath()) + codeEdit->toPlainText();
+				.arg(QDir::currentPath());
+
+			QSettings settings;
+// 			QStringList dllList = settings.value(tr("DllList")).toStringList();
+// 			foreach (QString s, dllList)
+// 			{
+// 			}
+			QStringList sysLibs = settings.value(tr("SysLibs")).toStringList();
+			foreach (QString s, sysLibs)
+			{
+				int pos = s.indexOf('.');
+				execStr += tr("import %1\n").arg(s.left(pos));
+			}
+			
+			execStr += codeEdit->toPlainText();
 
             scriptProcess->start(pyPath);
             scriptProcess->waitForStarted();

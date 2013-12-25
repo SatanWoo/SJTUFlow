@@ -43,6 +43,11 @@ Setting::Setting(QWidget *parent) :
 
     ui.pushButtonCancel->setShortcut(tr("ctrl+w"));
 
+	QStringList sysLibs;
+	sysLibs << "SJTUFlow_SPH.pyd" << "SJTUFlow_EG.pyd";
+	QSettings settings;
+	settings.setValue(tr("SysLibs"), sysLibs);
+
 	loadSetting();
 }
 
@@ -190,6 +195,14 @@ void Setting::loadSetting()
 		dllrow->setText(s);
 		ui.listWidgetDll->setItemWidget(newItem, dllrow);
 	}
+
+	QStringList sysLibs = settings.value(tr("SysLibs")).toStringList();
+	QString sysLibStr;
+	foreach (QString s, sysLibs)
+	{
+		sysLibStr += tr("%1\n").arg(s);
+	}
+	ui.plainTextEditSysLib->setPlainText(sysLibStr);
 
 	ui.pushButtonApply->setEnabled(false);
 }

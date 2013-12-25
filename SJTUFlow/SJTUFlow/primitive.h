@@ -111,9 +111,9 @@ namespace SceneUnit
 		Q_OBJECT
 
 	public:
-        Sphere(GLUquadric *quadric_);
+        Sphere(GLUquadric *quadric_, int slice_ = 32, int stack_ = 32);
 		Sphere(qglviewer::Vec center, QColor color, 
-			GLdouble radius, GLUquadric *quadric_, bool fill = true);
+			GLdouble radius, GLUquadric *quadric_, int slice_ = 32, int stack_ = 32, bool fill = true);
 
 		void draw(bool selected);
 		QDomElement domElement(QDomDocument &doc);
@@ -123,6 +123,8 @@ namespace SceneUnit
 
 	private:
 		GLUquadric *quadric;
+		int slices;
+		int stacks;
 	};
 
 	class Rectangle : public Primitive

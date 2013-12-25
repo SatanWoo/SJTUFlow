@@ -61,7 +61,7 @@ void SPHSolver::SolverDestroy(void)
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
-void SPHSolver::SolverInitSPH(vec2 gs, float dt, int particleNum)
+void SPHSolver::SolverInitSPH(vector2 gs, float dt, int particleNum)
 {
    // TODO : implement
    this->dt = dt;

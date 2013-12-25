@@ -43,7 +43,7 @@ void DllRow::leaveEditState()
 void DllRow::openDll()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Load Dll"),
-		QDir::homePath(), tr("Dynamic Link Libraries(*.dll)"));
+		QDir::homePath(), tr("Dynamic Link Libraries(*.pyd)"));
 	
 	if(!fileName.isEmpty())
 	{

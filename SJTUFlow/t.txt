@@ -1,0 +1,53 @@
+QFile file(scene.c_str());
+	if (!file.open(QFile::ReadOnly | QFile::Text))
+	{
+		return;
+	}
+
+	QDomDocument doc;
+	QString errStr;
+	int errLine, errCol;
+	if (!doc.setContent(&file, false, &errStr, &errLine, &errCol))
+	{
+		return;
+	}
+	QDomElement root = doc.documentElement();
+	QDomElement node = root.firstChildElement(QString("Scene"));
+	if (node.isNull())
+	{
+		return;
+	}
+	int mode = node.attribute(QString("mode"), QString("-1")).toInt();
+	if (mode != 0)
+	{
+		return;
+	}
+	QDomNodeList children = node.childNodes();
+	for (int i = 0; i < children.count(); i++)
+	{
+		QDomElement child = children.at(i).toElement();
+		if (child.tagName() == QString("Primitive"))
+		{
+			int t = child.attribute(QString("type"), QString("-1")).toInt();
+			if (t == 0) // rectangle
+			{
+				QDomElement e = child.firstChildElement(QString("frame"));
+				e = e.firstChildElement(QString("position"));
+				float x = e.attribute(QString("x"), QString("0")).toFloat();
+				float y = e.attribute(QString("y"), QString("0")).toFloat();
+				e = child.firstChildElement(QString("size"));
+				float w = e.attribute(QString("x"), QString("0.2")).toFloat();
+				float h = e.attribute(QString("y"), QString("0.2")).toFloat();
+				AddRect(vec2(x, y), w, h);
+			}
+			else if (t == 1) // circle
+			{
+				float radius = child.attribute(QString("radius"), QString("0.1")).toFloat();
+				QDomElement e = child.firstChildElement(QString("frame"));
+				e = e.firstChildElement(QString("position"));
+				float x = e.attribute(QString("x"), QString("0")).toFloat();
+				float y = e.attribute(QString("y"), QString("0")).toFloat();
+				AddCircle(vec2(x, y), radius);
+			}
+		}
+	}

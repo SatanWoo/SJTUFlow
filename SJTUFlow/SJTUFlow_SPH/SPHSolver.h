@@ -25,7 +25,7 @@ public:
 	SPHSolver();
 	void SetScene(std::string fileName);
 	void SolverDestroy(void);
-	void SolverInitSPH(vec2 gs, float dt, int particleNum);
+	void SolverInitSPH(vector2 gs, float dt, int particleNum);
 	void SetEmitStrategy(EmitStrategy *emitStrategy);
 	void SetBodyForceStrategy(BodyForceStrategy *bodyForceStrategy);
 	void SetUpdateGridStrategy(UpdateGridStrategy *updateGridStrategy);
@@ -52,6 +52,10 @@ public:
 	CollisionStrategy *collisionStrategy;
 	RenderSPHStrategy *renderSPHStrategy;
 
+public:
+	int GetCurParticleNum(){return curParticleNum;}
+	int GetTotalParticleNum(){return totalParticleNum;}
+	Particle* GetParticles(){return particles;}
 protected:
 private:
     int curParticleNum;

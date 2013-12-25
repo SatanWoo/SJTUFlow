@@ -1,7 +1,7 @@
 /***********************************************************************
  * Module:  RenderSPHA.cpp
  * Author:  zs
- * Modified: 2013Äê11ÔÂ21ÈÕ 20:26:47
+ * Modified: 2013年11月21日 20:26:47
  * Purpose: Implementation of the class RenderSPHA
  ***********************************************************************/
 
@@ -72,7 +72,9 @@ void RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string sce
 	sp.particleNum = particleNum;
 	for (int i = 0; i < particleNum; i++)
 	{
-		sp.particles[i] = particles[i].curPos;
+		sp.particles[i].x = particles[i].curPos.x;
+		sp.particles[i].y = particles[i].curPos.y;
+		sp.particles[i].z = particles[i].curPos.z;
 		sp.particlesMass[i] = particles[i].m;
 	}
 	QLocalSocket socket;
@@ -82,7 +84,9 @@ void RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string sce
 		throw UnconnectedException();
 	}
 	QDataStream ds(&socket);
+	SceneType st = SC_2D;
 	SocketType type = SC_SPH;
+	ds.writeRawData((const char *)(&st), sizeof(SceneType));
 	ds.writeRawData((const char *)(&type), sizeof(SocketType));
 	ds.writeRawData((const char *)(&sp), sizeof(SocketPackageSPH));
 	socket.waitForBytesWritten(3000);
