@@ -11,6 +11,7 @@ TitleBar::TitleBar(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	maxPressed = false;
 	pressed = false;
 
 	title = tr("SJTU Flow");
@@ -19,6 +20,7 @@ TitleBar::TitleBar(QWidget *parent)
 
 	connect(ui.toolButtonClose, SIGNAL(clicked()), parent->parent(), SLOT(close()));
 	connect(ui.toolButtonMin, SIGNAL(clicked()), parent->parent(), SLOT(showMinimized()));
+	connect(ui.toolButtonMax, SIGNAL(clicked()), this, SLOT(showMaximized()));
 }
 
 TitleBar::~TitleBar()
@@ -56,4 +58,24 @@ void TitleBar::mouseMoveEvent( QMouseEvent *me )
 void TitleBar::mouseReleaseEvent( QMouseEvent * )
 {
 	pressed = false;
+}
+
+void TitleBar::showMaximized()
+{
+	QWidget *p = qobject_cast<QWidget *>(parent()->parent());
+	if (maxPressed)
+	{
+		ui.toolButtonMax->setIcon(QIcon(":/SJTUFlow/Resources/TitleMax.png"));
+		ui.toolButtonMax->setWhatsThis(tr("Maximize"));
+		ui.toolButtonMax->setToolTip(tr("Maximize"));
+		p->showNormal();
+	}
+	else
+	{
+		ui.toolButtonMax->setIcon(QIcon(":/SJTUFlow/Resources/TitleNormal.png"));
+		ui.toolButtonMax->setWhatsThis(tr("Restore"));
+		ui.toolButtonMax->setToolTip(tr("Restore"));
+		p->showMaximized();
+	}
+	maxPressed = !maxPressed;
 }

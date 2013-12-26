@@ -17,9 +17,30 @@
    <string>DisplayWidget</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QToolBar
+{
+	background-color: rgba(255, 255, 255, 50);
+	border-color: rgba(255, 255, 255, 50);
+}</string>
   </property>
   <widget class="QWidget" name="centralWidget"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

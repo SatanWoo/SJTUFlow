@@ -483,7 +483,7 @@ void Scene::draw()
 			{
 				p = new SceneUnit::Sphere(quadric, 10, 10);
 				p->setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, spSPH.particles[i].z));
-				p->setRadius(0.2);
+				p->setRadius(0.001);
 			}
 			glPushMatrix();
 			p->draw(false);

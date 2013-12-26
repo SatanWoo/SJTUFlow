@@ -349,17 +349,6 @@ void SceneDesignWidget::sceneChanged()
 	emit filePathChanged(tr("%1*").arg(sceneFilePath));
 }
 
-void SceneDesignWidget::operateStart()
-{
-	QDomDocument doc;
-	oldNode = scene->domElement(doc, true);
-}
-
-void SceneDesignWidget::operateDone()
-{
-	//undoStack->push(new SceneCommand(scene, oldNode));
-}
-
 void SceneDesignWidget::changePropertyWidget()
 {
 	if (selectedObj != NULL)

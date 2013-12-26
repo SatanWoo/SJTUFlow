@@ -69,7 +69,6 @@ void RenderSPHB::RenderSPH(int particleNum, Particle* particles, std::string sce
 	   sp.particles[i].x = particles[i].curPos.x;
 	   sp.particles[i].y = particles[i].curPos.y;
 	   sp.particles[i].z = particles[i].curPos.z;
-	   sp.particlesMass[i] = particles[i].m;
    }
    QLocalSocket socket;
    socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);

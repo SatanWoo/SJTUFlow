@@ -72,11 +72,12 @@ public:
         if (SJTUFlowClass->objectName().isEmpty())
             SJTUFlowClass->setObjectName(QStringLiteral("SJTUFlowClass"));
         SJTUFlowClass->resize(1024, 773);
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(SJTUFlowClass->sizePolicy().hasHeightForWidth());
         SJTUFlowClass->setSizePolicy(sizePolicy);
+        SJTUFlowClass->setMinimumSize(QSize(1024, 773));
         QFont font;
         font.setBold(false);
         font.setItalic(false);

@@ -21,6 +21,8 @@ void UpdateGridB::sph_neighbour_list_create(sph_neighbour_list* l, int n_particl
 	l->sizes =new int[n_particles]();
 	l->pool = malloc(250*n_particles*sizeof(sph_neighbour));
 	l->p =new sph_neighbour*[n_particles];
+	l->n_poolused = 0;
+	l->used_by_rigid = 0;
 }
 void UpdateGridB::sph_grid_create(sph_grid* g, int n_particles, float grid_len){
 	int g_size;

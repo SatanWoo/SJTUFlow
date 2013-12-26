@@ -22,10 +22,14 @@ protected:
 
 private:
 	Ui::TitleBar ui;
+	bool maxPressed;
 
 	bool pressed;
 	QPoint clickPos;
 	QString title;
+
+private slots:
+	void showMaximized();
 };
 
 #endif // TITLEBAR_H

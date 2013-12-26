@@ -15,6 +15,7 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -23,6 +24,7 @@ class Ui_DisplayWidget
 {
 public:
     QWidget *centralWidget;
+    QToolBar *toolBar;
 
     void setupUi(QMainWindow *DisplayWidget)
     {
@@ -30,10 +32,19 @@ public:
             DisplayWidget->setObjectName(QStringLiteral("DisplayWidget"));
         DisplayWidget->resize(400, 300);
         DisplayWidget->setContextMenuPolicy(Qt::NoContextMenu);
-        DisplayWidget->setStyleSheet(QStringLiteral(""));
+        DisplayWidget->setStyleSheet(QLatin1String("QToolBar\n"
+"{\n"
+"	background-color: rgba(255, 255, 255, 50);\n"
+"	border-color: rgba(255, 255, 255, 50);\n"
+"}"));
         centralWidget = new QWidget(DisplayWidget);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         DisplayWidget->setCentralWidget(centralWidget);
+        toolBar = new QToolBar(DisplayWidget);
+        toolBar->setObjectName(QStringLiteral("toolBar"));
+        toolBar->setMovable(false);
+        toolBar->setFloatable(false);
+        DisplayWidget->addToolBar(Qt::LeftToolBarArea, toolBar);
 
         retranslateUi(DisplayWidget);
 
@@ -43,6 +54,7 @@ public:
     void retranslateUi(QMainWindow *DisplayWidget)
     {
         DisplayWidget->setWindowTitle(QApplication::translate("DisplayWidget", "DisplayWidget", 0));
+        toolBar->setWindowTitle(QApplication::translate("DisplayWidget", "toolBar", 0));
     } // retranslateUi
 
 };

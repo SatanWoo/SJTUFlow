@@ -66,9 +66,6 @@ public slots:
 	void propertyOperated();
 	void sceneChanged();
 
-	void operateStart();
-	void operateDone();
-
 private:
 	Ui::SceneDesignWidget ui;
 

@@ -15,13 +15,23 @@ public:
 	~DisplayWidget();
 
 	void cloneScene(Scene *scene_);
-	void startAnimate();
-	void stopAnimate();
+	void startAnimation();
+	void stopAnimation();
+
+public slots:
+	void replayEnabled(bool enabled);
+
+signals:
+	void replayClicked();
 
 private:
 	Ui::DisplayWidget ui;
+	QAction *actionReplay;
 
 	Scene *scene;
+
+private slots:
+	void replay();
 };
 
 #endif // DISPLAYWIDGET_H

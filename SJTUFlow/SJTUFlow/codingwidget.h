@@ -19,7 +19,8 @@ public:
 
 signals:
 	void filePathChanged(QString);
-	void running(int);
+	void running();
+	void finished(bool);
 
 protected:
 
@@ -75,6 +76,7 @@ public slots:
 	void copyAvailable(bool yes);
 
 	void showRunError();
+	void processFinished(int, QProcess::ExitStatus);
 };
 
 #endif // CODINGWIDGET_H

@@ -28,6 +28,7 @@ public:
     QLabel *label;
     QLabel *labelTitle;
     QToolButton *toolButtonMin;
+    QToolButton *toolButtonMax;
     QToolButton *toolButtonClose;
 
     void setupUi(QWidget *TitleBar)
@@ -98,12 +99,21 @@ public:
 
         horizontalLayout->addWidget(toolButtonMin);
 
+        toolButtonMax = new QToolButton(TitleBar);
+        toolButtonMax->setObjectName(QStringLiteral("toolButtonMax"));
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/SJTUFlow/Resources/TitleMax.png"), QSize(), QIcon::Normal, QIcon::Off);
+        toolButtonMax->setIcon(icon1);
+        toolButtonMax->setIconSize(QSize(24, 24));
+
+        horizontalLayout->addWidget(toolButtonMax);
+
         toolButtonClose = new QToolButton(TitleBar);
         toolButtonClose->setObjectName(QStringLiteral("toolButtonClose"));
         toolButtonClose->setStyleSheet(QStringLiteral(""));
-        QIcon icon1;
-        icon1.addFile(QStringLiteral(":/SJTUFlow/Resources/TitleClose.png"), QSize(), QIcon::Normal, QIcon::Off);
-        toolButtonClose->setIcon(icon1);
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/SJTUFlow/Resources/TitleClose.png"), QSize(), QIcon::Normal, QIcon::Off);
+        toolButtonClose->setIcon(icon2);
         toolButtonClose->setIconSize(QSize(24, 24));
 
         horizontalLayout->addWidget(toolButtonClose);
@@ -127,6 +137,16 @@ public:
         toolButtonMin->setWhatsThis(QApplication::translate("TitleBar", "Minimize", 0));
 #endif // QT_NO_WHATSTHIS
         toolButtonMin->setText(QApplication::translate("TitleBar", "...", 0));
+#ifndef QT_NO_TOOLTIP
+        toolButtonMax->setToolTip(QApplication::translate("TitleBar", "Maximize", 0));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_STATUSTIP
+        toolButtonMax->setStatusTip(QString());
+#endif // QT_NO_STATUSTIP
+#ifndef QT_NO_WHATSTHIS
+        toolButtonMax->setWhatsThis(QApplication::translate("TitleBar", "Maximize", 0));
+#endif // QT_NO_WHATSTHIS
+        toolButtonMax->setText(QApplication::translate("TitleBar", "...", 0));
 #ifndef QT_NO_TOOLTIP
         toolButtonClose->setToolTip(QApplication::translate("TitleBar", "Close", 0));
 #endif // QT_NO_TOOLTIP

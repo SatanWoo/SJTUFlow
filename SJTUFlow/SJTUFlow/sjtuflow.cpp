@@ -1,6 +1,7 @@
 #include "sjtuflow.h"
 
 #include <QMessageBox>
+#include <QBitmap>
 
 SJTUFlow::SJTUFlow(QWidget *parent)
 	: QMainWindow(parent)
@@ -27,12 +28,14 @@ SJTUFlow::SJTUFlow(QWidget *parent)
     codingWidget = new CodingWidget(ui.menuBar);
 	ui.tabWidget->addTab(codingWidget,
 		QIcon(":/Icons/Resources/Icons/Coding.png"), tr("Coding"));
-	connect(codingWidget, SIGNAL(running(int)), this, SLOT(display(int)));
+	connect(codingWidget, SIGNAL(running()), this, SLOT(display()));
 
 	displayWidget = new DisplayWidget;
 	ui.tabWidget->addTab(displayWidget,
 		QIcon(":/Icons/Resources/Icons/Display.png"), tr("Display"));
 
+	connect(codingWidget, SIGNAL(finished(bool)), displayWidget, SLOT(replayEnabled(bool)));
+	connect(displayWidget, SIGNAL(replayClicked()), codingWidget, SLOT(runModule()));
     connect(ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
     ui.tabWidget->setCurrentIndex(0);
@@ -71,6 +74,13 @@ void SJTUFlow::paintEvent( QPaintEvent *)
 {
 	QPainter painter(this);
     painter.drawPixmap(rect(), bgImage);
+
+	QBitmap objBitmap(size());
+	QPainter p(&objBitmap);
+	p.fillRect(rect(), Qt::white);
+	p.setBrush(QColor(0, 0, 0));
+	p.drawRoundedRect(rect(), 10, 10);
+	setMask(objBitmap);
 }
 
 void SJTUFlow::closeEvent(QCloseEvent *e)
@@ -127,7 +137,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionSelectAll->setVisible(false);
         sceneDesignWidget->checkState();
 		ui.titleBar->setFilePath(sceneDesignWidget->filePath());
-		displayWidget->stopAnimate();
+		displayWidget->stopAnimation();
         break;
     case 1:
         ui.menuEdit->setEnabled(true);
@@ -151,7 +161,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionSelectAll->setVisible(true);
         codingWidget->checkState(0);
 		ui.titleBar->setFilePath(codingWidget->filePath());
-		displayWidget->stopAnimate();
+		displayWidget->stopAnimation();
         break;
     case 2:
 		ui.menuNewScene->menuAction()->setEnabled(false);
@@ -166,7 +176,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionRun->setEnabled(false);
 		ui.titleBar->setFilePath(QString());
 		displayWidget->cloneScene(sceneDesignWidget->getScene());
-		displayWidget->startAnimate();
+		displayWidget->startAnimation();
     default:
         break;
     }
@@ -244,7 +254,7 @@ void SJTUFlow::sharedDelete()
     }
 }
 
-void SJTUFlow::display(int index)
+void SJTUFlow::display()
 {
-	ui.tabWidget->setCurrentIndex(index);
+	ui.tabWidget->setCurrentIndex(2);
 }

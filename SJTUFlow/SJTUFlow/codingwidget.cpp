@@ -20,6 +20,8 @@ CodingWidget::CodingWidget(QMenuBar *menubar, QWidget *parent)
     scriptProcess = new QProcess(this);
     connect(scriptProcess, SIGNAL(readyReadStandardError()),
         this, SLOT(showRunError()));
+	connect(scriptProcess, SIGNAL(finished(int, QProcess::ExitStatus)), 
+		this, SLOT(processFinished(int, QProcess::ExitStatus)));
 
     parseMenuActions(menubar);
 
@@ -389,7 +391,7 @@ void CodingWidget::runModule()
             scriptProcess->write(execStr.toStdString().c_str());
             scriptProcess->closeWriteChannel();
 
-			emit running(2);
+			emit running();
 		}
 //D:/Projects/SJTUFlow/SJTUFlow/Win32/Debug
 	}	
@@ -467,9 +469,13 @@ void CodingWidget::showRunError()
 	QString num = errStr.mid(pos);
 	QStringList tokens = num.split(' ', QString::SkipEmptyParts);
 	int lineNum = tokens[0].toInt();
-	lineNum -= 2;
+	lineNum -= 4;
 	QString lineStr = tr("line %1").arg(lineNum);
 	errStr = errStr.replace(QRegExp("line [0-9]+"), lineStr);
 	QMessageBox::warning(this, tr("Runtime Error"), errStr, QMessageBox::Ok);
-	emit running(1);
+}
+
+void CodingWidget::processFinished( int, QProcess::ExitStatus )
+{
+	emit finished(true);
 }

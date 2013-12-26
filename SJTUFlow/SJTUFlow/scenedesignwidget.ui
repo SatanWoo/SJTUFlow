@@ -430,6 +430,9 @@ QPushButton
    <property name="windowTitle">
     <string>Main ToolBar</string>
    </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
    <property name="allowedAreas">
     <set>Qt::LeftToolBarArea|Qt::RightToolBarArea</set>
    </property>
@@ -450,8 +453,14 @@ QPushButton
    <property name="windowTitle">
     <string>3D toolBar</string>
    </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
    <property name="allowedAreas">
     <set>Qt::LeftToolBarArea|Qt::RightToolBarArea</set>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>LeftToolBarArea</enum>
@@ -467,8 +476,14 @@ QPushButton
    <property name="windowTitle">
     <string>2D toolBar</string>
    </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
    <property name="allowedAreas">
     <set>Qt::LeftToolBarArea|Qt::RightToolBarArea</set>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>LeftToolBarArea</enum>

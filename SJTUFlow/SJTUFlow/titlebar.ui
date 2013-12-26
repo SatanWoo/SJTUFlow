@@ -46,7 +46,7 @@ QToolButton:pressed
 }
 </string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,500,0,0">
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,500,0,0,0">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -114,6 +114,32 @@ QToolButton:pressed
      <property name="icon">
       <iconset resource="sjtuflow.qrc">
        <normaloff>:/SJTUFlow/Resources/TitleMin.png</normaloff>:/SJTUFlow/Resources/TitleMin.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolButton" name="toolButtonMax">
+     <property name="toolTip">
+      <string>Maximize</string>
+     </property>
+     <property name="statusTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>Maximize</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="sjtuflow.qrc">
+       <normaloff>:/SJTUFlow/Resources/TitleMax.png</normaloff>:/SJTUFlow/Resources/TitleMax.png</iconset>
      </property>
      <property name="iconSize">
       <size>
