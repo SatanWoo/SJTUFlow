@@ -32,6 +32,9 @@ Setting::Setting(QWidget *parent) :
 
 	connect(ui.lineEditPyPath, SIGNAL(textChanged(QString)), this, SLOT(canApply(QString)));
 	connect(ui.pushButtonPyPath, SIGNAL(clicked()), this, SLOT(selectPyPath()));
+	connect(ui.lineEditRunOutputPath, SIGNAL(textChanged(QString)), this, SLOT(canApply(QString)));
+	connect(ui.pushButtonOutputPath, SIGNAL(clicked()), this, SLOT(selectOutputDir()));
+	connect(ui.lineEditRunOutputName, SIGNAL(textChanged(QString)), this, SLOT(outputNameChanged(QString)));
    
 	connect(ui.checkBoxRender, SIGNAL(toggled(bool)), 
 		ui.groupBoxRenderOutput, SLOT(setEnabled(bool)));
@@ -44,7 +47,7 @@ Setting::Setting(QWidget *parent) :
     ui.pushButtonCancel->setShortcut(tr("ctrl+w"));
 
 	QStringList sysLibs;
-	sysLibs << "SJTUFlow_SPH.pyd" << "SJTUFlow_EG.pyd";
+	sysLibs << "SJTUFlow_Global.pyd" << "SJTUFlow_SPH.pyd" << "SJTUFlow_EG.pyd";
 	QSettings settings;
 	settings.setValue(tr("SysLibs"), sysLibs);
 
@@ -77,6 +80,23 @@ void Setting::selectPyPath()
 		QMessageBox::warning(this, tr("Warning"), 
 			tr("Please select the python executable file"), QMessageBox::Ok);
 	}
+}
+
+void Setting::selectOutputDir()
+{
+	QString dirName = QFileDialog::getExistingDirectory(
+		this, tr("Set Output Directory"), QDir::homePath());
+	if (!dirName.isEmpty())
+	{
+		ui.lineEditRunOutputPath->setText(dirName);
+	}
+}
+
+void Setting::outputNameChanged( QString name )
+{
+	ui.labelPromote->setText(
+		tr("The output files will be like %1_[0...n].txt").arg(name));
+	canApply();
 }
 
 void Setting::insertRow()
@@ -120,6 +140,14 @@ void Setting::saveSetting()
 
 	QString pyPath = ui.lineEditPyPath->text();
 	settings.setValue(tr("PyPath"), pyPath);
+
+	QString outputDir = ui.lineEditRunOutputPath->text();
+	if (outputDir != QDir::homePath())
+	{
+		settings.setValue(tr("OutputDir"), outputDir);
+	}
+	QString outputName = ui.lineEditRunOutputName->text();
+	settings.setValue(tr("OutputName"), outputName);
 
 	QStringList dllList;
 	for (int i = 0; i < ui.listWidgetDll->count(); i++)
@@ -184,6 +212,17 @@ void Setting::loadSetting()
 
 	QString pyPath = settings.value(tr("PyPath")).toString();
 	ui.lineEditPyPath->setText(pyPath);
+	QString outputDir = settings.value(tr("OutputDir")).toString();
+	if (outputDir.isEmpty() || QDir(outputDir).exists())
+	{
+		outputDir = QDir::homePath();
+		settings.setValue(tr("OutputDir"), outputDir);
+	}
+	ui.lineEditRunOutputPath->setText(outputDir);
+	QString outputName = settings.value(tr("OutputName")).toString();
+	ui.lineEditRunOutputName->setText(outputName);
+	ui.labelPromote->setText(
+		tr("The output files will be like %1_[0...n].txt").arg(outputName));
 
 	QStringList dllList = settings.value(tr("DllList")).toStringList();
 	foreach (QString s, dllList)

@@ -45,7 +45,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="pageRun">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -115,7 +115,11 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEditRunOutputPath"/>
+           <widget class="QLineEdit" name="lineEditRunOutputPath">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="labelRunName">

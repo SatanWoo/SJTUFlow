@@ -3,7 +3,7 @@
 //  Eulter SE
 //
 //  Created by satanwoo on 13-12-16.
-//  Copyright (c) 2013å¹´ Ziqi Wu. All rights reserved.
+//  Copyright (c) 2013Äê Ziqi Wu. All rights reserved.
 //
 
 #include "Velocity.h"

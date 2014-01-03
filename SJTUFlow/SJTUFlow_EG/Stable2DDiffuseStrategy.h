@@ -1,6 +1,6 @@
 #ifndef _STABLE2DDIFFUSESTRATEGY_H
 #define _STABLE2DDIFFUSESTRATEGY_H
-#include "DiffuseStrategy.h"
+#include "../SJTUFlow_Global/DiffuseStrategy.h"
 
 class Stable2DDiffuseStrategy : public DiffuseStrategy
 {

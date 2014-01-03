@@ -23,7 +23,7 @@ if __name__ == '__main__':
     application.setProjectStrategy(Stable2DProjectStrategy.Create(bs))
     application.setAddSourceStrategY(Stable2DAddSourceStrategy.Create())
 
-    for i in range(1, 1000):
+    for i in range(1, 100):
         initialize()        
 
         application.addSourceVelocity()
@@ -36,4 +36,4 @@ if __name__ == '__main__':
         application.diffuseDensity();
         application.advectDensity();
 
-        application.render()
+        application.render(True, i)

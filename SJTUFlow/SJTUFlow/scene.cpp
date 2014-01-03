@@ -178,6 +178,16 @@ void Scene::startAnimation()
 		qDebug() << "failed to listen" << QApplication::applicationName() << endl;
 	}
 
+	if (spSPH.particles)
+	{
+		delete[] spSPH.particles;
+		spSPH.particles = NULL;
+	}
+	if (spSPH.particlesMass)
+	{
+		delete[] spSPH.particlesMass;
+		spSPH.particlesMass = NULL;
+	}
 	memset(&spSPH, 0, sizeof(SocketPackageSPH));
 	if (spEG.density)
 	{
@@ -441,6 +451,22 @@ void Scene::init()
 
 void Scene::draw()
 {
+	// trick
+	glPushMatrix();
+	glTranslated(-1000.0, -1000.0, -1000.0);
+	if (sceneMode == SCENE_3D)
+	{
+		SceneUnit::Sphere s(quadric, 10, 10);
+		s.draw(false);
+	}
+	else
+	{
+		SceneUnit::Rectangle r;
+		r.draw(false);
+	}
+	glPopMatrix();
+	//
+
 	for (int i = 0; i < primitives.count(); i++)
 	{
 		glPushMatrix();
@@ -560,7 +586,7 @@ void Scene::postSelection(const QPoint& point)
 		}
 		else if (selectedName() == AXIS_SCALE)
 		{
-			setCursor(Qt::SizeBDiagCursor);
+			setCursor(Qt::SizeAllCursor);
 		}
 		else
 		{
@@ -577,7 +603,8 @@ void Scene::animate()
 		QDataStream ds(socket);
 		socket->waitForReadyRead();
 
-		int size = spEG.size;
+		int sizeEG = spEG.size;
+		int sizeSPH = spSPH.particleNum;
 
 		SceneType st;
 		ds.readRawData((char *)(&st), sizeof(SceneType));
@@ -585,7 +612,8 @@ void Scene::animate()
 		{
 			if (st == SC_3D)
 			{
-				size = 0;
+				sizeEG = 0;
+				sizeSPH = 0;
 				sceneMode = SCENE_3D;
 				setSceneMode();
 			}
@@ -594,7 +622,8 @@ void Scene::animate()
 		{
 			if (st == SC_2D)
 			{
-				size = 0;
+				sizeEG = 0;
+				sizeSPH = 0;
 				sceneMode = SCENE_2D;
 				setSceneMode();
 			}
@@ -603,13 +632,28 @@ void Scene::animate()
 		ds.readRawData((char *)(&type), sizeof(SocketType));
 		if (type == SC_SPH)
 		{
-			ds.readRawData((char *)(&spSPH), sizeof(SocketPackageSPH));
+			ds.readRawData((char *)(&spSPH.particleNum), sizeof(int));
+			if (spSPH.particleNum != sizeSPH)
+			{
+				if (spSPH.particles)
+				{
+					delete[] spSPH.particles;
+				}
+				if (spSPH.particlesMass)
+				{
+					delete[] spSPH.particlesMass;
+				}
+				spSPH.particles = new vector3[spSPH.particleNum];
+				spSPH.particlesMass = new float[spSPH.particleNum];
+			}
+			ds.readRawData((char *)(spSPH.particles), spSPH.particleNum * sizeof(vector3));
+			ds.readRawData((char *)(spSPH.particlesMass), spSPH.particleNum * sizeof(float));
 		}
 		else
 		{
 			ds.readRawData((char *)(&spEG.size), sizeof(int));
 			ds.readRawData((char *)(&spEG.totalSize), sizeof(int));
-			if (spEG.size != size)
+			if (spEG.size != sizeEG)
 			{
 				if (spEG.density != NULL)
 				{
@@ -685,18 +729,34 @@ void Scene::mouseMoveEvent(QMouseEvent *event)
 			{
 				Vec d = pos - mousePos;
 
+				double l = camera()->position().norm();
+
 				if (sceneMode == SCENE_3D)
 				{
-					d *= 0.5;	// need to be related to zoom rate. 
+					d *= 0.5 * l / 9.0;	// need to be related to zoom rate. 
 				}
 
 				p->translate(d, selectedAxis - AXIS_X);
 			}
 			else if (curOp == OP_ROTATE)
 			{
+				if (!rect().contains(event->pos()))
+				{
+					return;
+				}
 				Vec center = p->getCenter();
-				Vec d0 = mousePos - center;
-				Vec d1 = pos - center;
+				Vec d0, d1; 
+				if (sceneMode == SCENE_3D)
+				{
+					d0 = mousePos - center;
+					d1 = pos - center;
+				}
+				else
+				{
+					Vec c = camera()->projectedCoordinatesOf(center);
+					d0 = Vec(event->pos().x(), event->pos().y(), 0.0) - c;
+					d1 = Vec(mousePosInWin.x(), mousePosInWin.y(), 0.0) - c;
+				}
 
 				double angle = acos(d0 * d1 / (d0.norm() * d1.norm()));
 				if (cross(d0, d1) * camera()->viewDirection() > 0)

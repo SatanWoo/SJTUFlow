@@ -3,7 +3,7 @@
 //  Eulter SE
 //
 //  Created by satanwoo on 13-12-20.
-//  Copyright (c) 2013å¹´ Ziqi Wu. All rights reserved.
+//  Copyright (c) 2013Äê Ziqi Wu. All rights reserved.
 //
 
 #include "StableFluids3DApplication.h"
@@ -17,9 +17,13 @@
 #include <QLocalSocket>
 #include <QDataStream>
 
-#include "../include/SJTUFlow/global.h"
+#include <sstream>
+#include <fstream>
 
-StableFluids3DApplication::StableFluids3DApplication(int size, float timeStep, float diff): m_size(size), m_time(timeStep), m_diff(diff)
+#include "../SJTUFlow_Global/global.h"
+
+StableFluids3DApplication::StableFluids3DApplication(int size, float timeStep, float diff)
+	: EulerApplication(size, timeStep, diff)
 {
     grid = new EulerGrid3D(m_size, m_diff, m_time);
 	initialize();
@@ -56,16 +60,16 @@ void StableFluids3DApplication::advectVelocity()
     grid->getV()->swap();
     grid->getW()->swap();
     
-    m_as->advect(m_size, BoundaryTypeU, grid->getU()->getCurrent(), grid->getU()->getPrevious(), grid->getU()->getPrevious(), grid->getV()->getPrevious(), grid->getW()->getPrevious(), m_time);
-    m_as->advect(m_size, BoundaryTypeV, grid->getV()->getCurrent(), grid->getV()->getPrevious(), grid->getU()->getPrevious(), grid->getV()->getPrevious(), grid->getW()->getPrevious(), m_time);
-    m_as->advect(m_size, BoundaryTypeW, grid->getW()->getCurrent(), grid->getW()->getPrevious(), grid->getU()->getPrevious(), grid->getV()->getPrevious(), grid->getW()->getPrevious(), m_time);
+    m_as->advect3D(m_size, BoundaryTypeU, grid->getU()->getCurrent(), grid->getU()->getPrevious(), grid->getU()->getPrevious(), grid->getV()->getPrevious(), grid->getW()->getPrevious(), m_time);
+    m_as->advect3D(m_size, BoundaryTypeV, grid->getV()->getCurrent(), grid->getV()->getPrevious(), grid->getU()->getPrevious(), grid->getV()->getPrevious(), grid->getW()->getPrevious(), m_time);
+    m_as->advect3D(m_size, BoundaryTypeW, grid->getW()->getCurrent(), grid->getW()->getPrevious(), grid->getU()->getPrevious(), grid->getV()->getPrevious(), grid->getW()->getPrevious(), m_time);
 }
 
 void StableFluids3DApplication::advectDensity()
 {
     grid->getDensity()->swap();
     
-    m_as->advect(m_size, BoundaryTypeNone, grid->getDensity()->getCurrent(), grid->getDensity()->getPrevious(), grid->getU()->getCurrent(), grid->getV()->getCurrent(), grid->getW()->getCurrent(), m_time);
+    m_as->advect3D(m_size, BoundaryTypeNone, grid->getDensity()->getCurrent(), grid->getDensity()->getPrevious(), grid->getU()->getCurrent(), grid->getV()->getCurrent(), grid->getW()->getCurrent(), m_time);
 }
 
 void StableFluids3DApplication::diffuseVelocity()
@@ -87,15 +91,32 @@ void StableFluids3DApplication::diffuseDensity()
 
 void StableFluids3DApplication::projectVelocity()
 {
-    m_ps->project(m_size, grid->getU()->getCurrent(), grid->getV()->getCurrent(), grid->getW()->getCurrent(), grid->getU()->getPrevious(), grid->getV()->getPrevious());
+    m_ps->project3D(m_size, grid->getU()->getCurrent(), grid->getV()->getCurrent(), grid->getW()->getCurrent(), grid->getU()->getPrevious(), grid->getV()->getPrevious());
 }
 
-void StableFluids3DApplication::render()
+void StableFluids3DApplication::ExportClass()
+{
+	class_<StableFluids3DApplication, bases<EulerApplication> >
+		("StableFluids3DApplication", init<int, float, float>())
+		.def("advectVelocity", &StableFluids3DApplication::advectVelocity)
+		.def("advectDensity", &StableFluids3DApplication::advectDensity)
+		.def("diffuseVelocity", &StableFluids3DApplication::diffuseVelocity)
+		.def("diffuseDensity", &StableFluids3DApplication::diffuseDensity)
+		.def("projectVelocity", &StableFluids3DApplication::projectVelocity)
+		.def("addSourceVelocity", &StableFluids3DApplication::addSourceVelocity)
+		.def("addSourceDensity", &StableFluids3DApplication::addSourceDensity)
+		.add_property("grid",
+		make_getter(&StableFluids3DApplication::grid, return_value_policy<reference_existing_object>()),
+		make_setter(&StableFluids3DApplication::grid, return_value_policy<reference_existing_object>()));
+}
+
+void StableFluids3DApplication::display()
 {
 	int size = (m_size + 2) * (m_size + 2) * (m_size + 2);
+
 	QLocalSocket socket;
 	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
-	if (!socket.waitForConnected(3000))
+	if (!socket.waitForConnected(500))
 	{
 		throw UnconnectedException();
 	}
@@ -107,7 +128,7 @@ void StableFluids3DApplication::render()
 	ds.writeRawData((const char *)(&m_size), sizeof(int));
 	ds.writeRawData((const char *)(&size), sizeof(int));
 	ds.writeRawData((const char *)(grid->getDensity()->getCurrent()), size * sizeof(float));
-	socket.waitForBytesWritten(3000);
+	socket.waitForBytesWritten(500);
 	socket.disconnectFromServer();
 
 	memset(grid->getDensity()->getPrevious(), 0, size * sizeof(float));
@@ -116,26 +137,35 @@ void StableFluids3DApplication::render()
 	memset(grid->getW()->getPrevious(), 0, size * sizeof(float));
 }
 
-void StableFluids3DApplication::ExportClass()
+void StableFluids3DApplication::saveResults(string rstname, int i)
 {
-	class_<StableFluids3DApplication>("StableFluids3DApplication", init<int, float, float>())
-		.def("setAdvectStrategy", &StableFluids3DApplication::setAdvectStrategy,
-		with_custodian_and_ward<1, 2>())
-		.def("setDiffuseStrategy", &StableFluids3DApplication::setDiffuseStrategy,
-		with_custodian_and_ward<1, 2>())
-		.def("setProjectStrategy", &StableFluids3DApplication::setProjectStrategy,
-		with_custodian_and_ward<1, 2>())
-		.def("setAddSourceStrategY", &StableFluids3DApplication::setAddSourceStrategY,
-		with_custodian_and_ward<1, 2>())
-		.def("advectVelocity", &StableFluids3DApplication::advectVelocity)
-		.def("advectDensity", &StableFluids3DApplication::advectDensity)
-		.def("diffuseVelocity", &StableFluids3DApplication::diffuseVelocity)
-		.def("diffuseDensity", &StableFluids3DApplication::diffuseDensity)
-		.def("projectVelocity", &StableFluids3DApplication::projectVelocity)
-		.def("addSourceVelocity", &StableFluids3DApplication::addSourceVelocity)
-		.def("addSourceDensity", &StableFluids3DApplication::addSourceDensity)
-		.def("render", &StableFluids3DApplication::render)
-		.add_property("grid",
-		make_getter(&StableFluids3DApplication::grid, return_value_policy<reference_existing_object>()),
-		make_setter(&StableFluids3DApplication::grid, return_value_policy<reference_existing_object>()));
+	stringstream ss;
+	ss << i;
+	string num;
+	ss >> num;
+	string realName = rstname + "_" + num + ".txt";
+
+	ofstream out(realName);
+	if (!out)
+	{
+		return;
+	}
+
+	out << "#size\n#density velocity_u velocity_v velocity_w\n#...\n";
+	int size = (m_size + 2) * (m_size + 2) * (m_size + 2);
+	out << size << endl;
+	for (int i = 0; i < size; i++)
+	{
+		out << grid->getDensity()->getCurrent()[i] << " "
+			<< grid->getU()->getCurrent()[i] << " "
+			<< grid->getV()->getCurrent()[i] << " "
+			<< grid->getW()->getCurrent()[i] << "\n";
+	}
+
+	out.close();
+
+	memset(grid->getDensity()->getPrevious(), 0, size * sizeof(float));
+	memset(grid->getU()->getPrevious(), 0, size * sizeof(float));
+	memset(grid->getV()->getPrevious(), 0, size * sizeof(float));
+	memset(grid->getW()->getPrevious(), 0, size * sizeof(float));
 }

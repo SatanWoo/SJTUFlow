@@ -49,7 +49,7 @@ void* UpdateGridB::sph_mem_pool_alloc(sph_mem_pool* pool, int size){
 	pool->used_size += size;
 	return ret;
 }
-void UpdateGridB::sph_grid_clear(sph_grid* g, int start, int end, Particle* particles){
+void UpdateGridB::sph_grid_clear(sph_grid* g, int start, int end, AbstractParticle** particles){
 	float fmin_x;
 	float fmax_x;
 	float fmin_y;
@@ -60,7 +60,7 @@ void UpdateGridB::sph_grid_clear(sph_grid* g, int start, int end, Particle* part
 	fmin_x = fmin_y = fmin_z = MAX_FLOAT;
 	fmax_x = fmax_y = fmax_z = -MAX_FLOAT;
 	for (int i = start; i <= end; i++){
-		const vector3* p = &particles[i].curPos;
+		const vector3* p = &particles[i]->curPos;
 		if (fmin_x > p->x)
 			fmin_x = p->x;
 		if (fmax_x < p->x)
@@ -91,7 +91,7 @@ void UpdateGridB::sph_grid_clear(sph_grid* g, int start, int end, Particle* part
 
 	g->mempool.used_size = 0;
 }
-void UpdateGridB::sph_grid_alloc(sph_grid* g, int start, int end, Particle* particles){
+void UpdateGridB::sph_grid_alloc(sph_grid* g, int start, int end, AbstractParticle** particles){
 	float inv_glen = 1.0f/g->grid_len;
 	for (int i = start; i <= end; i++){
 		int gx;
@@ -100,9 +100,9 @@ void UpdateGridB::sph_grid_alloc(sph_grid* g, int start, int end, Particle* part
 		int gindex;
 
 		//particles[i].curPos = particles[i].curPos;
-		gx = (int)((particles[i].curPos.x - g->minx) *inv_glen);
-		gy = (int)((particles[i].curPos.y - g->miny) *inv_glen);
-		gz = (int)((particles[i].curPos.z - g->minz) *inv_glen);
+		gx = (int)((particles[i]->curPos.x - g->minx) *inv_glen);
+		gy = (int)((particles[i]->curPos.y - g->miny) *inv_glen);
+		gz = (int)((particles[i]->curPos.z - g->minz) *inv_glen);
 
 		gindex = gx + gy*g->width + gz*g->width*g->height;
 
@@ -115,7 +115,7 @@ void UpdateGridB::sph_grid_alloc(sph_grid* g, int start, int end, Particle* part
 		g->sizes[gindex]++;
 	}
 }
-void UpdateGridB::sph_grid_get_neighbours(sph_grid* g, int start, int end, sph_neighbour_list* n_list, float search_radius, Particle* particles)
+void UpdateGridB::sph_grid_get_neighbours(sph_grid* g, int start, int end, sph_neighbour_list* n_list, float search_radius, AbstractParticle** particles)
 {
 	int neighbour_grid;
 	int gx;
@@ -137,9 +137,9 @@ void UpdateGridB::sph_grid_get_neighbours(sph_grid* g, int start, int end, sph_n
 		n_list->p[i] = &((sph_neighbour*)n_list->pool)[n_list->n_poolused];
 		n_list->p[i][0].index = i;
 		n_list->sizes[i] = 1;
-		gx = (int)((particles[i].curPos.x - g->minx)*inv_glen);
-		gy = (int)((particles[i].curPos.y - g->miny)*inv_glen);
-		gz = (int)((particles[i].curPos.z - g->minz)*inv_glen);
+		gx = (int)((particles[i]->curPos.x - g->minx)*inv_glen);
+		gy = (int)((particles[i]->curPos.y - g->miny)*inv_glen);
+		gz = (int)((particles[i]->curPos.z - g->minz)*inv_glen);
 
 		gindex = gx + gy*g->width + gz*g->width*g->height;
 		for (gz = -1; gz <= 1; gz++)
@@ -155,7 +155,7 @@ void UpdateGridB::sph_grid_get_neighbours(sph_grid* g, int start, int end, sph_n
 						float distsq;
 
 						pindex = g->particles[neighbour_grid][j];
-						dist = particles[i].curPos - particles[pindex].curPos;
+						dist = particles[i]->curPos - particles[pindex]->curPos;
 						distsq=dist.lengthSqr();
 
 						if (distsq < search_radius2)
@@ -178,7 +178,7 @@ void UpdateGridB::sph_grid_get_neighbours(sph_grid* g, int start, int end, sph_n
 				g->sizes[gindex]++;
 	}
 }
-void UpdateGridB::UpdateGrid(int particleNum, Particle* particles)
+void UpdateGridB::UpdateGrid(int particleNum, AbstractParticle** particles)
 {
    // TODO : implement
     static bool isFirst = 1;
@@ -194,15 +194,17 @@ void UpdateGridB::UpdateGrid(int particleNum, Particle* particles)
     const float h2 = SMOOTHING_LENGTH*SMOOTHING_LENGTH;
     sph_neighbour_list* nlist = &n_list;
     for (int i = 0; i < particleNum; i++){
-        particles[i].neighbour_count = 0;
+		Particle* pi = (Particle*)particles[i];
+        pi->neighbour_count = 0;
         for (int j = 0; j < nlist->sizes[i]; j++){
             int nindex = nlist->p[i][j].index;
-            vector3 dist = particles[i].curPos - particles[nindex].curPos;
+			Particle* pj = (Particle*)particles[nindex];
+            vector3 dist = pi->curPos - pj->curPos;
             float distsq = dist.lengthSqr();
             if (distsq < h2){
-                particles[i].neighbours[particles[i].neighbour_count] = nindex;
-                particles[i].r[particles[i].neighbour_count] = sqrt(distsq);
-                particles[i].neighbour_count ++;
+                pi->neighbours[pi->neighbour_count] = nindex;
+                pi->r[pi->neighbour_count] = sqrt(distsq);
+                pi->neighbour_count ++;
             }
         }
     }

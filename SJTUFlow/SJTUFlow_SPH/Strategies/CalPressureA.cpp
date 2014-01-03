@@ -16,26 +16,26 @@
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
-void CalPressureA::CalPressure(int particleNum, Particle* particles)
+void CalPressureA::CalPressure(int particleNum, AbstractParticle** particles)
 {
    // TODO : implement
    for (size_t i=0; i<particleNum; ++i){
-        Particle& pi = particles[i];
+        Particle* pi = (Particle *)particles[i];
 
         float density = 0;
         float nearDensity = 0;
-        for (size_t j=0; j<pi.neighbour_count; ++j)
+        for (size_t j=0; j<pi->neighbour_count; ++j)
         {
-            const Particle& pj = particles[pi.neighbours[j]];
-            float r = pi.r[j];
+            const Particle* pj = (Particle *)particles[pi->neighbours[j]];
+            float r = pi->r[j];
             float a = 1 - r/kH;
-            density += pj.m * a*a*a * kNorm;
-            nearDensity += pj.m * a*a*a*a * kNearNorm;
+            density += pj->m * a*a*a * kNorm;
+            nearDensity += pj->m * a*a*a*a * kNearNorm;
         }
-        pi.dens = density;
-        pi.nearDens = nearDensity;
-        pi.P = kStiffness * (density - pi.m*kRestDensity);
-        pi.nearP = kNearStiffness * nearDensity;
+        pi->dens = density;
+        pi->nearDens = nearDensity;
+        pi->P = kStiffness * (density - pi->m*kRestDensity);
+        pi->nearP = kNearStiffness * nearDensity;
     }
 }
 

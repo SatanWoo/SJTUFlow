@@ -23,7 +23,7 @@ EmitA::EmitA()
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
-size_t EmitA::EmitParticles(int particleNum, float kDt, Particle* particles)
+size_t EmitA::EmitParticles(int particleNum, float kDt, AbstractParticle** particles)
 {
    // TODO : implement
    static size_t particleCount = 0;
@@ -48,19 +48,19 @@ size_t EmitA::EmitParticles(int particleNum, float kDt, Particle* particles)
 
         for (size_t i=0; i<=steps && particleCount<kParticleCount; ++i)
         {
-            Particle& pi = particles[particleCount];
-            pi.index = particleCount;
+            Particle* pi = (Particle *)particles[particleCount];
+            pi->index = particleCount;
             ++particleCount;
             ++emitter.count;
 
             float ofs = (float)i / (float)steps - 0.5f;
 
             ofs *= emitter.size;
-            pi.curPos.x = emitter.position.x - ofs*emitter.direction.y;
-            pi.curPos.y = emitter.position.y + ofs*emitter.direction.x;
-            pi.vel.x = emitter.speed * emitter.direction.x*Random(0.9f, 1.1f);
-            pi.vel.y = emitter.speed * emitter.direction.y*Random(0.9f, 1.1f);
-            pi.m = emitter.mass;
+            pi->curPos.x = emitter.position.x - ofs*emitter.direction.y;
+            pi->curPos.y = emitter.position.y + ofs*emitter.direction.x;
+            pi->vel.x = emitter.speed * emitter.direction.x*Random(0.9f, 1.1f);
+            pi->vel.y = emitter.speed * emitter.direction.y*Random(0.9f, 1.1f);
+            pi->m = emitter.mass;
         }
     }
 

@@ -84,14 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BodyForceStrategy.h" />
-    <ClInclude Include="CalPressureStrategy.h" />
-    <ClInclude Include="CollisionStrategy.h" />
-    <ClInclude Include="EmitStrategy.h" />
-    <ClInclude Include="mtxlib.h" />
     <ClInclude Include="Particle.h" />
-    <ClInclude Include="RelaxPosStrategy.h" />
-    <ClInclude Include="RenderSPHStrategy.h" />
     <ClInclude Include="SPHSolver.h" />
     <ClInclude Include="Strategies\BodyForceA.h" />
     <ClInclude Include="Strategies\BodyForceB.h" />
@@ -108,19 +101,11 @@
     <ClInclude Include="Strategies\Strategies.h" />
     <ClInclude Include="Strategies\UpdateGridA.h" />
     <ClInclude Include="Strategies\UpdateGridB.h" />
-    <ClInclude Include="UpdateGridStrategy.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BodyForceStrategy.cpp" />
-    <ClCompile Include="CalPressureStrategy.cpp" />
-    <ClCompile Include="CollisionStrategy.cpp" />
-    <ClCompile Include="EmitStrategy.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mtxlib.cpp" />
     <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="RelaxPosStrategy.cpp" />
-    <ClCompile Include="RenderSPHStrategy.cpp" />
     <ClCompile Include="SPHSolver.cpp" />
     <ClCompile Include="Strategies\BodyForceA.cpp" />
     <ClCompile Include="Strategies\BodyForceB.cpp" />
@@ -136,7 +121,6 @@
     <ClCompile Include="Strategies\RenderSPHB.cpp" />
     <ClCompile Include="Strategies\UpdateGridA.cpp" />
     <ClCompile Include="Strategies\UpdateGridB.cpp" />
-    <ClCompile Include="UpdateGridStrategy.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

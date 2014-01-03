@@ -19,7 +19,7 @@ const float EPSILON = 0.00001f;
 inline void compute_col(vector3* p, vector3* col,const vector3* vel, const vector3* n, float diff, float stiff, float damp){
 	float v0;
 	float reverse;
-	v0 = DotProduct(*n, *vel);
+	v0 = vector3::DotProduct(*n, *vel);
 	reverse = stiff * diff - damp * v0;
 	*col = (*col)+reverse*(*n);
 }
@@ -68,14 +68,14 @@ inline void cpu_sph_glass_collision(vector3* p, vector3* col, const vector3* vel
 		compute_col(p, col, vel, &n, diff, stiff, damp);
 	}
 }
-void CollisionB::Collision(int particleNum, float kDt, Particle* particles, std::string scene)
+void CollisionB::Collision(int particleNum, float kDt, AbstractParticle** particles, std::string scene)
 {
    // TODO : implement
-    static matrix44 _mat_col = IdentityMatrix44();
+    static matrix44 _mat_col = matrix44::IdentityMatrix44();
 
     matrix44 m;
-    m = TranslateMatrix44(0.0f,0.0f,0.0f);
-    static matrix44 _mat_inv_col = InvertMatrix44(m);
+    m = matrix44::TranslateMatrix44(0.0f,0.0f,0.0f);
+    static matrix44 _mat_inv_col = matrix44::InvertMatrix44(m);
 
     float e = 1.0f;
     float sphere_radius = 0.004f;
@@ -83,13 +83,14 @@ void CollisionB::Collision(int particleNum, float kDt, Particle* particles, std:
     float damp = 128.0f;
 
     for (int i = 0; i < particleNum; i++){
+		Particle* pi = (Particle*)particles[i];
         vector3 pre_p;
         vector3 col(0.0f, 0.0f, 0.0f);
 
-        pre_p = particles[i].curPos + kDt * particles[i].vel_half;
+        pre_p = pi->curPos + kDt * pi->vel_half;
 
-        cpu_sph_glass_collision(&pre_p, &col, &particles[i].vel, &_mat_col, &_mat_inv_col, sphere_radius, stiff, damp);
-        particles[i].acc += col;
+        cpu_sph_glass_collision(&pre_p, &col, &pi->vel, &_mat_col, &_mat_inv_col, sphere_radius, stiff, damp);
+        pi->acc += col;
     }
     return;
 }

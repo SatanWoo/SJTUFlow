@@ -10,7 +10,7 @@
 
 #include "../utils.h"
 #include "../Particle.h"
-#include "../UpdateGridStrategy.h"
+#include "../SJTUFlow_Global/UpdateGridStrategy.h"
 
 #define kEpsilon 0.0000001f
 #define kEpsilon2 (kEpsilon*kEpsilon)
@@ -22,7 +22,7 @@ const size_t kGridCellCount = kGridWidth * kGridHeight;
 class UpdateGridA : public UpdateGridStrategy
 {
 public:
-	void UpdateGrid(int particleNum, Particle* particles);
+	void UpdateGrid(int particleNum, AbstractParticle** particles);
 
 	static UpdateGridStrategy *Create();
 	static void ExportClass();

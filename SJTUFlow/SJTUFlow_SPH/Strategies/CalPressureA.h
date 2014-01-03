@@ -10,7 +10,7 @@
 
 #include "../utils.h"
 #include "../Particle.h"
-#include "../CalPressureStrategy.h"
+#include "../SJTUFlow_Global/CalPressureStrategy.h"
 
 #define kRestDensity 2.0f
 #define kStiffness 0.08f
@@ -19,7 +19,7 @@
 class CalPressureA : public CalPressureStrategy
 {
 public:
-	void CalPressure(int particleNum, Particle* particles);
+	void CalPressure(int particleNum, AbstractParticle** particles);
 
 	static CalPressureStrategy *Create();
 	static void ExportClass();

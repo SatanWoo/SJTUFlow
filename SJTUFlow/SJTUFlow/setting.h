@@ -18,6 +18,8 @@ private slots:
     void changePage(QListWidgetItem *current, QListWidgetItem *previous);
 
 	void selectPyPath();
+	void selectOutputDir();
+	void outputNameChanged(QString name);
 
 	void insertRow();
 	void removeRow();

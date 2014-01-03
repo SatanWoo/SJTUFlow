@@ -1,7 +1,7 @@
 /***********************************************************************
 * Module:  utils.h
 * Author:  zs
-* Modified: 2013å¹´11æœˆ23æ—¥ 0:24:58
+* Modified: 2013Äê11ÔÂ23ÈÕ 0:24:58
 * Purpose: Declaration of the class utils
 ***********************************************************************/
 
@@ -12,9 +12,8 @@
 #include <memory.h>
 #include <math.h>
 #include <GL/glut.h>
-#include "mtxlib.h"
 
-#include "../include/SJTUFlow/global.h"
+#include "../SJTUFlow_Global/global.h"
 
 #define kScreenWidth 640
 #define kScreenHeight 480

@@ -150,6 +150,7 @@ public:
 
         lineEditRunOutputPath = new QLineEdit(groupBoxRunOutput);
         lineEditRunOutputPath->setObjectName(QStringLiteral("lineEditRunOutputPath"));
+        lineEditRunOutputPath->setReadOnly(true);
 
         gridLayout_2->addWidget(lineEditRunOutputPath, 0, 1, 1, 1);
 
@@ -382,7 +383,7 @@ public:
 
         retranslateUi(Setting);
 
-        stackedWidget->setCurrentIndex(2);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(Setting);

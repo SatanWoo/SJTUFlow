@@ -10,9 +10,13 @@
 #include <QLocalSocket>
 #include <QDataStream>
 
-#include "../include/SJTUFlow/global.h"
+#include <sstream>
+#include <fstream>
 
-StableFluidsApplication::StableFluidsApplication(int size, float timeStep, float diff): m_size(size), m_time(timeStep), m_diff(diff)
+#include "../SJTUFlow_Global/global.h"
+
+StableFluidsApplication::StableFluidsApplication(int size, float timeStep, float diff)
+	: EulerApplication(size, timeStep, diff)
 {
     grid = new EulerGrid2D(m_size, m_diff, m_time);
 	initialize();
@@ -77,12 +81,29 @@ void StableFluidsApplication::projectVelocity()
     this->m_ps->project(m_size, grid->getU()->getCurrent(), grid->getV()->getCurrent(), grid->getU()->getPrevious(), grid->getV()->getPrevious());
 }
 
-void StableFluidsApplication::render()
+void StableFluidsApplication::ExportClass()
+{
+	class_<StableFluidsApplication, bases<EulerApplication> >
+		("StableFluidsApplication", init<int, float, float>())
+		.def("advectVelocity", &StableFluidsApplication::advectVelocity)
+		.def("advectDensity", &StableFluidsApplication::advectDensity)
+		.def("diffuseVelocity", &StableFluidsApplication::diffuseVelocity)
+		.def("diffuseDensity", &StableFluidsApplication::diffuseDensity)
+		.def("projectVelocity", &StableFluidsApplication::projectVelocity)
+		.def("addSourceVelocity", &StableFluidsApplication::addSourceVelocity)
+		.def("addSourceDensity", &StableFluidsApplication::addSourceDensity)
+		.add_property("grid",
+		make_getter(&StableFluidsApplication::grid, return_value_policy<reference_existing_object>()),
+		make_setter(&StableFluidsApplication::grid, return_value_policy<reference_existing_object>()));
+}
+
+void StableFluidsApplication::display()
 {
 	int size = (m_size + 2) * (m_size + 2);
+
 	QLocalSocket socket;
 	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
-	if (!socket.waitForConnected(3000))
+	if (!socket.waitForConnected(500))
 	{
 		throw UnconnectedException();
 	}
@@ -94,7 +115,7 @@ void StableFluidsApplication::render()
 	ds.writeRawData((const char *)(&m_size), sizeof(int));
 	ds.writeRawData((const char *)(&size), sizeof(int));
 	ds.writeRawData((const char *)(grid->getDensity()->getCurrent()), size * sizeof(float));
-	socket.waitForBytesWritten(3000);
+	socket.waitForBytesWritten(500);
 	socket.disconnectFromServer();
 
 	memset(grid->getDensity()->getPrevious(), 0, size * sizeof(float));
@@ -102,26 +123,33 @@ void StableFluidsApplication::render()
 	memset(grid->getV()->getPrevious(), 0, size * sizeof(float));
 }
 
-void StableFluidsApplication::ExportClass()
+void StableFluidsApplication::saveResults(string rstname, int i)
 {
-	class_<StableFluidsApplication>("StableFluidsApplication", init<int, float, float>())
-		.def("setAdvectStrategy", &StableFluidsApplication::setAdvectStrategy,
-		with_custodian_and_ward<1, 2>())
-		.def("setDiffuseStrategy", &StableFluidsApplication::setDiffuseStrategy,
-		with_custodian_and_ward<1, 2>())
-		.def("setProjectStrategy", &StableFluidsApplication::setProjectStrategy,
-		with_custodian_and_ward<1, 2>())
-		.def("setAddSourceStrategY", &StableFluidsApplication::setAddSourceStrategY,
-		with_custodian_and_ward<1, 2>())
-		.def("advectVelocity", &StableFluidsApplication::advectVelocity)
-		.def("advectDensity", &StableFluidsApplication::advectDensity)
-		.def("diffuseVelocity", &StableFluidsApplication::diffuseVelocity)
-		.def("diffuseDensity", &StableFluidsApplication::diffuseDensity)
-		.def("projectVelocity", &StableFluidsApplication::projectVelocity)
-		.def("addSourceVelocity", &StableFluidsApplication::addSourceVelocity)
-		.def("addSourceDensity", &StableFluidsApplication::addSourceDensity)
-		.def("render", &StableFluidsApplication::render)
-		.add_property("grid",
-		make_getter(&StableFluidsApplication::grid, return_value_policy<reference_existing_object>()),
-		make_setter(&StableFluidsApplication::grid, return_value_policy<reference_existing_object>()));
+	stringstream ss;
+	ss << i;
+	string num;
+	ss >> num;
+	string realName = rstname + "_" + num + ".txt";
+
+	ofstream out(realName);
+	if (!out)
+	{
+		return;
+	}
+
+	out << "#size\n#density velocity_u velocity_v\n#...\n";
+	int size = (m_size + 2) * (m_size + 2);
+	out << size << endl;
+	for (int i = 0; i < size; i++)
+	{
+		out << grid->getDensity()->getCurrent()[i] << " "
+			<< grid->getU()->getCurrent()[i] << " "
+			<< grid->getV()->getCurrent()[i] << "\n";
+	}
+
+	out.close();
+
+	memset(grid->getDensity()->getPrevious(), 0, size * sizeof(float));
+	memset(grid->getU()->getPrevious(), 0, size * sizeof(float));
+	memset(grid->getV()->getPrevious(), 0, size * sizeof(float));
 }

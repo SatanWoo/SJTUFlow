@@ -5,7 +5,7 @@ if __name__ == '__main__':
     kSubSteps = 7
     kDt = (1.0 / kFrameRate) / kSubSteps
     _SPHSolver = SPHSolver()
-    _SPHSolver.SolverInitSPH(vec2(640, 480), kDt, 1000)
+    _SPHSolver.SolverInitSPH(kDt, 1000)
     _SPHSolver.SetEmitStrategy(EmitA.Create())
     _SPHSolver.SetBodyForceStrategy(BodyForceA.Create())
     _SPHSolver.SetUpdateGridStrategy(UpdateGridA.Create())
@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     _SPHSolver.RenderInit()
 
-    for i in range(1, 1000):
+    for i in range(1, 100):
         for j in range(0, kSubSteps):
             _SPHSolver.Emit()
             _SPHSolver.BodyForce()
@@ -24,6 +24,4 @@ if __name__ == '__main__':
             _SPHSolver.CalPressure()
             _SPHSolver.RelaxPos()
             _SPHSolver.Collision()
-        _SPHSolver.RenderSPH()
-
-    #_SPHSolver.SolverDestroy()
+        _SPHSolver.RenderSPH(False, i)

@@ -39,4 +39,4 @@ if __name__ == '__main__':
         application.diffuseDensity();
         application.advectDensity();
 
-        application.render()
+        application.render(True, i)

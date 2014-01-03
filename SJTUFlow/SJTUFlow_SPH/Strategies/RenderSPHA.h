@@ -10,16 +10,16 @@
 
 #include "../utils.h"
 #include "../Particle.h"
-#include "../RenderSPHStrategy.h"
+#include "../SJTUFlow_Global/RenderSPHStrategy.h"
 
 class RenderSPHA : public RenderSPHStrategy
 {
 public:
 	static size_t _particleNum;
-	static Particle *_particles;
+	static AbstractParticle **_particles;
 	void Render();
 	void RenderInit();
-	void RenderSPH(int particleNum, Particle* particles, std::string scene);
+	void RenderSPH(int particleNum, AbstractParticle** particles, std::string scene);
 
 	static RenderSPHStrategy *Create();
 	static void ExportClass();

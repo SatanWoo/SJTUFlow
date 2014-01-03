@@ -3,7 +3,7 @@ from SJTUFlow_SPH import *
 if __name__ == '__main__':
     kDt = 0.005
     _SPHSolver = SPHSolver()
-    _SPHSolver.SolverInitSPH(vector2(640, 480), kDt, 1000)
+    _SPHSolver.SolverInitSPH(kDt, 1000)
     _SPHSolver.SetEmitStrategy(EmitB.Create())
     _SPHSolver.SetBodyForceStrategy(BodyForceB.Create())
     _SPHSolver.SetUpdateGridStrategy(UpdateGridB.Create())
@@ -22,4 +22,4 @@ if __name__ == '__main__':
         _SPHSolver.RelaxPos()
         _SPHSolver.Collision()
 
-        _SPHSolver.RenderSPH()
+        _SPHSolver.RenderSPH(True, i)

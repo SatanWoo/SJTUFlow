@@ -16,7 +16,7 @@
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
-void CalPressureB::CalPressure(int particleNum, Particle* particles)
+void CalPressureB::CalPressure(int particleNum, AbstractParticle** particles)
 {
    // TODO : implement
     const float STIFF = 1.5f;
@@ -27,28 +27,31 @@ void CalPressureB::CalPressure(int particleNum, Particle* particles)
     vector3 dist;
 
     for (int i = 0; i < particleNum; i++){
-        particles[i].dens = 0;
-        for (int j=0; j < particles[i].neighbour_count; j++){
+		Particle* pi = (Particle*)particles[i];
+        pi->dens = 0;
+        for (int j=0; j < pi->neighbour_count; j++){
             float density;
             float distsq;
 
-            nindex = particles[i].neighbours[j];
-            dist = particles[i].curPos - particles[nindex].curPos;
+            nindex = pi->neighbours[j];
+			Particle* pj = (Particle*)particles[nindex];
+            dist = pi->curPos - pj->curPos;
             distsq = dist.lengthSqr();
 
             float h2_r2;
             h2_r2 = h2 - distsq;
             density = h2_r2 * h2_r2 * h2_r2;
-            particles[i].dens += particles[i].m * density;
+            pi->dens += pi->m * density;
             if (i != nindex){
-                particles[nindex].dens += particles[i].m * density;
+                pj->dens += pi->m * density;
             }
         }
     }
     for (int i=0; i<particleNum; i++){
-        particles[i].dens *= POLY6;
-        particles[i].P = STIFF * (particles[i].dens - 1000.0f);
-        particles[i].dens = 1.0f / particles[i].dens;
+		Particle* pi = (Particle*)particles[i];
+        pi->dens *= POLY6;
+        pi->P = STIFF * (pi->dens - 1000.0f);
+        pi->dens = 1.0f / pi->dens;
     }
 }
 

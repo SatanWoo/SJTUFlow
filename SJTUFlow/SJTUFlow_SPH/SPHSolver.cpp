@@ -7,10 +7,18 @@
 
 #include "SPHSolver.h"
 
-#include "Strategies/Strategies.h"
+#include "Strategies.h"
+
+#include <sstream>
+#include <fstream>
 
 SPHSolver::SPHSolver()
 {
+	for (int i = 0; i < kParticleCount; i++)
+	{
+		particles[i] = new Particle;
+	}
+
 	emitStrategy = new EmitA;
 	bodyForceStrategy = new BodyForceA;
 	updateGridStrategy = new UpdateGridA;
@@ -34,24 +42,6 @@ void SPHSolver::SetScene(std::string fileName)
 }
 
 ////////////////////////////////////////////////////////////////////////
-// Name:       SPHSolver::SolverDestroy()
-// Purpose:    Implementation of SPHSolver::SolverDestroy()
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void SPHSolver::SolverDestroy(void)
-{
-   // TODO : implement
-   if(emitStrategy)delete emitStrategy;
-   if(bodyForceStrategy)delete bodyForceStrategy;
-   if(updateGridStrategy)delete updateGridStrategy;
-   if(calPressureStrategy)delete calPressureStrategy;
-   if(relaxPosStrategy)delete relaxPosStrategy;
-   if(collisionStrategy)delete collisionStrategy;
-   if(renderSPHStrategy)delete renderSPHStrategy;
-}
-
-////////////////////////////////////////////////////////////////////////
 // Name:       SPHSolver::SolverInitSPH(vec2 gs, float dt, int particleNum)
 // Purpose:    Implementation of SPHSolver::SolverInitSPH()
 // Parameters:
@@ -61,110 +51,12 @@ void SPHSolver::SolverDestroy(void)
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
-void SPHSolver::SolverInitSPH(vector2 gs, float dt, int particleNum)
+void SPHSolver::SolverInitSPH(float dt, int particleNum)
 {
    // TODO : implement
    this->dt = dt;
    this->totalParticleNum = particleNum;
    this->curParticleNum = 0;
-}
-
-////////////////////////////////////////////////////////////////////////
-// Name:       SPHSolver::SetEmitStrategy(EmitStrategy emitStrategy)
-// Purpose:    Implementation of SPHSolver::SetEmitStrategy()
-// Parameters:
-// - emitStrategy
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void SPHSolver::SetEmitStrategy(EmitStrategy *emitStrategy)
-{
-   // TODO : implement
-   this->emitStrategy = emitStrategy;
-}
-
-////////////////////////////////////////////////////////////////////////
-// Name:       SPHSolver::SetBodyForceStrategy(BodyForceStrategy bodyForceStrategy)
-// Purpose:    Implementation of SPHSolver::SetBodyForceStrategy()
-// Parameters:
-// - bodyForceStrategy
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void SPHSolver::SetBodyForceStrategy(BodyForceStrategy *bodyForceStrategy)
-{
-   // TODO : implement
-   this->bodyForceStrategy = bodyForceStrategy;
-}
-
-////////////////////////////////////////////////////////////////////////
-// Name:       SPHSolver::SetUpdateGridStrategy(UpdateGridStrategy updateGridStrategy)
-// Purpose:    Implementation of SPHSolver::SetUpdateGridStrategy()
-// Parameters:
-// - updateGridStrategy
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void SPHSolver::SetUpdateGridStrategy(UpdateGridStrategy *updateGridStrategy)
-{
-   // TODO : implement
-   this->updateGridStrategy = updateGridStrategy;
-}
-
-////////////////////////////////////////////////////////////////////////
-// Name:       SPHSolver::SetCalPressureStrategy(CalPressureStrategy calPressureStrategy)
-// Purpose:    Implementation of SPHSolver::SetCalPressureStrategy()
-// Parameters:
-// - calPressureStrategy
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void SPHSolver::SetCalPressureStrategy(CalPressureStrategy *calPressureStrategy)
-{
-   // TODO : implement
-   this->calPressureStrategy = calPressureStrategy;
-}
-
-////////////////////////////////////////////////////////////////////////
-// Name:       SPHSolver::SetRelaxPosStrategy(RelaxPosStrategy relaxPosStrategy)
-// Purpose:    Implementation of SPHSolver::SetRelaxPosStrategy()
-// Parameters:
-// - relaxPosStrategy
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void SPHSolver::SetRelaxPosStrategy(RelaxPosStrategy *relaxPosStrategy)
-{
-   // TODO : implement
-   this->relaxPosStrategy = relaxPosStrategy;
-}
-
-////////////////////////////////////////////////////////////////////////
-// Name:       SPHSolver::SetCollisionStrategy(CollisionStrategy collisionStrategy)
-// Purpose:    Implementation of SPHSolver::SetCollisionStrategy()
-// Parameters:
-// - collisionStrategy
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void SPHSolver::SetCollisionStrategy(CollisionStrategy *collisionStrategy)
-{
-   // TODO : implement
-   this->collisionStrategy = collisionStrategy;
-}
-
-////////////////////////////////////////////////////////////////////////
-// Name:       SPHSolver::SetRenderSPHStrategy(RenderSPHStrategy renderSPHStrategy)
-// Purpose:    Implementation of SPHSolver::SetRenderSPHStrategy()
-// Parameters:
-// - renderSPHStrategy
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void SPHSolver::SetRenderSPHStrategy(RenderSPHStrategy *renderSPHStrategy)
-{
-   // TODO : implement
-   this->renderSPHStrategy = renderSPHStrategy;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -251,43 +143,48 @@ void SPHSolver::RenderInit(void)
    renderSPHStrategy->RenderInit();
 }
 
-////////////////////////////////////////////////////////////////////////
-// Name:       SPHSolver::RenderSPH()
-// Purpose:    Implementation of SPHSolver::RenderSPH()
-// Return:     void
-////////////////////////////////////////////////////////////////////////
-
-void SPHSolver::RenderSPH(void)
-{
-   // TODO : implement
-   renderSPHStrategy->RenderSPH(curParticleNum, particles, scene);
-}
-
 void SPHSolver::ExportClass()
 {
-	class_<SPHSolver>("SPHSolver", init<>())
+	class_<SPHSolver, bases<AbstractSPHSolver> >("SPHSolver", init<>())
 		.def("SetScene", &SPHSolver::SetScene)
 		.def("SolverInitSPH", &SPHSolver::SolverInitSPH)
-		.def("SetEmitStrategy", &SPHSolver::SetEmitStrategy,
-		with_custodian_and_ward<1, 2>())
-		.def("SetBodyForceStrategy", &SPHSolver::SetBodyForceStrategy, 
-		with_custodian_and_ward<1, 2>())
-		.def("SetUpdateGridStrategy", &SPHSolver::SetUpdateGridStrategy, 
-		with_custodian_and_ward<1, 2>())
-		.def("SetCalPressureStrategy", &SPHSolver::SetCalPressureStrategy, 
-		with_custodian_and_ward<1, 2>())
-		.def("SetRelaxPosStrategy", &SPHSolver::SetRelaxPosStrategy, 
-		with_custodian_and_ward<1, 2>())
-		.def("SetCollisionStrategy", &SPHSolver::SetCollisionStrategy, 
-		with_custodian_and_ward<1, 2>())
-		.def("SetRenderSPHStrategy", &SPHSolver::SetRenderSPHStrategy, 
-		with_custodian_and_ward<1, 2>())
 		.def("Emit", &SPHSolver::Emit)
 		.def("BodyForce", &SPHSolver::BodyForce)
 		.def("UpdateGrid", &SPHSolver::UpdateGrid)
 		.def("CalPressure", &SPHSolver::CalPressure)
 		.def("RelaxPos", &SPHSolver::RelaxPos)
 		.def("Collision", &SPHSolver::Collision)
-		.def("RenderInit", &SPHSolver::RenderInit)
-		.def("RenderSPH", &SPHSolver::RenderSPH);
+		.def("RenderInit", &SPHSolver::RenderInit);
+}
+
+void SPHSolver::Display()
+{
+	renderSPHStrategy->RenderSPH(curParticleNum, particles, scene);
+}
+
+void SPHSolver::SaveResults( std::string rstname, int i )
+{
+	using namespace std;
+	stringstream ss;
+	ss << i;
+	string num;
+	ss >> num;
+	string realName = rstname + "_" + num + ".txt";
+
+	ofstream out(realName);
+	if (!out)
+	{
+		return;
+	}
+
+	out << "#particle num\n#pos_x pos_y pos_z\n#...\n";
+	out << curParticleNum << endl;
+	for (int i = 0; i < curParticleNum; i++)
+	{
+		out << particles[i]->curPos.x << " "
+			<< particles[i]->curPos.y << " "
+			<< particles[i]->curPos.z << "\n";
+	}
+
+	out.close();
 }

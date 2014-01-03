@@ -3,13 +3,13 @@
 //  Eulter SE
 //
 //  Created by satanwoo on 13-12-21.
-//  Copyright (c) 2013å¹´ Ziqi Wu. All rights reserved.
+//  Copyright (c) 2013Äê Ziqi Wu. All rights reserved.
 //
 
 #include "Stable3DAdvectStrategy.h"
 #include "Utility.h"
 
-void Stable3DAdvectStrategy::advect( int N, BoundaryType b, float *density, float *density_prev, float *velocity_u, float *velocity_v, float *velocity_w, float dt )
+void Stable3DAdvectStrategy::advect3D( int N, BoundaryType b, float *density, float *density_prev, float *velocity_u, float *velocity_v, float *velocity_w, float dt )
 {
 	int count_x;
 	int count_y;
@@ -98,15 +98,15 @@ void Stable3DAdvectStrategy::advect( int N, BoundaryType b, float *density, floa
 	}
 }
 
-Advect3DStrategy * Stable3DAdvectStrategy::Create()
+AdvectStrategy * Stable3DAdvectStrategy::Create()
 {
 	return new Stable3DAdvectStrategy;
 }
 
 void Stable3DAdvectStrategy::ExportClass()
 {
-	class_<Stable3DAdvectStrategy, bases<Advect3DStrategy>>("Stable3DAdvectStrategy", init<>())
-		.def("advect", &Stable3DAdvectStrategy::advect)
+	class_<Stable3DAdvectStrategy, bases<AdvectStrategy>>("Stable3DAdvectStrategy", init<>())
+		.def("advect3D", &Stable3DAdvectStrategy::advect3D)
 		.def("Create", &Stable3DAdvectStrategy::Create, return_value_policy<manage_new_object>())
 		.staticmethod("Create");
 }

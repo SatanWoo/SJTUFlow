@@ -12,9 +12,9 @@ void Stable2DAdvectStrategy::advect(int N, BoundaryType type, float *d, float *d
     
     x = i - dt0 * u[IX(i,j)]; y = j - dt0 * v[IX(i,j)];
     if (x < 0.5f) x = 0.5f; if (x > N + 0.5f) x = N + 0.5f; i0 = (int)x; i1 = i0 + 1;
-    if (y < 0.5f) y = 0.5f; if (y > N + 0.5f) y = N + 0.5f; j0 = (int)y; j1 = j0 + 1; // è®¾ç½®è¾¹ç•Œ
+    if (y < 0.5f) y = 0.5f; if (y > N + 0.5f) y = N + 0.5f; j0 = (int)y; j1 = j0 + 1; // ÉèÖÃ±ß½ç
     
-    s1 = x - i0; s0 = 1 - s1; t1 = y - j0; t0 = 1 - t1;// æ’å€¼ç³»æ•°
+    s1 = x - i0; s0 = 1 - s1; t1 = y - j0; t0 = 1 - t1;// ²åÖµÏµÊı
     d[IX(i,j)] = s0 * (t0 * d0[IX(i0,j0)] + t1 * d0[IX(i0,j1)]) + s1 * (t0 * d0[IX(i1,j0)] + t1 * d0[IX(i1,j1)]);// d0 predensity
     
 	END_FOR

@@ -10,18 +10,14 @@
 
 #include "utils.h"
 
+#include "../SJTUFlow_Global/AbstractParticle.h"
+
 #define kMaxNeighbourCount 64
-class Particle
+class Particle : public AbstractParticle
 {
 public:
     int index;
-    vector3 curPos;
-    vector3 prePos;
-    vector3 vel;
     vector3 vel_half;
-	vector3 acc;
-    float m;
-    float P;
     float nearP;
     float dens;
     float nearDens;
@@ -30,8 +26,6 @@ public:
     int neighbours[kMaxNeighbourCount];
     float r[kMaxNeighbourCount];
     size_t neighbour_count;
-protected:
-private:
 };
 
 #endif

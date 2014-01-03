@@ -8,61 +8,32 @@
 #if !defined(__SJTUFLOW2_SPHSolver_h)
 #define __SJTUFLOW2_SPHSolver_h
 
-#include "EmitStrategy.h"
-#include "BodyForceStrategy.h"
-#include "UpdateGridStrategy.h"
-#include "CalPressureStrategy.h"
-#include "RelaxPosStrategy.h"
-#include "CollisionStrategy.h"
-#include "RenderSPHStrategy.h"
+#include "../SJTUFlow_Global/AbstractSPHSolver.h"
 
 #include "utils.h"
 #include <iostream>
 
-class SPHSolver
+class SPHSolver : public AbstractSPHSolver
 {
 public:
 	SPHSolver();
-	void SetScene(std::string fileName);
-	void SolverDestroy(void);
-	void SolverInitSPH(vector2 gs, float dt, int particleNum);
-	void SetEmitStrategy(EmitStrategy *emitStrategy);
-	void SetBodyForceStrategy(BodyForceStrategy *bodyForceStrategy);
-	void SetUpdateGridStrategy(UpdateGridStrategy *updateGridStrategy);
-	void SetCalPressureStrategy(CalPressureStrategy *calPressureStrategy);
-	void SetRelaxPosStrategy(RelaxPosStrategy *relaxPosStrategy);
-	void SetCollisionStrategy(CollisionStrategy *collisionStrategy);
-	void SetRenderSPHStrategy(RenderSPHStrategy *renderSPHStrategy);
-	void Emit(void);
-	void BodyForce(void);
-	void UpdateGrid(void);
-	void CalPressure(void);
-	void RelaxPos(void);
-	void Collision(void);
-	void RenderInit(void);
-	void RenderSPH(void);
+	virtual void SetScene(std::string fileName);
+	virtual void SolverInitSPH(float dt, int particleNum);
+	virtual void Emit(void);
+	virtual void BodyForce(void);
+	virtual void UpdateGrid(void);
+	virtual void CalPressure(void);
+	virtual void RelaxPos(void);
+	virtual void Collision(void);
+	virtual void RenderInit(void);
 	
 	static void ExportClass();
-
-	EmitStrategy *emitStrategy;
-	BodyForceStrategy *bodyForceStrategy;
-	UpdateGridStrategy *updateGridStrategy;
-	CalPressureStrategy *calPressureStrategy;
-	RelaxPosStrategy *relaxPosStrategy;
-	CollisionStrategy *collisionStrategy;
-	RenderSPHStrategy *renderSPHStrategy;
-
-public:
-	int GetCurParticleNum(){return curParticleNum;}
-	int GetTotalParticleNum(){return totalParticleNum;}
-	Particle* GetParticles(){return particles;}
 protected:
 private:
-    int curParticleNum;
-    int totalParticleNum;
-    Particle particles[kParticleCount];
-    float dt;
-    std::string scene;
+    AbstractParticle* particles[kParticleCount];
+
+	virtual void Display();
+	virtual void SaveResults(std::string rstname, int i);
 };
 
 #endif

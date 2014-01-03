@@ -10,12 +10,12 @@
 
 #include "../utils.h"
 #include "../Particle.h"
-#include "../BodyForceStrategy.h"
+#include "../SJTUFlow_Global/BodyForceStrategy.h"
 
 class BodyForceA : public BodyForceStrategy
 {
 public:
-	void ApplyBodyForce(int particleNum, float kDt, Particle* particles);
+	void ApplyBodyForce(int particleNum, float kDt, AbstractParticle** particles);
 
 	static BodyForceStrategy *Create();
 	static void ExportClass();

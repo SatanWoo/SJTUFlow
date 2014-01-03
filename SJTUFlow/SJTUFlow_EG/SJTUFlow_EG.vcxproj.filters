@@ -37,22 +37,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AddSourceStrategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AdvectStrategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundaryStrategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DiffuseStrategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MathHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StableFluids.h">
@@ -79,12 +64,6 @@
     <ClInclude Include="StableFluidsApplication.h">
       <Filter>Header Files\Stable2D</Filter>
     </ClInclude>
-    <ClInclude Include="EulerGrid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Velocity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Stable3DAddSourceStrategy.h">
       <Filter>Header Files\Stable3D</Filter>
     </ClInclude>
@@ -102,6 +81,12 @@
     </ClInclude>
     <ClInclude Include="StableFluids3DApplication.h">
       <Filter>Header Files\Stable3D</Filter>
+    </ClInclude>
+    <ClInclude Include="EulerGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Velocity.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

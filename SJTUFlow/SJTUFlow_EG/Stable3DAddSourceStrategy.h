@@ -3,12 +3,12 @@
 //  Eulter SE
 //
 //  Created by satanwoo on 13-12-21.
-//  Copyright (c) 2013å¹´ Ziqi Wu. All rights reserved.
+//  Copyright (c) 2013Äê Ziqi Wu. All rights reserved.
 //
 
 #ifndef Eulter_SE_Stable3DAddSourceStrategy_h
 #define Eulter_SE_Stable3DAddSourceStrategy_h
-#include "AddSourceStrategy.h"
+#include "../SJTUFlow_Global/AddSourceStrategy.h"
 
 class Stable3DAddSourceStrategy : public AddSourceStrategy
 {

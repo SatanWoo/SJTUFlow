@@ -1,6 +1,6 @@
 #ifndef _STABLE2DBOUNDARYSTRATEGY_H
 #define _STABLE2DBOUNDARYSTRATEGY_H
-#include "BoundaryStrategy.h"
+#include "../SJTUFlow_Global/BoundaryStrategy.h"
 
 class Stable2DBoundaryStrategy : public BoundaryStrategy
 {

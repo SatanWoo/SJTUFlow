@@ -10,12 +10,12 @@
 
 #include "../utils.h"
 #include "../Particle.h"
-#include "../RelaxPosStrategy.h"
+#include "../SJTUFlow_Global/RelaxPosStrategy.h"
 
 class RelaxPosB : public RelaxPosStrategy
 {
 public:
-   void RelaxPos(int particleNum, float kDt, Particle* particles);
+   void RelaxPos(int particleNum, float kDt, AbstractParticle** particles);
 
    static RelaxPosStrategy *Create();
    static void ExportClass();

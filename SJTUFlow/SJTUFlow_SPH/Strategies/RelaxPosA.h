@@ -10,7 +10,7 @@
 
 #include "../utils.h"
 #include "../Particle.h"
-#include "../RelaxPosStrategy.h"
+#include "../SJTUFlow_Global/RelaxPosStrategy.h"
 
 #define kSurfaceTension 0.0004f
 #define kLinearViscocity 0.5f
@@ -19,7 +19,7 @@
 class RelaxPosA : public RelaxPosStrategy
 {
 public:
-	void RelaxPos(int particleNum, float kDt, Particle* particles);
+	void RelaxPos(int particleNum, float kDt, AbstractParticle** particles);
 
 	static RelaxPosStrategy *Create();
 	static void ExportClass();

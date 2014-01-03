@@ -37,7 +37,5 @@ SceneDesign:
 
 2. reset the object to initialization
 
-3. relate the move steps to the zoom rate
-
-4. add a progress dialog or progress bar when importing object
+3. add a progress dialog or progress bar when importing object
 

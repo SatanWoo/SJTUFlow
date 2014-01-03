@@ -3,7 +3,7 @@
 //  Eulter SE
 //
 //  Created by satanwoo on 13-12-20.
-//  Copyright (c) 2013å¹´ Ziqi Wu. All rights reserved.
+//  Copyright (c) 2013Äê Ziqi Wu. All rights reserved.
 //
 
 #ifndef Eulter_SE_StableFluids3DApplication_h
@@ -12,44 +12,34 @@
 #include "EulerGrid.h"
 #include "StableFluids.h"
 
-class StableFluids3DApplication
+#include "../SJTUFlow_Global/EulerApplication.h"
+
+class StableFluids3DApplication : public EulerApplication
 {
 public:
     StableFluids3DApplication(int size, float timeStep, float diff);
     ~StableFluids3DApplication();
     
-    void setAdvectStrategy(Advect3DStrategy* as) {m_as = as;}
-	void setDiffuseStrategy(DiffuseStrategy* ds) {m_ds = ds;}
-	void setProjectStrategy(Project3DStrategy* ps) {m_ps = ps;}
-    void setAddSourceStrategY(AddSourceStrategy *ass) {m_ass = ass;}
+    virtual void initialize();
     
-    void initialize();
-    
-    void advectVelocity();
-    void advectDensity();
-    
-    void diffuseVelocity();
-    void diffuseDensity();
-    
-    void projectVelocity();
-    
-    void addSourceVelocity();
-    void addSourceDensity();
+    virtual void advectVelocity();
+    virtual void advectDensity();
 
-	void render();
+    virtual void diffuseVelocity();
+    virtual void diffuseDensity();
+
+    virtual void projectVelocity();
+
+    virtual void addSourceVelocity();
+    virtual void addSourceDensity();
+
 	static void ExportClass();
     
     EulerGrid3D *grid;
-    
+
 private:
-    Advect3DStrategy *m_as;
-	DiffuseStrategy *m_ds;
-	Project3DStrategy *m_ps;
-    AddSourceStrategy *m_ass;
-    
-    int m_size;
-	float m_time;
-	float m_diff;
+	void display();
+	void saveResults(string rstname, int i);
 };
 
 #endif

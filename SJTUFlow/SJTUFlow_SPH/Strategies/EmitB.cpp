@@ -18,7 +18,7 @@
 inline float getRand(){
 	return rand()/(float)RAND_MAX-0.5f;
 }
-size_t EmitB::EmitParticles(int particleNum, float kDt, Particle* particles)
+size_t EmitB::EmitParticles(int particleNum, float kDt, AbstractParticle** particles)
 {
    // TODO : implement
     static bool isFirst = 1;
@@ -49,10 +49,11 @@ size_t EmitB::EmitParticles(int particleNum, float kDt, Particle* particles)
                 float _y = s*(y - CUBE_LEN_Y/2) - cy + s2*getRand();
                 float _z = 0.8*s*z - cz;
 
-                particles[index].curPos.set(_x, _y, _z);
-                particles[index].vel.set(0.0f, 0.0f, 0.0f);
-                particles[index].m = MASS;
-                particles[index].vel_half.set(0.0f, 0.0f, 0.0f);
+				Particle* pi = (Particle*)particles[index];
+				pi->curPos.set(_x, _y, _z);
+				pi->vel.set(0.0f, 0.0f, 0.0f);
+				pi->m = MASS;
+				pi->vel_half.set(0.0f, 0.0f, 0.0f);
             }
         }
     }

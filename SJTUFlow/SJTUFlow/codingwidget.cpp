@@ -10,7 +10,7 @@
 
 #include "codeedit.h"
 
-#include "SJTUFlow/global.h"
+#include "../SJTUFlow_Global/global.h"
 
 CodingWidget::CodingWidget(QMenuBar *menubar, QWidget *parent)
 	: QMainWindow(parent)
@@ -383,7 +383,11 @@ void CodingWidget::runModule()
 				int pos = s.indexOf('.');
 				execStr += tr("import %1\n").arg(s.left(pos));
 			}
-			
+			QString rstname = tr("%1/%2")
+				.arg(settings.value(tr("OutputDir")).toString())
+				.arg(settings.value(tr("OutputName")).toString());
+			execStr += tr("SJTUFlow_Global.EulerApplication.m_rstname='%1'\n").arg(rstname) 
+				+ tr("SJTUFlow_Global.AbstractSPHSolver.m_rstname='%1'\n").arg(rstname);
 			execStr += codeEdit->toPlainText();
 
             scriptProcess->start(pyPath);
@@ -469,7 +473,7 @@ void CodingWidget::showRunError()
 	QString num = errStr.mid(pos);
 	QStringList tokens = num.split(' ', QString::SkipEmptyParts);
 	int lineNum = tokens[0].toInt();
-	lineNum -= 4;
+	lineNum -= 7;
 	QString lineStr = tr("line %1").arg(lineNum);
 	errStr = errStr.replace(QRegExp("line [0-9]+"), lineStr);
 	QMessageBox::warning(this, tr("Runtime Error"), errStr, QMessageBox::Ok);

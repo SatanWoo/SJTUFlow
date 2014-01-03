@@ -10,13 +10,13 @@
 
 #include "../utils.h"
 #include "../Particle.h"
-#include "../EmitStrategy.h"
+#include "../SJTUFlow_Global/EmitStrategy.h"
 
 
 class EmitB : public EmitStrategy
 {
 public:
-   size_t EmitParticles(int particleNum, float kDt, Particle* particles);
+   size_t EmitParticles(int particleNum, float kDt, AbstractParticle** particles);
 
    static EmitStrategy *Create();
    static void ExportClass();

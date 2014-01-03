@@ -10,12 +10,12 @@
 
 #include "../utils.h"
 #include "../Particle.h"
-#include "../UpdateGridStrategy.h"
+#include "../SJTUFlow_Global/UpdateGridStrategy.h"
 
 class UpdateGridB : public UpdateGridStrategy
 {
 public:
-   void UpdateGrid(int particleNum, Particle* particles);
+   void UpdateGrid(int particleNum, AbstractParticle** particles);
 
    static UpdateGridStrategy *Create();
    static void ExportClass();
@@ -67,9 +67,9 @@ private:
     void sph_neighbour_list_create(sph_neighbour_list* l, int n_particles);
     void sph_grid_create(sph_grid* g, int n_particles, float grid_len);
     void* sph_mem_pool_alloc(sph_mem_pool* pool, int size);
-    void sph_grid_clear(sph_grid* g, int start, int end, Particle* particles);
-    void sph_grid_alloc(sph_grid* g, int start, int end, Particle* particles);
-    void sph_grid_get_neighbours(sph_grid* g, int start, int end, sph_neighbour_list* n_list, float search_radius, Particle* particles);
+    void sph_grid_clear(sph_grid* g, int start, int end, AbstractParticle** particles);
+    void sph_grid_alloc(sph_grid* g, int start, int end, AbstractParticle** particles);
+    void sph_grid_get_neighbours(sph_grid* g, int start, int end, sph_neighbour_list* n_list, float search_radius, AbstractParticle** particles);
 };
 
 #endif

@@ -10,7 +10,7 @@
 
 #include "../utils.h"
 #include "../Particle.h"
-#include "../CollisionStrategy.h"
+#include "../SJTUFlow_Global/CollisionStrategy.h"
 
 
 
@@ -18,7 +18,7 @@ class CollisionA : public CollisionStrategy
 {
 public:
 	CollisionA();
-	void Collision(int particleNum, float kDt, Particle* particles, std::string scene);
+	void Collision(int particleNum, float kDt, AbstractParticle** particles, std::string scene);
 
 	static CollisionStrategy *Create();
 	static void ExportClass();

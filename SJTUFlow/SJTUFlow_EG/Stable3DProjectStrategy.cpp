@@ -3,7 +3,7 @@
 //  Eulter SE
 //
 //  Created by satanwoo on 13-12-21.
-//  Copyright (c) 2013å¹´ Ziqi Wu. All rights reserved.
+//  Copyright (c) 2013Äê Ziqi Wu. All rights reserved.
 //
 
 #include "Stable3DProjectStrategy.h"
@@ -15,7 +15,7 @@ Stable3DProjectStrategy::Stable3DProjectStrategy( BoundaryStrategy *bs )
 	m_bs = bs;
 }
 
-void Stable3DProjectStrategy::project( int N, float *velocity_u, float *velocity_v, float *velocity_w, float *p, float *div )
+void Stable3DProjectStrategy::project3D( int N, float *velocity_u, float *velocity_v, float *velocity_w, float *p, float *div )
 {
 	int count_x;
 	int count_y;
@@ -56,14 +56,14 @@ void Stable3DProjectStrategy::project( int N, float *velocity_u, float *velocity
 	m_bs->setBoundary(N, BoundaryTypeW, velocity_w);
 }
 
-Project3DStrategy * Stable3DProjectStrategy::Create( BoundaryStrategy *bs )
+ProjectStrategy * Stable3DProjectStrategy::Create( BoundaryStrategy *bs )
 {
 	return new Stable3DProjectStrategy(bs);
 }
 
 void Stable3DProjectStrategy::ExportClass()
 {
-	class_<Stable3DProjectStrategy, bases<Project3DStrategy>>("Stable3DProjectStrategy", init<>())
+	class_<Stable3DProjectStrategy, bases<ProjectStrategy>>("Stable3DProjectStrategy", init<>())
 		.def("project", &Stable3DProjectStrategy::project)
 		.def("Create", &Stable3DProjectStrategy::Create, 
 		return_value_policy<manage_new_object>(), with_custodian_and_ward<1, 2>())

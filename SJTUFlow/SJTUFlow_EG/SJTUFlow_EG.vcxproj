@@ -11,13 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AddSourceStrategy.h" />
-    <ClInclude Include="AdvectStrategy.h" />
-    <ClInclude Include="BoundaryStrategy.h" />
-    <ClInclude Include="DiffuseStrategy.h" />
     <ClInclude Include="EulerGrid.h" />
     <ClInclude Include="MathHelper.h" />
-    <ClInclude Include="ProjectStrategy.h" />
     <ClInclude Include="Stable2DAddSourceStrategy.h" />
     <ClInclude Include="Stable2DAdvectStrategy.h" />
     <ClInclude Include="Stable2DBoundaryStrategy.h" />

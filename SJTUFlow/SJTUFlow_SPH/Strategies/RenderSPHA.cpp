@@ -1,7 +1,7 @@
 /***********************************************************************
  * Module:  RenderSPHA.cpp
  * Author:  zs
- * Modified: 2013Âπ¥11Êúà21Êó• 20:26:47
+ * Modified: 2013ƒÍ11‘¬21»’ 20:26:47
  * Purpose: Implementation of the class RenderSPHA
  ***********************************************************************/
 
@@ -11,7 +11,7 @@
 #include <QDataStream>
 
 size_t RenderSPHA::_particleNum = 0;
-Particle* RenderSPHA::_particles = NULL;
+AbstractParticle** RenderSPHA::_particles = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 // Name:       RenderSPHA::Render()
@@ -36,16 +36,16 @@ void RenderSPHA::Render()
 
 	float r = 2.5f*kParticleRadius*kScreenWidth/kViewWidth;
 
-	//ÁªòÂà∂Á≤íÂ≠ê ÂçäÂæÑr*r
+	//ªÊ÷∆¡£◊” ∞Îæ∂r*r
 	glPointSize(r*2);
 
 	glBegin(GL_POINTS);
 	for(unsigned int i=0; i < RenderSPHA::_particleNum; ++i){
-		const Particle& pi = RenderSPHA::_particles[i];
-		if(pi.m > 1.0)
+		const Particle* pi = (Particle*)RenderSPHA::_particles[i];
+		if(pi->m > 1.0)
 			glColor3f(.2,.6,.0);
 		else glColor3f(.2,.6,.8);
-		glVertex2f(pi.curPos.x, pi.curPos.y);
+		glVertex2f(pi->curPos.x, pi->curPos.y);
 	}
 	glEnd();
 
@@ -62,7 +62,7 @@ void RenderSPHA::Render()
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
-void RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string scene)
+void RenderSPHA::RenderSPH(int particleNum, AbstractParticle** particles, std::string scene)
 {
 	// TODO : implement
 	_particleNum = particleNum;
@@ -70,17 +70,21 @@ void RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string sce
 
 	SocketPackageSPH sp;
 	sp.particleNum = particleNum;
+	sp.particles = new vector3[particleNum];
+	sp.particlesMass = new float[particleNum];
 	for (int i = 0; i < particleNum; i++)
 	{
-		sp.particles[i].x = particles[i].curPos.x;
-		sp.particles[i].y = particles[i].curPos.y;
-		sp.particles[i].z = particles[i].curPos.z;
-		sp.particlesMass[i] = particles[i].m;
+		sp.particles[i].x = particles[i]->curPos.x;
+		sp.particles[i].y = particles[i]->curPos.y;
+		sp.particles[i].z = 0.0;
+		sp.particlesMass[i] = particles[i]->m;
 	}
 	QLocalSocket socket;
 	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
-	if (!socket.waitForConnected(3000))
+	if (!socket.waitForConnected(500))
 	{
+		delete[] sp.particles;
+		delete[] sp.particlesMass;
 		throw UnconnectedException();
 	}
 	QDataStream ds(&socket);
@@ -88,10 +92,15 @@ void RenderSPHA::RenderSPH(int particleNum, Particle* particles, std::string sce
 	SocketType type = SC_SPH;
 	ds.writeRawData((const char *)(&st), sizeof(SceneType));
 	ds.writeRawData((const char *)(&type), sizeof(SocketType));
-	ds.writeRawData((const char *)(&sp), sizeof(SocketPackageSPH));
-	socket.waitForBytesWritten(3000);
+	ds.writeRawData((const char *)(&sp.particleNum), sizeof(int));
+	ds.writeRawData((const char *)(sp.particles), particleNum * sizeof(vector3));
+	ds.writeRawData((const char *)(sp.particlesMass), particleNum * sizeof(float));
+	socket.waitForBytesWritten(500);
 	socket.disconnectFromServer();
 	//Render();
+
+	delete[] sp.particles;
+	delete[] sp.particlesMass;
 }
 
 ////////////////////////////////////////////////////////////////////////

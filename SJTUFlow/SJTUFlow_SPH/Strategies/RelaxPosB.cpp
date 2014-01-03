@@ -16,7 +16,7 @@
 // Return:     void
 ////////////////////////////////////////////////////////////////////////
 
-void RelaxPosB::RelaxPos(int particleNum, float kDt, Particle* particles)
+void RelaxPosB::RelaxPos(int particleNum, float kDt, AbstractParticle** particles)
 {
    // TODO : implement
     const float VISCOSITY = 0.2f;
@@ -29,32 +29,34 @@ void RelaxPosB::RelaxPos(int particleNum, float kDt, Particle* particles)
     h = SMOOTHING_LENGTH;
 
     for (int i=0; i<particleNum; i++){
-        particles[i].acc.set(0.0f, 0.0f, 0.0f);
-        for (int j=1; j < particles[i].neighbour_count; j++){
+		Particle* pi = (Particle*)particles[i];
+        pi->acc.set(0.0f, 0.0f, 0.0f);
+        for (int j=1; j < pi->neighbour_count; j++){
             vector3 force;
             float r;
             int nindex;
 
-            nindex = particles[i].neighbours[j];
-            r = particles[i].r[j];
+            nindex = pi->neighbours[j];
+            r = pi->r[j];
 
             if (r < h){
+				Particle* pj = (Particle*)particles[nindex];
                 float h_r;
                 vector3 diff;
 
                 h_r = h - r;
-                diff = particles[i].curPos - particles[nindex].curPos;
+                diff = pi->curPos - pj->curPos;
 
-                force = (-0.5f * (particles[i].P + particles[nindex].P) * SPIKY * h_r / r) * diff;
+                force = (-0.5f * (pi->P + pj->P) * SPIKY * h_r / r) * diff;
 
-                vdiff = particles[nindex].vel - particles[i].vel;
+                vdiff = pj->vel - pi->vel;
                 vdiff = (VISCOSITY * VIS) * vdiff;
 
                 force += vdiff;
-                force *= (h_r * particles[i].dens * particles[nindex].dens);
+                force *= (h_r * pi->dens * pj->dens);
 
-                particles[i].acc += particles[nindex].m * force;
-                particles[nindex].acc -= particles[i].m * force;
+                pi->acc += pj->m * force;
+                pj->acc -= pi->m * force;
             }
         }
     }
