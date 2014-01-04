@@ -19,10 +19,10 @@
 void UpdateGridA::UpdateGrid(int particleNum, AbstractParticle** particles)
 {
 	// TODO : implement
-	memset(grid, 0, kGridCellCount*sizeof(Particle*));
+	memset(grid, 0, kGridCellCount*sizeof(AbstractParticle*));
     // Add particles to grid
     for (size_t i=0; i<particleNum; ++i){
-        Particle* pi = (Particle *)particles[i];
+        AbstractParticle* pi = particles[i];
         int x = pi->curPos.x / kCellSize;
         int y = pi->curPos.y / kCellSize;
 
@@ -44,15 +44,15 @@ void UpdateGridA::UpdateGrid(int particleNum, AbstractParticle** particles)
     }
 
     for (size_t i=0; i<particleNum; ++i){
-        Particle* pi = (Particle *)particles[i];
+        AbstractParticle* pi = particles[i];
         size_t gi = gridCoords[i*2];
         size_t gj = gridCoords[i*2+1]*kGridWidth;
 
         pi->neighbour_count = 0;
         for (size_t ni=gi-1; ni<=gi+1; ++ni){
             for (size_t nj=gj-kGridWidth; nj<=gj+kGridWidth; nj+=kGridWidth){
-                for (Particle* ppj=grid[ni+nj]; NULL!=ppj; ppj=ppj->next){
-                    const Particle* pj = ppj;
+                for (AbstractParticle* ppj=grid[ni+nj]; NULL!=ppj; ppj=ppj->next){
+                    const AbstractParticle* pj = ppj;
 
                     float dx = pj->curPos.x - pi->curPos.x;
                     float dy = pj->curPos.y - pi->curPos.y;

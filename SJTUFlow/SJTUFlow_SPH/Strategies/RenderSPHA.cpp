@@ -41,7 +41,7 @@ void RenderSPHA::Render()
 
 	glBegin(GL_POINTS);
 	for(unsigned int i=0; i < RenderSPHA::_particleNum; ++i){
-		const Particle* pi = (Particle*)RenderSPHA::_particles[i];
+		const AbstractParticle* pi = RenderSPHA::_particles[i];
 		if(pi->m > 1.0)
 			glColor3f(.2,.6,.0);
 		else glColor3f(.2,.6,.8);
@@ -70,8 +70,7 @@ void RenderSPHA::RenderSPH(int particleNum, AbstractParticle** particles, std::s
 
 	SocketPackageSPH sp;
 	sp.particleNum = particleNum;
-	sp.particles = new vector3[particleNum];
-	sp.particlesMass = new float[particleNum];
+	sp.radius = 0.1;
 	for (int i = 0; i < particleNum; i++)
 	{
 		sp.particles[i].x = particles[i]->curPos.x;
@@ -83,8 +82,6 @@ void RenderSPHA::RenderSPH(int particleNum, AbstractParticle** particles, std::s
 	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
 	if (!socket.waitForConnected(500))
 	{
-		delete[] sp.particles;
-		delete[] sp.particlesMass;
 		throw UnconnectedException();
 	}
 	QDataStream ds(&socket);
@@ -92,15 +89,10 @@ void RenderSPHA::RenderSPH(int particleNum, AbstractParticle** particles, std::s
 	SocketType type = SC_SPH;
 	ds.writeRawData((const char *)(&st), sizeof(SceneType));
 	ds.writeRawData((const char *)(&type), sizeof(SocketType));
-	ds.writeRawData((const char *)(&sp.particleNum), sizeof(int));
-	ds.writeRawData((const char *)(sp.particles), particleNum * sizeof(vector3));
-	ds.writeRawData((const char *)(sp.particlesMass), particleNum * sizeof(float));
+	ds.writeRawData((const char *)(&sp), sizeof(SocketPackageSPH));
 	socket.waitForBytesWritten(500);
 	socket.disconnectFromServer();
 	//Render();
-
-	delete[] sp.particles;
-	delete[] sp.particlesMass;
 }
 
 ////////////////////////////////////////////////////////////////////////

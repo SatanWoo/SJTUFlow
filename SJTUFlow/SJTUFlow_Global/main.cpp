@@ -2,8 +2,8 @@
 #include "EulerApplication.h"
 #include "AbstractSPHSolver.h"
 
-string EulerApplication::m_rstname = "";
-string AbstractSPHSolver::m_rstname = "";
+string StaticVaribles::m_rstname = "";
+string StaticVaribles::m_scname = "";
 
 void translateUnconnectedException(const UnconnectedException &exc)
 {
@@ -13,6 +13,8 @@ void translateUnconnectedException(const UnconnectedException &exc)
 BOOST_PYTHON_MODULE(SJTUFlow_Global)
 {
 	register_exception_translator<UnconnectedException>(&translateUnconnectedException);
+
+	StaticVaribles::ExportClass();
 
 // Euler Gird
 	AdvectStrategyWrap::ExportClass();

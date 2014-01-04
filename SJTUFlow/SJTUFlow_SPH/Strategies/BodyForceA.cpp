@@ -21,7 +21,7 @@ void BodyForceA::ApplyBodyForce(int particleNum, float kDt, AbstractParticle** p
 {
    // TODO : implement
    for (size_t i=0; i<particleNum; ++i){
-        Particle* pi = (Particle *)particles[i];
+        AbstractParticle* pi = particles[i];
         pi->vel.y -= 9.8f * kDt;
 
         pi->prePos.x = pi->curPos.x;

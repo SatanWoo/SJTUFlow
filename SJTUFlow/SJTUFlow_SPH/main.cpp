@@ -1,16 +1,12 @@
 #include "SPHSolver.h"
 #include "Strategies.h"
 
-std::string AbstractSPHSolver::m_rstname = "";
+std::string StaticVaribles::m_rstname = "";
+std::string StaticVaribles::m_scname = "";
 
 BOOST_PYTHON_MODULE(SJTUFlow_SPH)
 {
 	using namespace boost::python;
-
-	class_<vector2>("vector2", init<>())
-		.def(init<float, float>())
-		.def_readwrite("x", &vector2::x)
-		.def_readwrite("y", &vector2::y);
 
 	EmitStrategyWrap::ExportClass();
 	EmitA::ExportClass();

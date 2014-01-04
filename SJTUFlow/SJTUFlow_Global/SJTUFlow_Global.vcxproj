@@ -49,6 +49,7 @@
     <IncludePath>$(PythonPath)include;$(BoostPath);$(IncludePath)</IncludePath>
     <LibraryPath>$(PythonPath)libs;$(BoostPath)stage\lib;$(LibraryPath)</LibraryPath>
     <TargetExt>.pyd</TargetExt>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -81,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="StaticVaribles.h" />
     <ClInclude Include="AbstractSPHSolver.h" />
     <ClInclude Include="AddSourceStrategy.h" />
     <ClInclude Include="AdvectStrategy.h" />

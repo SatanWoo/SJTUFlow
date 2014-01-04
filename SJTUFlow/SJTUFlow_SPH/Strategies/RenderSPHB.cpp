@@ -64,20 +64,18 @@ void RenderSPHB::RenderSPH(int particleNum, AbstractParticle** particles, std::s
 
    SocketPackageSPH sp;
    sp.particleNum = particleNum;
-   sp.particles = new vector3[particleNum];
-   sp.particlesMass = new float[particleNum];
+   sp.radius = 0.1;
    for (int i = 0; i < particleNum; i++)
    {
 	   sp.particles[i].x = particles[i]->curPos.x;
 	   sp.particles[i].y = particles[i]->curPos.y;
 	   sp.particles[i].z = particles[i]->curPos.z;
+	   sp.particlesMass[i] = particles[i]->m;
    }
    QLocalSocket socket;
    socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
-   if (!socket.waitForConnected(500))
+   if (!socket.waitForConnected(3000))
    {
-	   delete[] sp.particles;
-	   delete[] sp.particlesMass;
 	   throw UnconnectedException();
    }
    QDataStream ds(&socket);
@@ -85,15 +83,10 @@ void RenderSPHB::RenderSPH(int particleNum, AbstractParticle** particles, std::s
    SocketType type = SC_SPH;
    ds.writeRawData((const char *)(&st), sizeof(SceneType));
    ds.writeRawData((const char *)(&type), sizeof(SocketType));
-   ds.writeRawData((const char *)(&sp.particleNum), sizeof(int));
-   ds.writeRawData((const char *)(sp.particles), particleNum * sizeof(vector3));
-   ds.writeRawData((const char *)(sp.particlesMass), particleNum * sizeof(float));
-   socket.waitForBytesWritten(500);
+   ds.writeRawData((const char *)(&sp), sizeof(SocketPackageSPH));
+   socket.waitForBytesWritten(3000);
    socket.disconnectFromServer();
    //RenderB();
-
-   delete[] sp.particles;
-   delete[] sp.particlesMass;
 }
 
 ////////////////////////////////////////////////////////////////////////

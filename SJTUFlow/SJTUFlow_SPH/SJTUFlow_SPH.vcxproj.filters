@@ -37,9 +37,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Particle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SPHSolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -91,11 +88,11 @@
     <ClInclude Include="Strategies\UpdateGridB.h">
       <Filter>Header Files\StrategiesB</Filter>
     </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Particle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SPHSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

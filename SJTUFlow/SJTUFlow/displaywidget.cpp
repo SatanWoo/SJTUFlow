@@ -27,6 +27,7 @@ void DisplayWidget::cloneScene( Scene *scene_ )
 
 void DisplayWidget::startAnimation()
 {
+	actionReplay->setEnabled(false);
 	scene->startAnimation();
 }
 

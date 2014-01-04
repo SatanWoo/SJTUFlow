@@ -8,11 +8,14 @@ enum SceneType{SC_2D = 0, SC_3D};
 
 #include "mtxlib.h"
 
+#define KPN 4000
+
 struct SocketPackageSPH
 {
 	int particleNum;
-	float* particlesMass;
-	vector3* particles;
+	float radius;
+	float particlesMass[KPN];
+	vector3 particles[KPN];
 };
 
 struct SocketPackageEuler

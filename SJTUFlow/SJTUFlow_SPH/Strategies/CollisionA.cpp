@@ -30,7 +30,7 @@ void CollisionA::Collision(int particleNum, float kDt, AbstractParticle** partic
 {
    // TODO : implement
    for (size_t i=0; i<particleNum; ++i){
-        Particle* pi = (Particle *)particles[i];
+        AbstractParticle* pi = particles[i];
 
         for (size_t j=0; j<kWallCount; ++j){
             const Wall& wall = walls[j];

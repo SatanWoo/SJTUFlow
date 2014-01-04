@@ -1,5 +1,7 @@
 #include "codingwidget.h"
 
+//#include "runscriptthread.h"
+
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QFile>
@@ -9,6 +11,7 @@
 #include <QDebug>
 
 #include "codeedit.h"
+#include "runscriptthread.h"
 
 #include "../SJTUFlow_Global/global.h"
 
@@ -16,12 +19,6 @@ CodingWidget::CodingWidget(QMenuBar *menubar, QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-
-    scriptProcess = new QProcess(this);
-    connect(scriptProcess, SIGNAL(readyReadStandardError()),
-        this, SLOT(showRunError()));
-	connect(scriptProcess, SIGNAL(finished(int, QProcess::ExitStatus)), 
-		this, SLOT(processFinished(int, QProcess::ExitStatus)));
 
     parseMenuActions(menubar);
 
@@ -373,10 +370,19 @@ void CodingWidget::runModule()
 				.arg(QDir::currentPath());
 
 			QSettings settings;
-// 			QStringList dllList = settings.value(tr("DllList")).toStringList();
-// 			foreach (QString s, dllList)
-// 			{
-// 			}
+			QStringList dllList = settings.value(tr("DllList")).toStringList();
+			foreach (QString s, dllList)
+			{
+				if (QFile::exists(s))
+				{
+					execStr += tr("sys.path.append('%1')\n").arg(QFileInfo(s).absoluteDir().absolutePath());
+				}
+				else
+				{
+					dllList.removeAll(s);
+				}
+			}
+			settings.setValue(tr("DllList"), dllList);
 			QStringList sysLibs = settings.value(tr("SysLibs")).toStringList();
 			foreach (QString s, sysLibs)
 			{
@@ -386,14 +392,19 @@ void CodingWidget::runModule()
 			QString rstname = tr("%1/%2")
 				.arg(settings.value(tr("OutputDir")).toString())
 				.arg(settings.value(tr("OutputName")).toString());
-			execStr += tr("SJTUFlow_Global.EulerApplication.m_rstname='%1'\n").arg(rstname) 
-				+ tr("SJTUFlow_Global.AbstractSPHSolver.m_rstname='%1'\n").arg(rstname);
+			execStr += tr("SJTUFlow_Global.StaticVaribles.m_rstname='%1'\n").arg(rstname);
+			execStr += tr("SJTUFlow_Global.StaticVaribles.m_scname='%1'\n").arg(curScenePath);
 			execStr += codeEdit->toPlainText();
 
-            scriptProcess->start(pyPath);
-            scriptProcess->waitForStarted();
-            scriptProcess->write(execStr.toStdString().c_str());
-            scriptProcess->closeWriteChannel();
+			QProcess* scriptProcess = new QProcess(this);
+			connect(scriptProcess, SIGNAL(readyReadStandardError()),
+				this, SLOT(showRunError()));
+			connect(scriptProcess, SIGNAL(finished(int, QProcess::ExitStatus)), 
+				this, SLOT(processFinished(int, QProcess::ExitStatus)));
+			scriptProcess->start(pyPath);
+			scriptProcess->waitForStarted();
+			scriptProcess->write(execStr.toStdString().c_str());
+			scriptProcess->closeWriteChannel();
 
 			emit running();
 		}
@@ -462,7 +473,9 @@ void CodingWidget::copyAvailable( bool yes )
 
 void CodingWidget::showRunError()
 {
+	QProcess* scriptProcess = qobject_cast<QProcess*>(sender());
     QString errStr = QString::fromLocal8Bit(scriptProcess->readAllStandardError());
+	std::cout << errStr.toStdString() << std::endl;
 	if (errStr.contains(UnconnectedException().msg.c_str()) ||
 		errStr.contains(tr("QWindowsPipeReader")))
 	{

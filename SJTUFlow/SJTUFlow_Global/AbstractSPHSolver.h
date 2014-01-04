@@ -9,6 +9,8 @@
 #include "CollisionStrategy.h"
 #include "RenderSPHStrategy.h"
 
+#include "StaticVaribles.h"
+
 class AbstractSPHSolver
 {
 public:
@@ -21,6 +23,11 @@ public:
 	// Return:     void
 	////////////////////////////////////////////////////////////////////////
 	virtual void SetScene(std::string fileName) = 0;
+
+	void SetSceneFile()
+	{
+		ParseScene(sv.m_scname);
+	}
 
 	////////////////////////////////////////////////////////////////////////
 	// Name:       AbstractSPHSolver::SolverDestroy()
@@ -147,11 +154,13 @@ public:
 		}
 		else
 		{
-			SaveResults(m_rstname, i);
+			SaveResults(sv.m_rstname, i);
 		}
 	}
 
-	static std::string m_rstname;
+	virtual void Display() = 0;
+	virtual void SaveResults(std::string rstname, int i) = 0;
+	virtual void ParseScene(std::string scene) = 0;
 
 	EmitStrategy *emitStrategy;
 	BodyForceStrategy *bodyForceStrategy;
@@ -165,11 +174,7 @@ protected:
 	int curParticleNum;
 	int totalParticleNum;
 	float dt;
-	std::string scene;
-
-private:
-	virtual void Display() = 0;
-	virtual void SaveResults(std::string rstname, int i) = 0;
+	StaticVaribles sv;
 };
 
 class AbstractSPHSolverWrap : public AbstractSPHSolver, public wrapper<AbstractSPHSolver>
@@ -212,15 +217,25 @@ public:
 	{
 		this->get_override("RenderInit")();
 	}
-	void RenderSPH()
+
+	void Display()
 	{
-		this->get_override("RenderSPH")();
+		this->get_override("Display")();
+	}
+	void SaveResults(std::string rstname, int i)
+	{
+		this->get_override("SaveResults")(rstname, i);
+	}
+	void ParseScene(std::string scene)
+	{
+		this->get_override("ParseScene")(scene);
 	}
 
 	static void ExportClass()
 	{
 		class_<AbstractSPHSolverWrap, boost::noncopyable>("AbstractSPHSolver")
 			.def("SetScene", &AbstractSPHSolver::SetScene)
+			.def("SetSceneFile", &AbstractSPHSolver::SetSceneFile)
 			.def("SolverInitSPH", &AbstractSPHSolver::SolverInitSPH)
 			.def("SetEmitStrategy", &AbstractSPHSolver::SetEmitStrategy,
 			with_custodian_and_ward<1, 2>())
@@ -243,20 +258,7 @@ public:
 			.def("RelaxPos", pure_virtual(&AbstractSPHSolver::RelaxPos))
 			.def("Collision", pure_virtual(&AbstractSPHSolver::Collision))
 			.def("RenderInit", pure_virtual(&AbstractSPHSolver::RenderInit))
-			.def("RenderSPH", &AbstractSPHSolver::RenderSPH)
-			.add_static_property("m_rstname",
-			make_getter(&AbstractSPHSolver::m_rstname),
-			make_setter(&AbstractSPHSolver::m_rstname));
-	}
-
-private:
-	void Display()
-	{
-		this->get_override("Display")();
-	}
-	void SaveResults(std::string rstname, int i)
-	{
-		this->get_override("SaveResults")(rstname, i);
+			.def("RenderSPH", &AbstractSPHSolver::RenderSPH);
 	}
 };
 

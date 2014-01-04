@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SJTUFlow>
+    <Scene ids="2" mode="0">
+        <Primitive name="circle_1" radius="0.016" scalar="1" id="0" fill="true" color="#111be4" type="1">
+            <bmin x="-0.016" y="-0.016" z="0"/>
+            <bmax x="0.016" y="0.016" z="0"/>
+            <frame>
+                <position x="0.6" y="0.14" z="0"/>
+                <orientation q2="0" q3="1" q0="0" q1="0"/>
+            </frame>
+        </Primitive>
+        <Primitive name="rectangle_1" scalar="1" id="1" fill="true" color="#fa2f91" type="0">
+            <bmin x="-0.05" y="-0.05" z="0"/>
+            <bmax x="0.05" y="0.05" z="0"/>
+            <frame>
+                <position x="0.5" y="0.15" z="0"/>
+                <orientation q2="0" q3="1" q0="0" q1="0"/>
+            </frame>
+            <size x="0.1" y="0.1"/>
+        </Primitive>
+        <Camera>
+            <Parameters fieldOfView="0.785398" zNearCoefficient="0.005" sceneRadius="5" orthoCoef="0.414214" Type="ORTHOGRAPHIC" zClippingCoefficient="1.73205">
+                <SceneCenter x="0" y="0" z="0"/>
+            </Parameters>
+            <Stereo focusDistance="12.0711" IODist="0.062" physScreenWidth="0.5"/>
+            <ManipulatedCameraFrame>
+                <position x="0.500848" y="0.257785" z="1.672"/>
+                <orientation q2="0" q3="1" q0="0" q1="0"/>
+                <ManipulatedParameters rotSens="1" transSens="1" spinSens="0.3" wheelSens="1"/>
+                <ManipulatedCameraParameters flySpeed="0.05">
+                    <flyUpVector x="0" y="1" z="0"/>
+                </ManipulatedCameraParameters>
+            </ManipulatedCameraFrame>
+        </Camera>
+    </Scene>
+</SJTUFlow>

@@ -29,34 +29,32 @@ void RelaxPosB::RelaxPos(int particleNum, float kDt, AbstractParticle** particle
     h = SMOOTHING_LENGTH;
 
     for (int i=0; i<particleNum; i++){
-		Particle* pi = (Particle*)particles[i];
-        pi->acc.set(0.0f, 0.0f, 0.0f);
-        for (int j=1; j < pi->neighbour_count; j++){
+        particles[i]->acc.set(0.0f, 0.0f, 0.0f);
+        for (int j=1; j < particles[i]->neighbour_count; j++){
             vector3 force;
             float r;
             int nindex;
 
-            nindex = pi->neighbours[j];
-            r = pi->r[j];
+            nindex = particles[i]->neighbours[j];
+            r = particles[i]->r[j];
 
             if (r < h){
-				Particle* pj = (Particle*)particles[nindex];
                 float h_r;
                 vector3 diff;
 
                 h_r = h - r;
-                diff = pi->curPos - pj->curPos;
+                diff = particles[i]->curPos - particles[nindex]->curPos;
 
-                force = (-0.5f * (pi->P + pj->P) * SPIKY * h_r / r) * diff;
+                force = (-0.5f * (particles[i]->P + particles[nindex]->P) * SPIKY * h_r / r) * diff;
 
-                vdiff = pj->vel - pi->vel;
+                vdiff = particles[nindex]->vel - particles[i]->vel;
                 vdiff = (VISCOSITY * VIS) * vdiff;
 
                 force += vdiff;
-                force *= (h_r * pi->dens * pj->dens);
+                force *= (h_r * particles[i]->dens * particles[nindex]->dens);
 
-                pi->acc += pj->m * force;
-                pj->acc -= pi->m * force;
+                particles[i]->acc += particles[nindex]->m * force;
+                particles[nindex]->acc -= particles[i]->m * force;
             }
         }
     }

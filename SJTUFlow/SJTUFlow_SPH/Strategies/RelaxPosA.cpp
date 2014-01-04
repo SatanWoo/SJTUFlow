@@ -21,13 +21,13 @@ void RelaxPosA::RelaxPos(int particleNum, float kDt, AbstractParticle** particle
 {
 	// TODO : implement
 	for (size_t i=0; i<particleNum; ++i){
-        Particle* pi = (Particle *)particles[i];
+        AbstractParticle* pi = particles[i];
 
         float x = pi->curPos.x;
         float y = pi->curPos.y;
 
         for (size_t j=0; j<pi->neighbour_count; ++j){
-            const Particle* pj = (Particle *)particles[pi->neighbours[j]];
+            const AbstractParticle* pj = particles[pi->neighbours[j]];
             float r = pi->r[j];
             float dx = pj->curPos.x - pi->curPos.x;
             float dy = pj->curPos.y - pi->curPos.y;

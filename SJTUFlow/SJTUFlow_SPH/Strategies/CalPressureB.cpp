@@ -27,31 +27,28 @@ void CalPressureB::CalPressure(int particleNum, AbstractParticle** particles)
     vector3 dist;
 
     for (int i = 0; i < particleNum; i++){
-		Particle* pi = (Particle*)particles[i];
-        pi->dens = 0;
-        for (int j=0; j < pi->neighbour_count; j++){
+        particles[i]->dens = 0;
+        for (int j=0; j < particles[i]->neighbour_count; j++){
             float density;
             float distsq;
 
-            nindex = pi->neighbours[j];
-			Particle* pj = (Particle*)particles[nindex];
-            dist = pi->curPos - pj->curPos;
+            nindex = particles[i]->neighbours[j];
+            dist = particles[i]->curPos - particles[nindex]->curPos;
             distsq = dist.lengthSqr();
 
             float h2_r2;
             h2_r2 = h2 - distsq;
             density = h2_r2 * h2_r2 * h2_r2;
-            pi->dens += pi->m * density;
+            particles[i]->dens += particles[i]->m * density;
             if (i != nindex){
-                pj->dens += pi->m * density;
+                particles[nindex]->dens += particles[i]->m * density;
             }
         }
     }
     for (int i=0; i<particleNum; i++){
-		Particle* pi = (Particle*)particles[i];
-        pi->dens *= POLY6;
-        pi->P = STIFF * (pi->dens - 1000.0f);
-        pi->dens = 1.0f / pi->dens;
+        particles[i]->dens *= POLY6;
+        particles[i]->P = STIFF * (particles[i]->dens - 1000.0f);
+        particles[i]->dens = 1.0f / particles[i]->dens;
     }
 }
 

@@ -16,6 +16,7 @@ public:
 	~CodingWidget();
 
 	QString filePath(){ return curFilePath; }
+	void setScenePath(QString scenePath){ curScenePath = scenePath; }
 
 signals:
 	void filePathChanged(QString);
@@ -27,8 +28,6 @@ protected:
 private:
 	Ui::CodingWidget ui;
 
-    QProcess *scriptProcess;
-
     QMap<QString, QAction *> actions;
 
 	int codingTabNum; // record how many tabs have been added
@@ -36,6 +35,7 @@ private:
 	QIcon unsavedIcon;
 
 	QString curFilePath;
+	QString curScenePath;
 
 	void loadFile(const QString &fileName);
 	int saveOrNot(int index);

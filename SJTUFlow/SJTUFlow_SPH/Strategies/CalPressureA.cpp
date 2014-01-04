@@ -20,13 +20,13 @@ void CalPressureA::CalPressure(int particleNum, AbstractParticle** particles)
 {
    // TODO : implement
    for (size_t i=0; i<particleNum; ++i){
-        Particle* pi = (Particle *)particles[i];
+        AbstractParticle* pi = particles[i];
 
         float density = 0;
         float nearDensity = 0;
         for (size_t j=0; j<pi->neighbour_count; ++j)
         {
-            const Particle* pj = (Particle *)particles[pi->neighbours[j]];
+            const AbstractParticle* pj = particles[pi->neighbours[j]];
             float r = pi->r[j];
             float a = 1 - r/kH;
             density += pj->m * a*a*a * kNorm;

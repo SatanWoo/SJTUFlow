@@ -99,7 +99,7 @@ void UpdateGridB::sph_grid_alloc(sph_grid* g, int start, int end, AbstractPartic
 		int gz;
 		int gindex;
 
-		//particles[i].curPos = particles[i].curPos;
+		//particles[i]->curPos = particles[i]->curPos;
 		gx = (int)((particles[i]->curPos.x - g->minx) *inv_glen);
 		gy = (int)((particles[i]->curPos.y - g->miny) *inv_glen);
 		gz = (int)((particles[i]->curPos.z - g->minz) *inv_glen);
@@ -194,21 +194,18 @@ void UpdateGridB::UpdateGrid(int particleNum, AbstractParticle** particles)
     const float h2 = SMOOTHING_LENGTH*SMOOTHING_LENGTH;
     sph_neighbour_list* nlist = &n_list;
     for (int i = 0; i < particleNum; i++){
-		Particle* pi = (Particle*)particles[i];
-        pi->neighbour_count = 0;
+        particles[i]->neighbour_count = 0;
         for (int j = 0; j < nlist->sizes[i]; j++){
             int nindex = nlist->p[i][j].index;
-			Particle* pj = (Particle*)particles[nindex];
-            vector3 dist = pi->curPos - pj->curPos;
+            vector3 dist = particles[i]->curPos - particles[nindex]->curPos;
             float distsq = dist.lengthSqr();
             if (distsq < h2){
-                pi->neighbours[pi->neighbour_count] = nindex;
-                pi->r[pi->neighbour_count] = sqrt(distsq);
-                pi->neighbour_count ++;
+                particles[i]->neighbours[particles[i]->neighbour_count] = nindex;
+                particles[i]->r[particles[i]->neighbour_count] = sqrt(distsq);
+                particles[i]->neighbour_count ++;
             }
         }
-    }
-	std::cout << "end" << std::endl;
+	}
 }
 
 UpdateGridStrategy * UpdateGridB::Create()

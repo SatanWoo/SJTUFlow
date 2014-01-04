@@ -30,10 +30,12 @@ public:
 	static void ExportClass();
 protected:
 private:
-    AbstractParticle* particles[kParticleCount];
+	AbstractParticle particles[kParticleCount];
+    AbstractParticle* particlesArray[kParticleCount];
 
 	virtual void Display();
 	virtual void SaveResults(std::string rstname, int i);
+	virtual void ParseScene(std::string scene){}
 };
 
 #endif

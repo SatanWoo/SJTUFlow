@@ -9,6 +9,8 @@
 #include <iostream>
 using namespace std;
 
+#include "StaticVaribles.h"
+
 class EulerApplication
 {
 public:
@@ -41,11 +43,9 @@ public:
 		}
 		else
 		{
-			saveResults(m_rstname, i);
+			saveResults(sv.m_rstname, i);
 		}
 	}
-
-	static string m_rstname;
 
 protected:
 	AdvectStrategy *m_as;
@@ -59,6 +59,7 @@ protected:
 	int m_size;
 	float m_time;
 	float m_diff;
+	StaticVaribles sv;
 };
 
 class EulerApplicationWrap : public EulerApplication, public wrapper<EulerApplication>
@@ -116,10 +117,7 @@ public:
 			.def("projectVelocity", pure_virtual(&EulerApplication::projectVelocity))
 			.def("addSourceVelocity", pure_virtual(&EulerApplication::addSourceVelocity))
 			.def("addSourceDensity", pure_virtual(&EulerApplication::addSourceDensity))
-			.def("render", &EulerApplication::render)
-			.add_static_property("m_rstname",
-			make_getter(&EulerApplication::m_rstname),
-			make_setter(&EulerApplication::m_rstname));
+			.def("render", &EulerApplication::render);
 	}
 
 protected:

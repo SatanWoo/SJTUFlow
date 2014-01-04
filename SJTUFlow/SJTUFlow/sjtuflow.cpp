@@ -160,6 +160,7 @@ void SJTUFlow::tabChanged(int index)
         ui.actionPaste->setVisible(true);
         ui.actionSelectAll->setVisible(true);
         codingWidget->checkState(0);
+		codingWidget->setScenePath(sceneDesignWidget->filePath());
 		ui.titleBar->setFilePath(codingWidget->filePath());
 		displayWidget->stopAnimation();
         break;

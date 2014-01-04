@@ -29,7 +29,7 @@ public:
 
 protected:
 private:
-    Particle* grid[kGridCellCount];
+    AbstractParticle* grid[kGridCellCount];
     size_t gridCoords[kParticleCount*2];
 };
 

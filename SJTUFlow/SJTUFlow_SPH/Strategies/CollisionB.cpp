@@ -83,14 +83,13 @@ void CollisionB::Collision(int particleNum, float kDt, AbstractParticle** partic
     float damp = 128.0f;
 
     for (int i = 0; i < particleNum; i++){
-		Particle* pi = (Particle*)particles[i];
         vector3 pre_p;
         vector3 col(0.0f, 0.0f, 0.0f);
 
-        pre_p = pi->curPos + kDt * pi->vel_half;
+        pre_p = particles[i]->curPos + kDt * particles[i]->vel_half;
 
-        cpu_sph_glass_collision(&pre_p, &col, &pi->vel, &_mat_col, &_mat_inv_col, sphere_radius, stiff, damp);
-        pi->acc += col;
+        cpu_sph_glass_collision(&pre_p, &col, &particles[i]->vel, &_mat_col, &_mat_inv_col, sphere_radius, stiff, damp);
+        particles[i]->acc += col;
     }
     return;
 }

@@ -13,7 +13,8 @@
 #include "Stable3DDiffuseStrategy.h"
 #include "Stable3DProjectStrategy.h"
 
-string EulerApplication::m_rstname = "";
+string StaticVaribles::m_rstname = "";
+string StaticVaribles::m_scname = "";
 
 BOOST_PYTHON_MODULE(SJTUFlow_EG)
 {

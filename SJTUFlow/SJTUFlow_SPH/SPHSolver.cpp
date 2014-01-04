@@ -16,9 +16,8 @@ SPHSolver::SPHSolver()
 {
 	for (int i = 0; i < kParticleCount; i++)
 	{
-		particles[i] = new Particle;
+		particlesArray[i] = &particles[i];
 	}
-
 	emitStrategy = new EmitA;
 	bodyForceStrategy = new BodyForceA;
 	updateGridStrategy = new UpdateGridA;
@@ -68,7 +67,7 @@ void SPHSolver::SolverInitSPH(float dt, int particleNum)
 void SPHSolver::Emit(void)
 {
 	// TODO : implement
-	curParticleNum = emitStrategy->EmitParticles(totalParticleNum, dt, particles);
+	curParticleNum = emitStrategy->EmitParticles(totalParticleNum, dt, particlesArray);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -80,7 +79,7 @@ void SPHSolver::Emit(void)
 void SPHSolver::BodyForce(void)
 {
 	// TODO : implement
-	bodyForceStrategy->ApplyBodyForce(curParticleNum, dt, particles);
+	bodyForceStrategy->ApplyBodyForce(curParticleNum, dt, particlesArray);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -92,7 +91,7 @@ void SPHSolver::BodyForce(void)
 void SPHSolver::UpdateGrid(void)
 {
    // TODO : implement
-   updateGridStrategy->UpdateGrid(curParticleNum, particles);
+   updateGridStrategy->UpdateGrid(curParticleNum, particlesArray);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -104,7 +103,7 @@ void SPHSolver::UpdateGrid(void)
 void SPHSolver::CalPressure(void)
 {
    // TODO : implement
-   calPressureStrategy->CalPressure(curParticleNum, particles);
+   calPressureStrategy->CalPressure(curParticleNum, particlesArray);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -116,7 +115,7 @@ void SPHSolver::CalPressure(void)
 void SPHSolver::RelaxPos(void)
 {
    // TODO : implement
-   relaxPosStrategy->RelaxPos(curParticleNum, dt, particles);
+   relaxPosStrategy->RelaxPos(curParticleNum, dt, particlesArray);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -128,7 +127,7 @@ void SPHSolver::RelaxPos(void)
 void SPHSolver::Collision(void)
 {
    // TODO : implement
-   collisionStrategy->Collision(curParticleNum, dt, particles, scene);
+   collisionStrategy->Collision(curParticleNum, dt, particlesArray, sv.m_scname);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -159,7 +158,7 @@ void SPHSolver::ExportClass()
 
 void SPHSolver::Display()
 {
-	renderSPHStrategy->RenderSPH(curParticleNum, particles, scene);
+	renderSPHStrategy->RenderSPH(curParticleNum, particlesArray, sv.m_scname);
 }
 
 void SPHSolver::SaveResults( std::string rstname, int i )
@@ -181,9 +180,9 @@ void SPHSolver::SaveResults( std::string rstname, int i )
 	out << curParticleNum << endl;
 	for (int i = 0; i < curParticleNum; i++)
 	{
-		out << particles[i]->curPos.x << " "
-			<< particles[i]->curPos.y << " "
-			<< particles[i]->curPos.z << "\n";
+		out << particles[i].curPos.x << " "
+			<< particles[i].curPos.y << " "
+			<< particles[i].curPos.z << "\n";
 	}
 
 	out.close();

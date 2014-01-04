@@ -5,8 +5,8 @@ N = 64
 application = StableFluidsApplication(N, 0.1, 0.0)
 
 def initialize():
-    x = randint(0, N - 1)
-    y = randint(0, N - 1)
+    x = randint(1, N - 1)
+    y = randint(1, N - 1)
     t = randint(0, 2 * N)
     if t < N:
         application.grid.setPreDensity(x, y, 10)

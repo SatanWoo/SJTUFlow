@@ -8,7 +8,7 @@
 #include "BodyForceB.h"
 
 ////////////////////////////////////////////////////////////////////////
-// Name:       BodyForceB::ApplyBodyForce(int particleNum, AbstractParticle** particles)
+// Name:       BodyForceB::ApplyBodyForce(int particleNum, Particle* particles)
 // Purpose:    Implementation of BodyForceB::ApplyBodyForce()
 // Parameters:
 // - particleNum
@@ -22,19 +22,18 @@ void BodyForceB::ApplyBodyForce(int particleNum, float kDt, AbstractParticle** p
     vector3 gravity(0.0f, 0.0f, -9.8f);
 
     for (int i=0; i<particleNum; i++){
-		Particle* pi = (Particle*)particles[i];
         vector3 v_half;
         vector3 final_acc;
 
-        final_acc = pi->acc + gravity;
+        final_acc = particles[i]->acc + gravity;
 
-        v_half = pi->vel_half + kDt * final_acc;
+        v_half = particles[i]->vel_half + kDt * final_acc;
 
-        pi->curPos += kDt*v_half;
+        particles[i]->curPos += kDt*v_half;
 
-        pi->vel = pi->vel_half + v_half;
-        pi->vel *= 0.5f;
-        pi->vel_half = v_half;
+        particles[i]->vel = particles[i]->vel_half + v_half;
+        particles[i]->vel *= 0.5f;
+        particles[i]->vel_half = v_half;
     }
 }
 

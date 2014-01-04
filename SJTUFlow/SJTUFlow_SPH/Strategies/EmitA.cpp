@@ -48,7 +48,7 @@ size_t EmitA::EmitParticles(int particleNum, float kDt, AbstractParticle** parti
 
         for (size_t i=0; i<=steps && particleCount<kParticleCount; ++i)
         {
-            Particle* pi = (Particle *)particles[particleCount];
+            AbstractParticle* pi = particles[particleCount];
             pi->index = particleCount;
             ++particleCount;
             ++emitter.count;

@@ -178,16 +178,6 @@ void Scene::startAnimation()
 		qDebug() << "failed to listen" << QApplication::applicationName() << endl;
 	}
 
-	if (spSPH.particles)
-	{
-		delete[] spSPH.particles;
-		spSPH.particles = NULL;
-	}
-	if (spSPH.particlesMass)
-	{
-		delete[] spSPH.particlesMass;
-		spSPH.particlesMass = NULL;
-	}
 	memset(&spSPH, 0, sizeof(SocketPackageSPH));
 	if (spEG.density)
 	{
@@ -457,11 +447,14 @@ void Scene::draw()
 	if (sceneMode == SCENE_3D)
 	{
 		SceneUnit::Sphere s(quadric, 10, 10);
+		s.setRadius(0.0001);
 		s.draw(false);
 	}
 	else
 	{
 		SceneUnit::Rectangle r;
+		r.setLenX(0.0001);
+		r.setLenY(0.0001);
 		r.draw(false);
 	}
 	glPopMatrix();
@@ -488,7 +481,6 @@ void Scene::draw()
 	if (animationIsStarted())
 	{
 		//camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0));
-		float r = 0.05f;
 		for(int i = 0; i < spSPH.particleNum; ++i)
 		{
 			SceneUnit::Primitive *p;
@@ -504,6 +496,7 @@ void Scene::draw()
 					p->setColor(QColor(51, 153, 204));
 				}
 				p->setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, 0.0));
+				p->setRadius(spSPH.radius);
 			}
 			else
 			{
@@ -604,7 +597,6 @@ void Scene::animate()
 		socket->waitForReadyRead();
 
 		int sizeEG = spEG.size;
-		int sizeSPH = spSPH.particleNum;
 
 		SceneType st;
 		ds.readRawData((char *)(&st), sizeof(SceneType));
@@ -613,7 +605,6 @@ void Scene::animate()
 			if (st == SC_3D)
 			{
 				sizeEG = 0;
-				sizeSPH = 0;
 				sceneMode = SCENE_3D;
 				setSceneMode();
 			}
@@ -623,7 +614,6 @@ void Scene::animate()
 			if (st == SC_2D)
 			{
 				sizeEG = 0;
-				sizeSPH = 0;
 				sceneMode = SCENE_2D;
 				setSceneMode();
 			}
@@ -632,22 +622,7 @@ void Scene::animate()
 		ds.readRawData((char *)(&type), sizeof(SocketType));
 		if (type == SC_SPH)
 		{
-			ds.readRawData((char *)(&spSPH.particleNum), sizeof(int));
-			if (spSPH.particleNum != sizeSPH)
-			{
-				if (spSPH.particles)
-				{
-					delete[] spSPH.particles;
-				}
-				if (spSPH.particlesMass)
-				{
-					delete[] spSPH.particlesMass;
-				}
-				spSPH.particles = new vector3[spSPH.particleNum];
-				spSPH.particlesMass = new float[spSPH.particleNum];
-			}
-			ds.readRawData((char *)(spSPH.particles), spSPH.particleNum * sizeof(vector3));
-			ds.readRawData((char *)(spSPH.particlesMass), spSPH.particleNum * sizeof(float));
+			ds.readRawData((char *)(&spSPH), sizeof(SocketPackageSPH));
 		}
 		else
 		{
