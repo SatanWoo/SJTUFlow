@@ -33,9 +33,7 @@ Project for Advanced Software Engineering and SJTU Digital Arts Lab
 TODO:
 ========
 SceneDesign:
-1. fix the rotated bounding box
+1. reset the object to initialization
 
-2. reset the object to initialization
-
-3. add a progress dialog or progress bar when importing object
+2. add a progress dialog or progress bar when importing object
 

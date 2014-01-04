@@ -90,8 +90,30 @@ void Primitive::setCenter(qglviewer::Vec center_)
 
 void Primitive::getBoundingBox(qglviewer::Vec &bmin_, qglviewer::Vec &bmax_)
 {
-	bmin_ = scalar * bmin; 
-	bmax_ = scalar * bmax;
+	qglviewer::Vec b[8] = {
+		qglviewer::Vec(bmin),
+		qglviewer::Vec(bmin[0], bmin[1], bmax[2]),
+		qglviewer::Vec(bmin[0], bmax[1], bmin[2]),
+		qglviewer::Vec(bmin[0], bmax[1], bmax[2]),
+		qglviewer::Vec(bmax[0], bmin[1], bmin[2]),
+		qglviewer::Vec(bmax[0], bmin[1], bmax[2]),
+		qglviewer::Vec(bmax[0], bmax[1], bmin[2]),
+		qglviewer::Vec(bmax)
+	};
+	bmin_ = b[0];
+	bmax_ = b[0];
+	for (int i = 1; i < 8; i++)
+	{
+		b[i] = frame->rotation().rotate(b[i]);
+		bmin_[0] = bmin_[0] < b[i][0] ? bmin_[0] : b[i][0];
+		bmin_[1] = bmin_[1] < b[i][1] ? bmin_[1] : b[i][1];
+		bmin_[2] = bmin_[2] < b[i][2] ? bmin_[2] : b[i][2];
+		bmax_[0] = bmax_[0] > b[i][0] ? bmax_[0] : b[i][0];
+		bmax_[1] = bmax_[1] > b[i][1] ? bmax_[1] : b[i][1];
+		bmax_[2] = bmax_[2] > b[i][2] ? bmax_[2] : b[i][2];
+	}
+	bmin_ = scalar * bmin_; 
+	bmax_ = scalar * bmax_;
 }
 
 QColor Primitive::getColor()
