@@ -1,7 +1,7 @@
 SJTUFlow
 ========
 
-Project for Advanced Software Engineering and SJTU Digital Arts Lab
+Open Source Framework for Fluid Simulation
 
 
 贡献方法
