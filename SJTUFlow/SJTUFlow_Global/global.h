@@ -22,6 +22,7 @@ struct SocketPackageEuler
 {
 	int size;
 	int totalSize;
+	int frameCnt;
 	float *density;
 };
 

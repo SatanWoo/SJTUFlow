@@ -10,10 +10,12 @@
 #include <QLocalSocket>
 #include <QDataStream>
 #include <QMouseEvent>
+#include <QSettings>
 #include <time.h>
 
 #include "objloader.h"
 #include "scenecommand.h"
+#include "renderthread.h"
 
 using namespace qglviewer;
 
@@ -636,7 +638,27 @@ void Scene::animate()
 				}
 				spEG.density = new float[spEG.totalSize];
 			}
+			ds.readRawData((char *)(&spEG.frameCnt), sizeof(int));
 			ds.readRawData((char *)(spEG.density), spEG.totalSize * sizeof(float));
+			if (st == SC_3D)
+			{
+				QSettings settings;
+				bool ifRender = settings.value(tr("IfRender"), false).toBool();
+				if (ifRender)
+				{
+					QString outDir = settings.value(tr("RenderOutputDir")).toString();
+					QString outputName = settings.value(
+						tr("RenderOutputName"), tr("Default")).toString();
+					int width = settings.value(tr("SizeWidth"), 640).toInt();
+					int height = settings.value(tr("SizeHeight"), 480).toInt();
+					QString name = outDir + outputName;
+					Renderer::RenderEuler3D(spEG.density, spEG.size, 
+						spEG.frameCnt, name.toStdString().c_str(), width, height);
+				}
+// 				RenderThread* thread = new RenderThread();
+// 				thread->setData(&spEG, QString("test"), 640, 480);
+// 				QThreadPool::globalInstance()->start(thread);
+			}
 		}
 		socket->disconnectFromServer();
 	}

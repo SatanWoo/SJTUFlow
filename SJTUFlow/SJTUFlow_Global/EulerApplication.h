@@ -39,7 +39,7 @@ public:
 	{
 		if (guiOn)
 		{
-			display();
+			display(i);
 		}
 		else
 		{
@@ -53,7 +53,7 @@ protected:
 	ProjectStrategy *m_ps;
 	AddSourceStrategy *m_ass;
 
-	virtual void display() = 0;
+	virtual void display(int i) = 0;
 	virtual void saveResults(string rstname, int i) = 0;
 
 	int m_size;
@@ -121,9 +121,9 @@ public:
 	}
 
 protected:
-	void display()
+	void display(int i)
 	{
-		this->get_override("display")();
+		this->get_override("display")(i);
 	}
 
 	void saveResults(string rstname, int i)

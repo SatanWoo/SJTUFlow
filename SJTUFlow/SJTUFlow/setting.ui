@@ -45,7 +45,7 @@
    <item row="0" column="1">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pageRun">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -117,7 +117,7 @@
           <item row="0" column="1">
            <widget class="QLineEdit" name="lineEditRunOutputPath">
             <property name="readOnly">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -184,7 +184,8 @@
        <item>
         <widget class="QCheckBox" name="checkBoxRender">
          <property name="text">
-          <string>Render the results using renderer</string>
+          <string>Render the results using renderer
+(Only for Euler 3D now)</string>
          </property>
         </widget>
        </item>
@@ -232,6 +233,25 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QLineEdit" name="lineEditRenderName"/>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="lineEditRenderPath"/>
+          </item>
+          <item row="0" column="3">
+           <widget class="QPushButton" name="pushButtonRoPath">
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Browser</string>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="2">
            <spacer name="horizontalSpacer_2">
             <property name="orientation">
@@ -244,12 +264,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-          <item row="1" column="1" colspan="2">
-           <widget class="QLineEdit" name="lineEditRenderName"/>
-          </item>
-          <item row="0" column="1" colspan="2">
-           <widget class="QLineEdit" name="lineEditRenderPath"/>
           </item>
          </layout>
         </widget>

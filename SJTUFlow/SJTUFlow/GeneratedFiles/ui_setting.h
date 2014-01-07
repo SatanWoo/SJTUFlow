@@ -64,9 +64,10 @@ public:
     QComboBox *comboBoxSize;
     QLabel *labelRenderName;
     QLabel *labelRenderPath;
-    QSpacerItem *horizontalSpacer_2;
     QLineEdit *lineEditRenderName;
     QLineEdit *lineEditRenderPath;
+    QPushButton *pushButtonRoPath;
+    QSpacerItem *horizontalSpacer_2;
     QSpacerItem *verticalSpacer_2;
     QWidget *pageDllManager;
     QVBoxLayout *verticalLayout_3;
@@ -150,7 +151,7 @@ public:
 
         lineEditRunOutputPath = new QLineEdit(groupBoxRunOutput);
         lineEditRunOutputPath->setObjectName(QStringLiteral("lineEditRunOutputPath"));
-        lineEditRunOutputPath->setReadOnly(true);
+        lineEditRunOutputPath->setReadOnly(false);
 
         gridLayout_2->addWidget(lineEditRunOutputPath, 0, 1, 1, 1);
 
@@ -216,10 +217,6 @@ public:
 
         gridLayout_3->addWidget(labelRenderPath, 0, 0, 1, 1);
 
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        gridLayout_3->addItem(horizontalSpacer_2, 2, 2, 1, 1);
-
         lineEditRenderName = new QLineEdit(groupBoxRenderOutput);
         lineEditRenderName->setObjectName(QStringLiteral("lineEditRenderName"));
 
@@ -229,6 +226,16 @@ public:
         lineEditRenderPath->setObjectName(QStringLiteral("lineEditRenderPath"));
 
         gridLayout_3->addWidget(lineEditRenderPath, 0, 1, 1, 2);
+
+        pushButtonRoPath = new QPushButton(groupBoxRenderOutput);
+        pushButtonRoPath->setObjectName(QStringLiteral("pushButtonRoPath"));
+        pushButtonRoPath->setMaximumSize(QSize(50, 16777215));
+
+        gridLayout_3->addWidget(pushButtonRoPath, 0, 3, 1, 1);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_3->addItem(horizontalSpacer_2, 2, 2, 1, 1);
 
 
         verticalLayout_2->addWidget(groupBoxRenderOutput);
@@ -383,7 +390,7 @@ public:
 
         retranslateUi(Setting);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(Setting);
@@ -400,7 +407,8 @@ public:
         labelRunName->setText(QApplication::translate("Setting", "Name", 0));
         pushButtonOutputPath->setText(QApplication::translate("Setting", "Browse", 0));
         labelPromote->setText(QApplication::translate("Setting", "TextLabel", 0));
-        checkBoxRender->setText(QApplication::translate("Setting", "Render the results using renderer", 0));
+        checkBoxRender->setText(QApplication::translate("Setting", "Render the results using renderer\n"
+"(Only for Euler 3D now)", 0));
         groupBoxRenderOutput->setTitle(QApplication::translate("Setting", "Output", 0));
         labelRenderSize->setText(QApplication::translate("Setting", "Size", 0));
         comboBoxSize->clear();
@@ -410,6 +418,7 @@ public:
         );
         labelRenderName->setText(QApplication::translate("Setting", "Name", 0));
         labelRenderPath->setText(QApplication::translate("Setting", "Path", 0));
+        pushButtonRoPath->setText(QApplication::translate("Setting", "Browser", 0));
 #ifndef QT_NO_TOOLTIP
         pushButtonNew->setToolTip(QApplication::translate("Setting", "New Dll", 0));
 #endif // QT_NO_TOOLTIP

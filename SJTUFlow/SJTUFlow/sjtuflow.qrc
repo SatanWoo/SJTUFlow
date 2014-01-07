@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/SJTUFlow">
-        <file>Resources/background.jpg</file>
         <file>Resources/TitleClose.png</file>
         <file>Resources/TitleMin.png</file>
         <file>Resources/RotateCursor.png</file>
         <file>Resources/SJTU-Icon.png</file>
         <file>Resources/TitleMax.png</file>
         <file>Resources/TitleNormal.png</file>
+        <file>Resources/background.png</file>
     </qresource>
     <qresource prefix="/Icons">
         <file>Resources/Icons/SceneDesign.png</file>

@@ -38,7 +38,7 @@ public:
     EulerGrid3D *grid;
 
 private:
-	void display();
+	void display(int i);
 	void saveResults(string rstname, int i);
 };
 

@@ -110,7 +110,7 @@ void StableFluids3DApplication::ExportClass()
 		make_setter(&StableFluids3DApplication::grid, return_value_policy<reference_existing_object>()));
 }
 
-void StableFluids3DApplication::display()
+void StableFluids3DApplication::display(int i)
 {
 	int size = (m_size + 2) * (m_size + 2) * (m_size + 2);
 
@@ -127,6 +127,7 @@ void StableFluids3DApplication::display()
 	ds.writeRawData((const char *)(&type), sizeof(SocketType));
 	ds.writeRawData((const char *)(&m_size), sizeof(int));
 	ds.writeRawData((const char *)(&size), sizeof(int));
+	ds.writeRawData((const char *)(&i), sizeof(int));
 	ds.writeRawData((const char *)(grid->getDensity()->getCurrent()), size * sizeof(float));
 	socket.waitForBytesWritten(500);
 	socket.disconnectFromServer();

@@ -8,7 +8,7 @@ SJTUFlow::SJTUFlow(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	bgImage.load(":/SJTUFlow/Resources/background.jpg");
+	bgImage.load(":/SJTUFlow/Resources/background.png");
 
 	setWindowFlags(Qt::FramelessWindowHint);
     setGeometry(100, 25, width(), height());

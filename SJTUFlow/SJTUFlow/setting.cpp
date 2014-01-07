@@ -2,7 +2,6 @@
 #include "ui_setting.h"
 
 #include "dllrow.h"
-//#include "AlgorithmManager.h"
 
 #include <QSettings>
 #include <QFileDialog>
@@ -27,8 +26,8 @@ Setting::Setting(QWidget *parent) :
     connect(ui.pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
 	connect(ui.pushButtonApply, SIGNAL(clicked()), this, SLOT(saveSetting()));
 
-    connect(ui.listWidget, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
-            this, SLOT(changePage(QListWidgetItem*,QListWidgetItem*)));
+    connect(ui.listWidget, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
+            this, SLOT(changePage(QListWidgetItem*, QListWidgetItem*)));
 
 	connect(ui.lineEditPyPath, SIGNAL(textChanged(QString)), this, SLOT(canApply(QString)));
 	connect(ui.pushButtonPyPath, SIGNAL(clicked()), this, SLOT(selectPyPath()));
@@ -38,6 +37,7 @@ Setting::Setting(QWidget *parent) :
    
 	connect(ui.checkBoxRender, SIGNAL(toggled(bool)), 
 		ui.groupBoxRenderOutput, SLOT(setEnabled(bool)));
+	connect(ui.pushButtonRoPath, SIGNAL(clicked()), this, SLOT(selectRenderOutputDir()));
 	
 	connect(ui.pushButtonNew, SIGNAL(clicked()), this, SLOT(insertRow()));
 	connect(ui.pushButtonDelete, SIGNAL(clicked()), this, SLOT(removeRow()));
@@ -50,12 +50,15 @@ Setting::Setting(QWidget *parent) :
 	sysLibs << "SJTUFlow_Global.pyd" << "SJTUFlow_SPH.pyd" << "SJTUFlow_EG.pyd";
 	QSettings settings;
 	settings.setValue(tr("SysLibs"), sysLibs);
-
-	loadSetting();
 }
 
 Setting::~Setting()
 {
+}
+
+void Setting::showEvent( QShowEvent * )
+{
+	loadSetting();
 }
 
 void Setting::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -89,6 +92,16 @@ void Setting::selectOutputDir()
 	if (!dirName.isEmpty())
 	{
 		ui.lineEditRunOutputPath->setText(dirName);
+	}
+}
+
+void Setting::selectRenderOutputDir()
+{
+	QString dirName = QFileDialog::getExistingDirectory(
+		this, tr("Set Render Output Directory"), QDir::homePath());
+	if (!dirName.isEmpty())
+	{
+		ui.lineEditRenderPath->setText(dirName);
 	}
 }
 
@@ -149,6 +162,20 @@ void Setting::saveSetting()
 	QString outputName = ui.lineEditRunOutputName->text();
 	settings.setValue(tr("OutputName"), outputName);
 
+	bool ifRender = ui.checkBoxRender->isChecked();
+	settings.setValue(tr("IfRender"), ifRender);
+	QString roDir = ui.lineEditRenderPath->text();
+	if (roDir != QDir::homePath())
+	{
+		settings.setValue(tr("RenderOutputDir"), roDir);
+	}
+	QString roName = ui.lineEditRenderName->text();
+	settings.setValue(tr("RenderOutputName"), roName);
+	int i = ui.comboBoxSize->currentIndex();
+	settings.setValue(tr("SizeIndex"), i);
+	settings.setValue(tr("SizeWidth"), sizes[i][0]);
+	settings.setValue(tr("SizeHeight"), sizes[i][1]);
+
 	QStringList dllList;
 	for (int i = 0; i < ui.listWidgetDll->count(); i++)
 	{
@@ -168,29 +195,6 @@ void Setting::saveSetting()
 	QPushButton *pushbutton = qobject_cast<QPushButton *>(sender());
 	if (tr("pushButtonOK") == pushbutton->objectName())
 	{
-		// open dll
-		for (int i = 0; i < ui.listWidgetDll->count(); i++)
-		{
-			QListWidgetItem *item = ui.listWidgetDll->item(i);
-			DllRow *dllrow = qobject_cast<DllRow *>(
-				ui.listWidgetDll->itemWidget(item));
-
-			std::string str = dllrow->text().toStdString();
-			if (str == "")
-				continue;
-			
-//			if (AlgorithmManager::GetInstance().hModule != NULL)
-//				FreeLibrary(AlgorithmManager::GetInstance().hModule);
-
-//			wchar_t *buf = new wchar_t[str.size()+1];
-//			MultiByteToWideChar(CP_ACP, NULL, str.c_str(), str.size(), buf, str.size() * sizeof(wchar_t));
-//			buf[str.size()] = 0;
-//			AlgorithmManager::GetInstance().hModule = LoadLibraryEx(buf, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
-//			delete buf;
-
-			break; // no dll list; just single dll
-		}
-
 		close();
 	}
 }
@@ -213,7 +217,7 @@ void Setting::loadSetting()
 	QString pyPath = settings.value(tr("PyPath")).toString();
 	ui.lineEditPyPath->setText(pyPath);
 	QString outputDir = settings.value(tr("OutputDir")).toString();
-	if (outputDir.isEmpty() || QDir(outputDir).exists())
+	if (outputDir.isEmpty() || !QDir(outputDir).exists())
 	{
 		outputDir = QDir::homePath();
 		settings.setValue(tr("OutputDir"), outputDir);
@@ -223,6 +227,27 @@ void Setting::loadSetting()
 	ui.lineEditRunOutputName->setText(outputName);
 	ui.labelPromote->setText(
 		tr("The output files will be like %1_[0...n].txt").arg(outputName));
+
+	if (!settings.contains(tr("IfRender")))
+	{
+		settings.setValue(tr("IfRender"), false);
+	}
+	bool ifRender = settings.value(tr("IfRender")).toBool();
+	ui.checkBoxRender->setChecked(ifRender);
+	QString roDir = settings.value(tr("RenderOutputDir")).toString();
+	if (roDir.isEmpty() || !QDir(roDir).exists())
+	{
+		roDir = QDir::homePath();
+		settings.setValue(tr("RenderOutputDir"), roDir);
+	}
+	ui.lineEditRenderPath->setText(roDir);
+	QString roName = settings.value(tr("RenderOutputName")).toString();
+	ui.lineEditRenderName->setText(roName);
+	int i = settings.value(tr("SizeIndex"), 0).toInt();
+	ui.comboBoxSize->setCurrentIndex(i);
+	settings.setValue(tr("SizeIndex"), i);
+	settings.setValue(tr("SizeWidth"), sizes[i][0]);
+	settings.setValue(tr("SizeHeight"), sizes[i][1]);
 
 	QStringList dllList = settings.value(tr("DllList")).toStringList();
 	foreach (QString s, dllList)
