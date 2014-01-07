@@ -34,6 +34,7 @@ private slots:
 
 	void canApply();
 	void canApply(QString);
+	void canApply(int);
 	void saveSetting();
 
 private:

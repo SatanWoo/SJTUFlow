@@ -475,7 +475,6 @@ void CodingWidget::showRunError()
 {
 	QProcess* scriptProcess = qobject_cast<QProcess*>(sender());
     QString errStr = QString::fromLocal8Bit(scriptProcess->readAllStandardError());
-	std::cout << errStr.toStdString() << std::endl;
 	if (errStr.contains(UnconnectedException().msg.c_str()) ||
 		errStr.contains(tr("QWindowsPipeReader")))
 	{
@@ -486,10 +485,12 @@ void CodingWidget::showRunError()
 	QString num = errStr.mid(pos);
 	QStringList tokens = num.split(' ', QString::SkipEmptyParts);
 	int lineNum = tokens[0].toInt();
-	lineNum -= 7;
+	QSettings settings;
+	lineNum -= (5 + settings.value(tr("DllList")).toStringList().count());
 	QString lineStr = tr("line %1").arg(lineNum);
 	errStr = errStr.replace(QRegExp("line [0-9]+"), lineStr);
-	QMessageBox::warning(this, tr("Runtime Error"), errStr, QMessageBox::Ok);
+	std::cout << errStr.toStdString() << std::endl;
+	//QMessageBox::warning(this, tr("Runtime Error"), errStr, QMessageBox::Ok);
 }
 
 void CodingWidget::processFinished( int, QProcess::ExitStatus )

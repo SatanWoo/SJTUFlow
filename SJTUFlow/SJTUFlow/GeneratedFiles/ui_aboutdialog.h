@@ -144,7 +144,7 @@ public:
     {
         AboutDialog->setWindowTitle(QApplication::translate("AboutDialog", "About SJTU Flow", 0));
         labelIcon->setText(QString());
-        labelName->setText(QApplication::translate("AboutDialog", "SJTU Flow v0.6", 0));
+        labelName->setText(QApplication::translate("AboutDialog", "SJTU Flow v1.0", 0));
         textBrowserAuthor->setHtml(QApplication::translate("AboutDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

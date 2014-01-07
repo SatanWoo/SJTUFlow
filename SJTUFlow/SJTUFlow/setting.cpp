@@ -37,7 +37,11 @@ Setting::Setting(QWidget *parent) :
    
 	connect(ui.checkBoxRender, SIGNAL(toggled(bool)), 
 		ui.groupBoxRenderOutput, SLOT(setEnabled(bool)));
+	connect(ui.checkBoxRender, SIGNAL(stateChanged(int)), this, SLOT(canApply(int)));
 	connect(ui.pushButtonRoPath, SIGNAL(clicked()), this, SLOT(selectRenderOutputDir()));
+	connect(ui.lineEditRenderPath, SIGNAL(textChanged(QString)), this, SLOT(canApply(QString)));
+	connect(ui.lineEditRenderName, SIGNAL(textChanged(QString)), this, SLOT(canApply(QString)));
+	connect(ui.comboBoxSize, SIGNAL(currentIndexChanged(int)), this, SLOT(canApply(int)));
 	
 	connect(ui.pushButtonNew, SIGNAL(clicked()), this, SLOT(insertRow()));
 	connect(ui.pushButtonDelete, SIGNAL(clicked()), this, SLOT(removeRow()));
@@ -209,6 +213,11 @@ void Setting::canApply(QString)
 	canApply();
 }
 
+void Setting::canApply( int )
+{
+	canApply();
+}
+
 void Setting::loadSetting()
 {
 	//TODO load setting
@@ -250,6 +259,7 @@ void Setting::loadSetting()
 	settings.setValue(tr("SizeHeight"), sizes[i][1]);
 
 	QStringList dllList = settings.value(tr("DllList")).toStringList();
+	ui.listWidgetDll->clear();
 	foreach (QString s, dllList)
 	{
 		QListWidgetItem *newItem = new QListWidgetItem;
