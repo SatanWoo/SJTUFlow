@@ -37,3 +37,6 @@ SceneDesign:
 
 2. add a progress dialog or progress bar when importing object
 
+Display:
+problem: QGLWidget flicker
+

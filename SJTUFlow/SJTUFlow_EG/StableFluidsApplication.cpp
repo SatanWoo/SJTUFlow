@@ -126,6 +126,12 @@ void StableFluidsApplication::display(int i)
 
 void StableFluidsApplication::saveResults(string rstname, int i)
 {
+	QLocalSocket socket;
+	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
+	if (!socket.waitForConnected(500))
+	{
+		throw UnconnectedException();
+	}
 	stringstream ss;
 	ss << i;
 	string num;

@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     _SPHSolver.RenderInit()
 
-    for i in range(1, 1000):
+    for i in range(1, 10000):
         for j in range(0, 5):
             _SPHSolver.Emit()
             _SPHSolver.UpdateGrid()

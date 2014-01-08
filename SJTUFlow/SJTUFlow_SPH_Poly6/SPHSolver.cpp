@@ -13,6 +13,9 @@
 
 #include <QFile>
 #include <QDomDocument>
+#include <QLocalSocket>
+
+#include "../SJTUFlow_Global/global.h"
 
 size_t object_count = 0;
 Particle objects2D[OBJECT_COUNT];
@@ -242,6 +245,12 @@ void SPHPoly6Solver::Display()
 
 void SPHPoly6Solver::SaveResults( std::string rstname, int i )
 {
+	QLocalSocket socket;
+	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
+	if (!socket.waitForConnected(500))
+	{
+		throw UnconnectedException();
+	}
 	using namespace std;
 	stringstream ss;
 	ss << i;

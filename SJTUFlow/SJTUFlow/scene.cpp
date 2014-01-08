@@ -441,6 +441,12 @@ void Scene::init()
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 }
 
+void Scene::preDraw()
+{
+	makeCurrent();
+	QGLViewer::preDraw();
+}
+
 void Scene::draw()
 {
 	// trick
@@ -485,30 +491,32 @@ void Scene::draw()
 		//camera()->setPosition(qglviewer::Vec(5.0, 5.0, 15.0));
 		for(int i = 0; i < spSPH.particleNum; ++i)
 		{
-			SceneUnit::Primitive *p;
 			if (sceneMode == SCENE_2D)
 			{
-				p = new SceneUnit::Circle;
+				SceneUnit::Circle c;
 				if (spSPH.particlesMass[i] > 1.0)
 				{
-					p->setColor(QColor(51, 153, 0));
+					c.setColor(QColor(51, 153, 0));
 				}
 				else
 				{
-					p->setColor(QColor(51, 153, 204));
+					c.setColor(QColor(51, 153, 204));
 				}
-				p->setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, 0.0));
-				p->setRadius(spSPH.radius);
+				c.setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, 0.0));
+				c.setRadius(spSPH.radius);
+				glPushMatrix();
+				c.draw(false);
+				glPopMatrix();
 			}
 			else
 			{
-				p = new SceneUnit::Sphere(quadric, 10, 10);
-				p->setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, spSPH.particles[i].z));
-				p->setRadius(0.001);
+				SceneUnit::Sphere s(quadric, 10, 10);
+				s.setCenter(Vec(spSPH.particles[i].x, spSPH.particles[i].y, spSPH.particles[i].z));
+				s.setRadius(0.001);
+				glPushMatrix();
+				s.draw(false);
+				glPopMatrix();
 			}
-			glPushMatrix();
-			p->draw(false);
-			glPopMatrix();
 		}
 
 		if (spEG.size > 0)
@@ -651,7 +659,7 @@ void Scene::animate()
 						tr("RenderOutputName"), tr("Default")).toString();
 					int width = settings.value(tr("SizeWidth"), 640).toInt();
 					int height = settings.value(tr("SizeHeight"), 480).toInt();
-					QString name = outDir + outputName;
+					QString name = outDir + "/" + outputName;
 					Renderer::RenderEuler3D(spEG.density, spEG.size, 
 						spEG.frameCnt, name.toStdString().c_str(), width, height);
 				}

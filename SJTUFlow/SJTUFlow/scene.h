@@ -5,6 +5,7 @@
 #include <QDomDocument>
 #include <QUndoStack>
 #include <QLocalServer>
+#include <QPaintEngine>
 
 #include "primitive.h"
 
@@ -68,6 +69,7 @@ public:
 
 protected:
 	void init();
+	void preDraw();
 	void draw();
 	void drawWithNames();
 	void postDraw();

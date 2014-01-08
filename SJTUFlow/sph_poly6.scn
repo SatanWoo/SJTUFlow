@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SJTUFlow>
-    <Scene ids="2" mode="0">
-        <Primitive name="circle_1" radius="0.016" scalar="1" id="0" fill="true" color="#111be4" type="1">
+    <Scene mode="0" ids="2">
+        <Primitive color="#111be4" fill="true" type="1" radius="0.016" scalar="3.797" id="0" name="circle_1">
             <bmin x="-0.016" y="-0.016" z="0"/>
             <bmax x="0.016" y="0.016" z="0"/>
             <frame>
-                <position x="0.6" y="0.14" z="0"/>
-                <orientation q2="0" q3="1" q0="0" q1="0"/>
+                <position x="0.629488" y="0.17932" z="0"/>
+                <orientation q0="0" q1="0" q2="0" q3="1"/>
             </frame>
         </Primitive>
-        <Primitive name="rectangle_1" scalar="1" id="1" fill="true" color="#fa2f91" type="0">
+        <Primitive color="#fa2f91" fill="true" type="0" scalar="1.647" id="1" name="rectangle_1">
             <bmin x="-0.05" y="-0.05" z="0"/>
             <bmax x="0.05" y="0.05" z="0"/>
             <frame>
-                <position x="0.5" y="0.15" z="0"/>
-                <orientation q2="0" q3="1" q0="0" q1="0"/>
+                <position x="0.396109" y="0.201943" z="0"/>
+                <orientation q0="0" q1="0" q2="-0.0112201" q3="0.999937"/>
             </frame>
             <size x="0.1" y="0.1"/>
         </Primitive>
         <Camera>
-            <Parameters fieldOfView="0.785398" zNearCoefficient="0.005" sceneRadius="5" orthoCoef="0.414214" Type="ORTHOGRAPHIC" zClippingCoefficient="1.73205">
+            <Parameters fieldOfView="0.785398" zClippingCoefficient="1.73205" orthoCoef="0.414213" Type="ORTHOGRAPHIC" sceneRadius="5" zNearCoefficient="0.005">
                 <SceneCenter x="0" y="0" z="0"/>
             </Parameters>
-            <Stereo focusDistance="12.0711" IODist="0.062" physScreenWidth="0.5"/>
+            <Stereo IODist="0.062" physScreenWidth="0.5" focusDistance="12.0711"/>
             <ManipulatedCameraFrame>
-                <position x="0.500848" y="0.257785" z="1.672"/>
-                <orientation q2="0" q3="1" q0="0" q1="0"/>
-                <ManipulatedParameters rotSens="1" transSens="1" spinSens="0.3" wheelSens="1"/>
+                <position x="0.500848" y="0.257785" z="0.712"/>
+                <orientation q0="0" q1="0" q2="0" q3="1"/>
+                <ManipulatedParameters spinSens="0.3" rotSens="1" wheelSens="1" transSens="1"/>
                 <ManipulatedCameraParameters flySpeed="0.05">
                     <flyUpVector x="0" y="1" z="0"/>
                 </ManipulatedCameraParameters>

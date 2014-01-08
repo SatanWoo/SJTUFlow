@@ -12,6 +12,8 @@
 #include <sstream>
 #include <fstream>
 
+#include <QLocalSocket>
+
 SPHSolver::SPHSolver()
 {
 	for (int i = 0; i < kParticleCount; i++)
@@ -163,6 +165,12 @@ void SPHSolver::Display()
 
 void SPHSolver::SaveResults( std::string rstname, int i )
 {
+	QLocalSocket socket;
+	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
+	if (!socket.waitForConnected(500))
+	{
+		throw UnconnectedException();
+	}
 	using namespace std;
 	stringstream ss;
 	ss << i;

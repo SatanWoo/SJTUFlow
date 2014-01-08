@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     _SPHSolver.RenderInit()
 
-    for i in range(1, 100):
+    for i in range(1, 10000):
         for j in range(0, kSubSteps):
             _SPHSolver.Emit()
             _SPHSolver.BodyForce()
@@ -24,4 +24,4 @@ if __name__ == '__main__':
             _SPHSolver.CalPressure()
             _SPHSolver.RelaxPos()
             _SPHSolver.Collision()
-        _SPHSolver.RenderSPH(False, i)
+        _SPHSolver.RenderSPH(True, i)

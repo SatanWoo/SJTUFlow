@@ -140,6 +140,13 @@ void StableFluids3DApplication::display(int i)
 
 void StableFluids3DApplication::saveResults(string rstname, int i)
 {
+	QLocalSocket socket;
+	socket.connectToServer("SJTU Flow", QIODevice::ReadWrite);
+	if (!socket.waitForConnected(500))
+	{
+		throw UnconnectedException();
+	}
+
 	stringstream ss;
 	ss << i;
 	string num;

@@ -1,7 +1,7 @@
 from random import *
 from SJTUFlow_EG import *
 
-N = 64
+N = 128
 application = StableFluidsApplication(N, 0.1, 0.0)
 
 def initialize():
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     application.setProjectStrategy(Stable2DProjectStrategy.Create(bs))
     application.setAddSourceStrategY(Stable2DAddSourceStrategy.Create())
 
-    for i in range(1, 100):
+    for i in range(1, 10000):
         initialize()        
 
         application.addSourceVelocity()

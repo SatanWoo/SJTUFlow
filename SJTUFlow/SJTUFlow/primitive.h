@@ -28,7 +28,7 @@ namespace SceneUnit
 
 	public:
 		Primitive();
-		~Primitive(){}
+		~Primitive(){ delete frame; }
 
 		enum Type{T_Rect = 0, T_Circle, T_Box, T_Sphere, T_Object};
 
